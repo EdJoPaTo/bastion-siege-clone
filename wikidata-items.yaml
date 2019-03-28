@@ -1,0 +1,17 @@
+menu: Q846925
+buildings: Q41176
+workshop: Q656720
+construction:
+  townhall: Q543654
+  storage: Q1362225
+  houses: Q699405
+  farm: Q131596
+  sawmill: Q505213
+  mine: Q820477
+  barracks: Q131263
+  wall: Q42948
+  trebuchet: Q19776
+  ballista: Q219433
+action:
+  upgrade: Q920419
+wikidataItem: Q16222597
