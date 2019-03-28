@@ -13,7 +13,7 @@ export function infoHeader(ctx: any, construction: ConstructionName, currentLeve
 
 	if (ctx.wd.infoMissing(wdKey)) {
 		text += '\n\n'
-		const wdItem = ctx.wd.label('wikidataItem')
+		const wdItem = ctx.wd.label('menu.wikidataItem')
 		// TODO: i18n
 		text += `Some info is missing in the ${wdItem}. Consider updating :)`
 	}

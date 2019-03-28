@@ -1,4 +1,6 @@
-menu: Q846925
+menu:
+  menu: Q846925
+  wikidataItem: Q16222597
 buildings: Q41176
 workshop: Q656720
 construction:
@@ -14,4 +16,3 @@ construction:
   ballista: Q219433
 action:
   upgrade: Q920419
-wikidataItem: Q16222597

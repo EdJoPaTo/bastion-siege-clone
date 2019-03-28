@@ -28,7 +28,7 @@ bot.use(wdLabel.middleware())
 
 bot.use(menu.init({
 	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,
-	mainMenuButtonText: (ctx: any) => `🔝 ${ctx.wd.label('menu')}`
+	mainMenuButtonText: (ctx: any) => `🔝 ${ctx.wd.label('menu.menu')}`
 }))
 
 bot.catch((error: any) => {

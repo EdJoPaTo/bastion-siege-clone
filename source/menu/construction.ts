@@ -35,7 +35,7 @@ menu.button((ctx: any) => `⬆️ ${ctx.wd.label('action.upgrade')}`, 'upgrade',
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('wikidataItem')}`, (ctx: any) => {
+menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => {
 	const {construction} = constructionFromCtx(ctx)
 	const wdKey = `construction.${construction}`
 	return ctx.wd.url(wdKey)
