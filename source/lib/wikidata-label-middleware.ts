@@ -52,7 +52,7 @@ export default class WikidataLabel {
 			}, {})
 
 		const languageCodes = Object.keys(languages)
-			.sort()
+			.sort((a, b) => a.localeCompare(b))
 
 		for (const lang of languageCodes) {
 			this._languageCodes[lang] = languages[lang]
@@ -128,7 +128,7 @@ export default class WikidataLabel {
 	}
 
 	middleware(): (ctx: any, next: any) => void {
-		function lang(ctx: any) {
+		function lang(ctx: any): string {
 			return ctx.session.wikidataLanguageCode || ctx.from.language_code || 'de'
 		}
 
