@@ -12,11 +12,14 @@ export default class WikidataLabel {
 
 	private readonly _entities: Dictionary<EntitySimplified> = {}
 
+	private readonly _languageCodes: {[key: string]: number} = {}
+
 	constructor(
 		public qNumberFilePath: string
 	) {}
 
 	async load(): Promise<void> {
+		console.time('wikidata label cache load')
 		const contentString = await fsPromises.readFile(this.qNumberFilePath, 'utf8')
 
 		const content = loadYaml(contentString)
@@ -33,6 +36,39 @@ export default class WikidataLabel {
 		for (const key of Object.keys(entities)) {
 			this._entities[key] = entities[key]
 		}
+
+		const entryAmount = Object.keys(this._entities).length
+		console.log('entities', entryAmount)
+
+		const languages = Object.values(this._entities)
+			.flatMap(o => Object.keys(o.labels || {}))
+			.reduce<{[key: string]: number}>((coll, add) => {
+				if (!coll[add]) {
+					coll[add] = 0
+				}
+
+				coll[add] += 1 / entryAmount
+				return coll
+			}, {})
+
+		const languageCodes = Object.keys(languages)
+			.sort()
+
+		for (const lang of languageCodes) {
+			this._languageCodes[lang] = languages[lang]
+		}
+
+		console.log('languages', Object.keys(this._languageCodes).length)
+		console.timeEnd('wikidata label cache load')
+	}
+
+	availableLocales(filter: (o: number) => boolean = () => true): ReadonlyArray<string> {
+		return Object.keys(this._languageCodes)
+			.filter(o => filter(this._languageCodes[o]))
+	}
+
+	translationProgress(languageCode: string): number {
+		return this._languageCodes[languageCode] || 0
 	}
 
 	entityByQNumber(qNumber: string): EntitySimplified {
@@ -92,16 +128,25 @@ export default class WikidataLabel {
 	}
 
 	middleware(): (ctx: any, next: any) => void {
-		return (ctx, next) => {
-			// TODO: get language from a settings menu
-			const language = ctx.from.language_code || 'de'
+		function lang(ctx: any) {
+			return ctx.session.wikidataLanguageCode || ctx.from.language_code || 'de'
+		}
 
+		return (ctx, next) => {
 			ctx.wd = {
-				description: (key: string) => this.description(key, language),
+				description: (key: string) => this.description(key, lang(ctx)),
 				entity: (key: string) => this.entity(key),
-				infoMissing: (key: string) => this.infoMissing(key, language),
-				label: (key: string) => this.label(key, language),
-				url: (key: string) => this.url(key)
+				infoMissing: (key: string) => this.infoMissing(key, lang(ctx)),
+				locale: (code?: string) => {
+					if (code) {
+						ctx.session.wikidataLanguageCode = code
+					}
+
+					return ctx.session.wikidataLanguageCode
+				},
+				label: (key: string) => this.label(key, lang(ctx)),
+				url: (key: string) => this.url(key),
+				wikidata: this
 			}
 
 			return next()
