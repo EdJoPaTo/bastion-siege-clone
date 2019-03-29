@@ -2,11 +2,13 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {EMOJI} from 'bastion-siege-logic'
 
+import {resources} from '../lib/interface/resource'
+
 import {buildingsMenu, workshopMenu} from './constructions'
 import languageMenu from './languages'
 import * as nameMenu from './name-picker'
 
-function menuText(ctx: any) {
+function menuText(ctx: any): string {
 	let text = ''
 	text += `*${ctx.wd.label('menu.menu')}*\n`
 
@@ -15,6 +17,9 @@ function menuText(ctx: any) {
 		text += '\n'
 		text += `😎 ${first} ${last}\n`
 	}
+
+	text += '\n'
+	text += resources(ctx, ctx.session.resources)
 
 	return text
 }
