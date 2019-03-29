@@ -7,6 +7,10 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
+import {
+	possibleEmoji
+} from './generals'
+
 export function resourceLine(ctx: any, resource: ResourceName, amount: number): string {
 	const parts: string[] = []
 
@@ -18,8 +22,7 @@ export function resourceLine(ctx: any, resource: ResourceName, amount: number): 
 }
 
 export function constructionResourceLine(ctx: any, resource: ResourceName, amount: number, possible: boolean): string {
-	const prefix = possible ? '✅' : '⛔️'
-	return `${prefix} ${resourceLine(ctx, resource, amount)}`
+	return `${possibleEmoji(possible)} ${resourceLine(ctx, resource, amount)}`
 }
 
 export function resources(ctx: any, resources: Resources): string {
