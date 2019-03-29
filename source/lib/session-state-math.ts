@@ -34,8 +34,10 @@ export function calcCurrentResources(ctx: any): void {
 	const now = Date.now() / 1000
 	const {constructions, resources, resourcesTimestamp} = ctx.session
 
+	const foodPenalty = resources.food > 0 ? 1 : 0.2
+
 	const totalSeconds = now - resourcesTimestamp
-	const totalMinutes = Math.floor(GAME_SPEEDUP * totalSeconds / 60)
+	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty * totalSeconds / 60)
 
 	if (totalMinutes > 0) {
 		ctx.session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
