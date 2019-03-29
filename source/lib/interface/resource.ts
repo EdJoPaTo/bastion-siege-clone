@@ -15,7 +15,9 @@ export function resourceLine(ctx: any, resource: ResourceName, amount: number): 
 	const parts: string[] = []
 
 	parts.push(EMOJI[resource])
-	parts.push(ctx.wd.label(`resource.${resource}`))
+	parts.push(
+		`*${ctx.wd.label(`resource.${resource}`)}*`
+	)
 	parts.push(String(amount))
 
 	return parts.join(' ')
