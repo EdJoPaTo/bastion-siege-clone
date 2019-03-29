@@ -2,8 +2,9 @@ menu:
   language: Q315
   menu: Q846925
   wikidataItem: Q16222597
-buildings: Q41176
-workshop: Q656720
+bs:
+  buildings: Q41176
+  workshop: Q656720
 construction:
   townhall: Q543654
   storage: Q1362225

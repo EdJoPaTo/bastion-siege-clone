@@ -8,8 +8,8 @@ import languageMenu from './languages'
 const menu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('menu.menu')}*`)
 menu.setCommand('start')
 
-menu.submenu((ctx: any) => `${EMOJI.buildings} ${ctx.wd.label('buildings')}`, 'b', buildingsMenu)
-menu.submenu((ctx: any) => `${EMOJI.workshop} ${ctx.wd.label('workshop')}`, 'w', workshopMenu, {
+menu.submenu((ctx: any) => `${EMOJI.buildings} ${ctx.wd.label('bs.buildings')}`, 'b', buildingsMenu)
+menu.submenu((ctx: any) => `${EMOJI.workshop} ${ctx.wd.label('bs.workshop')}`, 'w', workshopMenu, {
 	joinLastRow: true
 })
 

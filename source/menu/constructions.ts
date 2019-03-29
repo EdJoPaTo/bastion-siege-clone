@@ -8,14 +8,14 @@ function constructionTextFunc(ctx: any, key: string): string {
 	return `${EMOJI[key]} ${ctx.wd.label(wdKey)}`
 }
 
-export const buildingsMenu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('buildings')}*`)
+export const buildingsMenu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('bs.buildings')}*`)
 
 buildingsMenu.selectSubmenu('', BUILDINGS, entryMenu, {
 	columns: 2,
 	textFunc: constructionTextFunc
 })
 
-export const workshopMenu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('workshop')}*`)
+export const workshopMenu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('bs.workshop')}*`)
 
 workshopMenu.selectSubmenu('', WORKSHOP, entryMenu, {
 	columns: 2,
