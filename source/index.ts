@@ -6,12 +6,14 @@ import TelegrafI18n from 'telegraf-i18n'
 import * as userSessions from './lib/user-sessions'
 import WikidataLabel from './lib/wikidata-label-middleware'
 import menu from './menu'
+import * as ensureSessionContent from './lib/session-state-math'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf(token)
 
 bot.use(userSessions.middleware())
+bot.use(ensureSessionContent.middleware())
 
 const i18n = new TelegrafI18n({
 	directory: 'locales',
