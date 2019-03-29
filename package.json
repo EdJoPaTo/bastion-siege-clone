@@ -37,7 +37,9 @@
 		"telegraf-inline-menu": "^3.5.0",
 		"telegraf-session-local": "0.0.6",
 		"ts-node": "^8.0.3",
-		"typescript": "^3.3.3"
+		"typescript": "^3.3.3",
+		"wikidata-sdk": "^6.1.0",
+		"wikidata-sdk-got": "^1.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "^11.9.0",
