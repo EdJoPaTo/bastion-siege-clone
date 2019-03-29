@@ -34,10 +34,10 @@
 		"js-yaml": "^3.13.0",
 		"telegraf": "^3.27.1",
 		"telegraf-i18n": "^6.5.0",
-		"telegraf-inline-menu": "^3.5.0",
+		"telegraf-inline-menu": "^3.5.1",
 		"telegraf-session-local": "0.0.6",
 		"ts-node": "^8.0.3",
-		"typescript": "^3.3.3",
+		"typescript": "^3.3.4000",
 		"wikidata-sdk": "^6.1.0",
 		"wikidata-sdk-got": "^1.0.0"
 	},
