@@ -2,6 +2,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	calcBuildingCost,
 	calcGoldIncome,
+	calcGoldIncomePerPerson,
 	calcMinutesNeeded,
 	calcProduction,
 	calcProductionFood,
@@ -25,8 +26,8 @@ function constructionFromCtx(ctx: any): {construction: ConstructionName; level: 
 	return {construction, level}
 }
 
-function incomeString(ctx: any, income: number, emoji: string) {
-	return `${ctx.wd.label('action.income')} ${income} ${emoji} / ${ctx.wd.label('bs.day')}`
+function incomeString(ctx: any, income: number, unit: string) {
+	return `${ctx.wd.label('action.income')} ${income} ${unit} / ${ctx.wd.label('bs.day')}`
 }
 
 function constructionText(ctx: any): string {
@@ -40,7 +41,11 @@ function constructionText(ctx: any): string {
 	textParts.push(infoHeader(ctx, construction, level))
 
 	if (construction === 'townhall') {
-		textParts.push(incomeString(ctx, calcGoldIncome(level, constructions.houses), EMOJI.gold))
+		const lines = []
+		lines.push(incomeString(ctx, calcGoldIncomePerPerson(level), `${EMOJI.gold} / ${ctx.wd.label('bs.inhabitant')}`))
+		lines.push(incomeString(ctx, calcGoldIncome(level, constructions.houses), EMOJI.gold))
+
+		textParts.push(lines.join('\n'))
 	}
 
 	if (construction === 'farm') {

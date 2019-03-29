@@ -6,6 +6,7 @@ menu:
 bs:
   buildings: Q41176
   day: Q573
+  inhabitant: Q22947
   trade: Q601401
   war: Q198
   workshop: Q656720
