@@ -29,7 +29,7 @@ function constructionFromCtx(ctx: any): {construction: ConstructionName; level: 
 	return {construction, level}
 }
 
-function incomeString(ctx: any, income: number, unit: string) {
+function incomeString(ctx: any, income: number | string, unit: string) {
 	return `${ctx.wd.label('action.income')} ${income} ${unit} / ${ctx.wd.label('bs.day')}`
 }
 
@@ -45,7 +45,7 @@ function constructionText(ctx: any): string {
 
 	if (construction === 'townhall') {
 		const lines = []
-		lines.push(incomeString(ctx, calcGoldIncomePerPerson(level), `${EMOJI.gold} / ${ctx.wd.label('bs.inhabitant')}`))
+		lines.push(incomeString(ctx, calcGoldIncomePerPerson(level).toFixed(1), `${EMOJI.gold} / ${ctx.wd.label('bs.inhabitant')}`))
 		lines.push(incomeString(ctx, calcGoldIncome(level, constructions.houses), EMOJI.gold))
 
 		textParts.push(lines.join('\n'))
