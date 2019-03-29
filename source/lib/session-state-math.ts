@@ -1,7 +1,10 @@
 import {
 	CONSTRUCTIONS,
+	estimateResourcesAfter,
 	RESOURCES
 } from 'bastion-siege-logic'
+
+const GAME_SPEEDUP = 30
 
 function initWhenMissing(ctx: any): void {
 	const {constructions, resources, resourcesTimestamp} = ctx.session
@@ -22,9 +25,23 @@ function initWhenMissing(ctx: any): void {
 	}
 }
 
+export function calcCurrentResources(ctx: any): void {
+	const now = Date.now() / 1000
+	const {constructions, resources, resourcesTimestamp} = ctx.session
+
+	const totalSeconds = now - resourcesTimestamp
+	const totalMinutes = Math.floor(GAME_SPEEDUP * totalSeconds / 60)
+
+	if (totalMinutes > 0) {
+		ctx.session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
+		ctx.session.resourcesTimestamp = now
+	}
+}
+
 export function middleware(): (ctx: any, next?: () => void) => void {
 	return (ctx, next) => {
 		initWhenMissing(ctx)
+		calcCurrentResources(ctx)
 
 		return next && next()
 	}
