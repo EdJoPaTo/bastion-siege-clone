@@ -1,7 +1,6 @@
 import {
 	CONSTRUCTIONS,
-	estimateResourcesAfter,
-	RESOURCES
+	estimateResourcesAfter
 } from 'bastion-siege-logic'
 
 const GAME_SPEEDUP = 30
@@ -14,13 +13,19 @@ function initWhenMissing(ctx: any): void {
 		for (const key of CONSTRUCTIONS) {
 			ctx.session.constructions[key] = 0
 		}
+
+		ctx.session.constructions.townhall = 1
+		ctx.session.constructions.storage = 1
+		ctx.session.constructions.houses = 1
 	}
 
 	if (!resources || !resourcesTimestamp) {
-		ctx.session.resources = {}
 		ctx.session.resourcesTimestamp = Date.now() / 1000
-		for (const key of RESOURCES) {
-			ctx.session.resources[key] = 0
+		ctx.session.resources = {
+			gold: 500,
+			wood: 0,
+			stone: 0,
+			food: 200
 		}
 	}
 }
