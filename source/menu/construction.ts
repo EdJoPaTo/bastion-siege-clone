@@ -2,6 +2,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	calcBarracksCapacity,
 	calcBuildingCost,
+	calcGoldCapacity,
 	calcGoldIncome,
 	calcGoldIncomePerPerson,
 	calcHousesCapacity,
@@ -9,10 +10,12 @@ import {
 	calcProduction,
 	calcProductionFood,
 	calcResourcesAfterConstruction,
+	calcStorageCapacity,
 	calcWallArcherCapacity,
 	ConstructionName,
 	Constructions,
 	EMOJI,
+	ResourceName,
 	Resources
 } from 'bastion-siege-logic'
 
@@ -33,6 +36,10 @@ function incomeString(ctx: any, income: number | string, unit: string) {
 	return `${ctx.wd.label('action.income')} ${income} ${unit} / ${ctx.wd.label('bs.day')}`
 }
 
+function storageCapacityString(ctx: any, capacity: number, unit: ResourceName) {
+	return `${ctx.wd.label('bs.storageCapacity')} ${capacity} ${EMOJI[unit]}`
+}
+
 function constructionText(ctx: any): string {
 	const constructions = ctx.session.constructions as Constructions
 	const {construction, level} = constructionFromCtx(ctx)
@@ -45,8 +52,17 @@ function constructionText(ctx: any): string {
 
 	if (construction === 'townhall') {
 		const lines = []
+		lines.push(storageCapacityString(ctx, calcGoldCapacity(level), 'gold'))
 		lines.push(incomeString(ctx, calcGoldIncomePerPerson(level).toFixed(1), `${EMOJI.gold} / ${ctx.wd.label('bs.inhabitant')}`))
 		lines.push(incomeString(ctx, calcGoldIncome(level, constructions.houses), EMOJI.gold))
+
+		textParts.push(lines.join('\n'))
+	}
+
+	if (construction === 'storage') {
+		const units: ResourceName[] = ['wood', 'stone', 'food']
+		const lines = units
+			.map(o => storageCapacityString(ctx, calcStorageCapacity(level), o))
 
 		textParts.push(lines.join('\n'))
 	}
