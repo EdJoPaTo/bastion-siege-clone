@@ -15,10 +15,6 @@ async function menuText(ctx: any): Promise<string> {
 	text += ctx.i18n.t('name.question')
 	text += '*'
 
-	text += '\n\n'
-
-	text += ctx.i18n.t('name.want')
-
 	return text
 }
 
@@ -44,7 +40,7 @@ menu.button((ctx: any) => ctx.session.createLast || FALLBACK, 'last', {
 	}
 })
 
-menu.button((ctx: any) => ctx.i18n.t('name.take'), 'take', {
+menu.button((ctx: any) => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	setParentMenuAfter: true,
 	hide: (ctx: any) => !ctx.session.createFirst || !ctx.session.createLast,
 	doFunc: (ctx: any) => {
