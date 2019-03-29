@@ -19,5 +19,10 @@ construction:
   wall: Q42948
   trebuchet: Q19776
   ballista: Q219433
+resource:
+  gold: Q897
+  wood: Q287
+  stone: Q22731
+  food: Q2095
 action:
   upgrade: Q920419
