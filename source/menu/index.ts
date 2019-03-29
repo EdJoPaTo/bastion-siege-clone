@@ -6,7 +6,20 @@ import {buildingsMenu, workshopMenu} from './constructions'
 import languageMenu from './languages'
 import * as nameMenu from './name-picker'
 
-const menu = new TelegrafInlineMenu((ctx: any) => `*${ctx.wd.label('menu.menu')}*`)
+function menuText(ctx: any) {
+	let text = ''
+	text += `*${ctx.wd.label('menu.menu')}*\n`
+
+	if (ctx.session.name) {
+		const {first, last} = ctx.session.name
+		text += '\n'
+		text += `😎 ${first} ${last}\n`
+	}
+
+	return text
+}
+
+const menu = new TelegrafInlineMenu(menuText)
 menu.setCommand('start')
 
 menu.submenu((ctx: any) => `👋 ${ctx.wd.label('menu.name')}`, 'name', nameMenu.menu, {
