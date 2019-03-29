@@ -4,9 +4,12 @@ menu:
   name: Q1071027
   wikidataItem: Q16222597
 bs:
+  archer: Q890527
+  army: Q37726
   buildings: Q41176
   day: Q573
   inhabitant: Q22947
+  people: Q2472587
   trade: Q601401
   war: Q198
   workshop: Q656720

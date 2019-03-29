@@ -1,12 +1,15 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
+	calcBarracksCapacity,
 	calcBuildingCost,
 	calcGoldIncome,
 	calcGoldIncomePerPerson,
+	calcHousesCapacity,
 	calcMinutesNeeded,
 	calcProduction,
 	calcProductionFood,
 	calcResourcesAfterConstruction,
+	calcWallArcherCapacity,
 	ConstructionName,
 	Constructions,
 	EMOJI,
@@ -48,6 +51,14 @@ function constructionText(ctx: any): string {
 		textParts.push(lines.join('\n'))
 	}
 
+	if (construction === 'houses') {
+		const lines = []
+		lines.push(`${ctx.wd.label('bs.people')} ${calcHousesCapacity(level)} ${EMOJI.people}`)
+		lines.push(incomeString(ctx, calcGoldIncome(constructions.townhall, level), EMOJI.gold))
+
+		textParts.push(lines.join('\n'))
+	}
+
 	if (construction === 'farm') {
 		textParts.push(incomeString(ctx, calcProductionFood(level, constructions.houses), EMOJI.food))
 	}
@@ -58,6 +69,14 @@ function constructionText(ctx: any): string {
 
 	if (construction === 'mine') {
 		textParts.push(incomeString(ctx, calcProduction(level), EMOJI.stone))
+	}
+
+	if (construction === 'barracks') {
+		textParts.push(`${ctx.wd.label('bs.army')} ${calcBarracksCapacity(level)} ${EMOJI.army}`)
+	}
+
+	if (construction === 'wall') {
+		textParts.push(`${ctx.wd.label('bs.archer')} ${calcWallArcherCapacity(level)} ${EMOJI.army}`)
 	}
 
 	textParts.push(constructionResources(ctx, requiredResources, currentResources))
