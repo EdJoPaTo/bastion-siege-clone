@@ -3,6 +3,23 @@ import {
 	EMOJI
 } from 'bastion-siege-logic'
 
+import {
+	possibleEmoji
+} from './generals'
+
+export function constructionLine(ctx: any, construction: ConstructionName, level: number, canUpgrade: boolean): string {
+	const parts: string[] = []
+
+	parts.push(possibleEmoji(canUpgrade))
+	parts.push(EMOJI[construction])
+	parts.push(String(level))
+	parts.push(
+		`*${ctx.wd.label(`construction.${construction}`)}*`
+	)
+
+	return parts.join(' ')
+}
+
 export function infoHeader(ctx: any, construction: ConstructionName, currentLevel: number): string {
 	const wdKey = `construction.${construction}`
 
