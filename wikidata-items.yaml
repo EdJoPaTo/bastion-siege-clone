@@ -5,6 +5,8 @@ menu:
   wikidataItem: Q16222597
 bs:
   buildings: Q41176
+  trade: Q601401
+  war: Q198
   workshop: Q656720
 construction:
   townhall: Q543654
