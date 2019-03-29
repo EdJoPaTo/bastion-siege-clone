@@ -1,10 +1,14 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	calcBuildingCost,
+	calcGoldIncome,
 	calcMinutesNeeded,
+	calcProduction,
+	calcProductionFood,
 	calcResourcesAfterConstruction,
 	ConstructionName,
 	Constructions,
+	EMOJI,
 	Resources
 } from 'bastion-siege-logic'
 
@@ -21,7 +25,12 @@ function constructionFromCtx(ctx: any): {construction: ConstructionName; level: 
 	return {construction, level}
 }
 
+function incomeString(ctx: any, income: number, emoji: string) {
+	return `${ctx.wd.label('action.income')} ${income} ${emoji} / ${ctx.wd.label('bs.day')}`
+}
+
 function constructionText(ctx: any): string {
+	const constructions = ctx.session.constructions as Constructions
 	const {construction, level} = constructionFromCtx(ctx)
 
 	const requiredResources = calcBuildingCost(construction, level)
@@ -29,6 +38,23 @@ function constructionText(ctx: any): string {
 
 	const textParts = []
 	textParts.push(infoHeader(ctx, construction, level))
+
+	if (construction === 'townhall') {
+		textParts.push(incomeString(ctx, calcGoldIncome(level, constructions.houses), EMOJI.gold))
+	}
+
+	if (construction === 'farm') {
+		textParts.push(incomeString(ctx, calcProductionFood(level, constructions.houses), EMOJI.food))
+	}
+
+	if (construction === 'sawmill') {
+		textParts.push(incomeString(ctx, calcProduction(level), EMOJI.wood))
+	}
+
+	if (construction === 'mine') {
+		textParts.push(incomeString(ctx, calcProduction(level), EMOJI.stone))
+	}
+
 	textParts.push(constructionResources(ctx, requiredResources, currentResources))
 
 	return textParts.join('\n\n')

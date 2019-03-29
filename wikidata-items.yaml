@@ -5,6 +5,7 @@ menu:
   wikidataItem: Q16222597
 bs:
   buildings: Q41176
+  day: Q573
   trade: Q601401
   war: Q198
   workshop: Q656720
@@ -26,3 +27,4 @@ resource:
   food: Q2095
 action:
   upgrade: Q920419
+  income: Q1527264
