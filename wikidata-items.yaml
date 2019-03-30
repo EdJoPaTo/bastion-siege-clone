@@ -31,6 +31,7 @@ resource:
   stone: Q22731
   food: Q2095
 action:
-  upgrade: Q920419
-  income: Q1527264
   buy: Q1369832
+  upgrade: Q920419
+other:
+  income: Q1527264

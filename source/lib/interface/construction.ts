@@ -40,7 +40,7 @@ function simpleLineString(...args: (string | number)[]): string {
 }
 
 function incomeString(ctx: any, income: number | string, unit: string): string {
-	return simpleLineString(ctx.wd.label('action.income'), income, `${unit} / ${ctx.wd.label('bs.day')}`)
+	return simpleLineString(ctx.wd.label('other.income'), income, `${unit} / ${ctx.wd.label('bs.day')}`)
 }
 
 function storageCapacityString(ctx: any, capacity: number, unit: ResourceName): string {
