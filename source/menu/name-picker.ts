@@ -1,8 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {getGivenNames, getFamilyNames} from '../lib/name-options'
-
-const FALLBACK = '🔮'
+import {outEmoji} from '../lib/interface/generals'
 
 export function nameNeeded(ctx: any): boolean {
 	return !ctx.session.name
@@ -25,14 +24,14 @@ function randomEntry<T>(possibilities: ReadonlyArray<T>): T {
 	return possibilities[rand]
 }
 
-menu.button((ctx: any) => ctx.session.createFirst || FALLBACK, 'first', {
+menu.button((ctx: any) => ctx.session.createFirst || outEmoji.nameFallback, 'first', {
 	doFunc: (ctx: any) => {
 		const possible = getGivenNames()
 		ctx.session.createFirst = randomEntry(possible)
 	}
 })
 
-menu.button((ctx: any) => ctx.session.createLast || FALLBACK, 'last', {
+menu.button((ctx: any) => ctx.session.createLast || outEmoji.nameFallback, 'last', {
 	joinLastRow: true,
 	doFunc: (ctx: any) => {
 		const possible = getFamilyNames()

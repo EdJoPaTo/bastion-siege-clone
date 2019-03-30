@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {EMOJI} from 'bastion-siege-logic'
 
 import {resources} from '../lib/interface/resource'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
@@ -30,7 +30,7 @@ function menuText(ctx: any): string {
 const menu = new TelegrafInlineMenu(menuText)
 menu.setCommand('start')
 
-menu.submenu((ctx: any) => `👋 ${ctx.wd.label('menu.name')}`, 'name', nameMenu.menu, {
+menu.submenu((ctx: any) => `${outEmoji.name} ${ctx.wd.label('menu.name')}`, 'name', nameMenu.menu, {
 	hide: ctx => !nameMenu.nameNeeded(ctx)
 })
 
@@ -47,6 +47,6 @@ menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade'
 	joinLastRow: true
 })
 
-menu.submenu((ctx: any) => `🏳️‍🌈 ${ctx.wd.label('menu.language')}`, 'lang', languageMenu)
+menu.submenu((ctx: any) => `${outEmoji.language} ${ctx.wd.label('menu.language')}`, 'lang', languageMenu)
 
 export default menu

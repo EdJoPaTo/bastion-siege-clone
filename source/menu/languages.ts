@@ -1,14 +1,14 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {countryEmojisOfLanguage} from '../lib/interface/language-code-emojis'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
 
 async function flagsString(languageCode: string, fallbackFlag: boolean): Promise<string> {
 	const flags = await countryEmojisOfLanguage(languageCode)
 	if (flags.length === 0 && fallbackFlag) {
-		return '🏳️‍🌈'
+		return outEmoji.language
 	}
 
 	return flags.join('')

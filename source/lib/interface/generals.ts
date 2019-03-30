@@ -1,6 +1,9 @@
 export const outEmoji: {[key: string]: string} = {
-	possibleYes: '✅',
-	possibleNo: '⛔️'
+	name: '👋',
+	nameFallback: '🔮',
+	language: '🏳️‍🌈',
+	possibleNo: '⛔️',
+	possibleYes: '✅'
 }
 
 export function possibleEmoji(condition: boolean): string {
