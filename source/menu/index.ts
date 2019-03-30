@@ -3,6 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {EMOJI} from 'bastion-siege-logic'
 
 import {resources} from '../lib/interface/resource'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
@@ -12,15 +13,15 @@ import warMenu from './war'
 
 function menuText(ctx: any): string {
 	let text = ''
-	text += `*${ctx.wd.label('menu.menu')}*\n`
+	text += wikidataInfoHeader(ctx, 'menu.menu')
+	text += '\n\n'
 
 	if (ctx.session.name) {
 		const {first, last} = ctx.session.name
-		text += '\n'
-		text += `😎 ${first} ${last}\n`
+		text += `${ctx.wd.label('menu.name')} ${first} ${last}`
+		text += '\n\n'
 	}
 
-	text += '\n'
 	text += resources(ctx, ctx.session.resources)
 
 	return text

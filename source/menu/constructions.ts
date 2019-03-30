@@ -11,6 +11,7 @@ import {
 } from 'bastion-siege-logic'
 
 import {constructionLine} from '../lib/interface/construction'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
 import entryMenu from './construction'
 
@@ -26,9 +27,9 @@ function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]
 	const constructions = ctx.session.constructions as Constructions
 
 	let text = ''
-	text += `${EMOJI[key]} *${ctx.wd.label(wdKey)}*\n`
+	text += wikidataInfoHeader(ctx, wdKey, {titlePrefix: EMOJI[key]})
 
-	text += '\n'
+	text += '\n\n'
 
 	text += entries
 		.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))

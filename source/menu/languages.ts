@@ -1,8 +1,9 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {countryEmojisOfLanguage} from '../lib/interface/language-code-emojis'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
-const menu = new TelegrafInlineMenu(ctx => languageText(ctx, true))
+const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
 
 async function flagsString(languageCode: string, fallbackFlag: boolean): Promise<string> {
 	const flags = await countryEmojisOfLanguage(languageCode)
@@ -13,15 +14,10 @@ async function flagsString(languageCode: string, fallbackFlag: boolean): Promise
 	return flags.join('')
 }
 
-async function languageText(ctx: any, markdown = false): Promise<string> {
+async function languageMenuText(ctx: any): Promise<string> {
 	const flags = await flagsString(ctx.wd.locale(), true)
-	const text = ctx.wd.label('menu.language')
-
-	if (markdown) {
-		return `${flags} *${text}*`
-	}
-
-	return `${flags} ${text}`
+	const text = wikidataInfoHeader(ctx, 'menu.language', {titlePrefix: flags})
+	return text
 }
 
 menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.5), {

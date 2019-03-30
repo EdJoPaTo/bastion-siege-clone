@@ -15,7 +15,7 @@ import {
 } from 'bastion-siege-logic'
 
 import {formatNumberShort} from './format-number'
-import {possibleEmoji} from './generals'
+import {possibleEmoji, wikidataInfoHeader} from './generals'
 
 export function constructionLine(ctx: any, construction: ConstructionName, level: number, canUpgrade: boolean): string {
 	const parts: string[] = []
@@ -32,20 +32,7 @@ export function constructionLine(ctx: any, construction: ConstructionName, level
 
 export function infoHeader(ctx: any, construction: ConstructionName, currentLevel: number): string {
 	const wdKey = `construction.${construction}`
-
-	let text = ''
-	text += `${EMOJI[construction]} *${ctx.wd.label(wdKey)}* ${currentLevel}`
-	text += '\n'
-	text += ctx.wd.description(wdKey)
-
-	if (ctx.wd.infoMissing(wdKey)) {
-		text += '\n\n'
-		const wdItem = ctx.wd.label('menu.wikidataItem')
-		// TODO: i18n
-		text += `Some info is missing in the ${wdItem}. Consider updating :)`
-	}
-
-	return text
+	return wikidataInfoHeader(ctx, wdKey, {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
 }
 
 function simpleLineString(...args: (string | number)[]): string {

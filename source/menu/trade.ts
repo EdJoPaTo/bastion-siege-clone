@@ -7,8 +7,9 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
-import {resources} from '../lib/interface/resource'
 import {formatNumberShort} from '../lib/interface/format-number'
+import {resources} from '../lib/interface/resource'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
 function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
 	const result: Resources = {...currentResources}
@@ -21,8 +22,8 @@ function tradeMenuText(ctx: any): string {
 	const currentResources = ctx.session.resources as Resources
 
 	let text = ''
-	text += `*${ctx.wd.label('action.buy')}*\n`
-	text += '\n'
+	text += wikidataInfoHeader(ctx, 'action.buy', {titlePrefix: EMOJI.trade})
+	text += '\n\n'
 	text += resources(ctx, currentResources)
 	return text
 }
@@ -40,9 +41,9 @@ function tradeResourceMenuText(ctx: any): string {
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
 	let text = ''
-	text += `*${ctx.wd.label('action.buy')}*\n`
+	text += wikidataInfoHeader(ctx, `resource.${resource}`, {titlePrefix: EMOJI[resource]})
 
-	text += '\n'
+	text += '\n\n'
 	text += `${EMOJI.gold} ${ctx.wd.label('resource.gold')} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
 	text += `${EMOJI[resource]} ${ctx.wd.label(`resource.${resource}`)} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
 	text += `${ctx.wd.label('bs.storageCapacity')} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
