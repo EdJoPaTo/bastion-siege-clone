@@ -5,8 +5,9 @@ import {EMOJI} from 'bastion-siege-logic'
 import {resources} from '../lib/interface/resource'
 
 import {buildingsMenu, workshopMenu} from './constructions'
-import languageMenu from './languages'
 import * as nameMenu from './name-picker'
+import languageMenu from './languages'
+import tradeMenu from './trade'
 
 function menuText(ctx: any): string {
 	let text = ''
@@ -41,9 +42,8 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('bs.war')}`, 'war',
 	doFunc: ctx => ctx.answerCbQuery('work in progress…')
 })
 
-menu.simpleButton((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade', {
-	joinLastRow: true,
-	doFunc: ctx => ctx.answerCbQuery('work in progress…')
+menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade', tradeMenu, {
+	joinLastRow: true
 })
 
 menu.submenu((ctx: any) => `🏳️‍🌈 ${ctx.wd.label('menu.language')}`, 'lang', languageMenu)

@@ -33,3 +33,4 @@ resource:
 action:
   upgrade: Q920419
   income: Q1527264
+  buy: Q1369832
