@@ -31,7 +31,10 @@ resource:
   stone: Q22731
   food: Q2095
 action:
+  attack: Q1174599
   buy: Q1369832
+  search: Q36963
   upgrade: Q920419
 other:
   income: Q1527264
+  target: P533
