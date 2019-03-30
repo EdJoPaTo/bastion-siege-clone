@@ -10,6 +10,8 @@ export function nameNeeded(ctx: any): boolean {
 async function menuText(ctx: any): Promise<string> {
 	let text = ''
 
+	text += outEmoji.name
+	text += ' '
 	text += '*'
 	text += ctx.i18n.t('name.question')
 	text += '*'
