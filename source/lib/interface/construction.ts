@@ -82,7 +82,7 @@ export function constructionPropertyString(ctx: any, construction: ConstructionN
 	if (construction === 'houses') {
 		const lines = []
 		lines.push(simpleLineString(ctx.wd.label('bs.people'), calcHousesCapacity(constructions.houses), EMOJI.people))
-		lines.push(incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold))
+		lines.push(incomeString(ctx, -calcProduction(constructions.houses), EMOJI.food))
 
 		return lines.join('\n')
 	}
