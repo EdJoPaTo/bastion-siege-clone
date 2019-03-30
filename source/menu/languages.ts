@@ -4,9 +4,9 @@ import {countryEmojisOfLanguage} from '../lib/interface/language-code-emojis'
 
 const menu = new TelegrafInlineMenu(ctx => languageText(ctx, true))
 
-async function flagsString(languageCode: string): Promise<string> {
+async function flagsString(languageCode: string, fallbackFlag: boolean): Promise<string> {
 	const flags = await countryEmojisOfLanguage(languageCode)
-	if (flags.length === 0) {
+	if (flags.length === 0 && fallbackFlag) {
 		return '🏳️‍🌈'
 	}
 
@@ -14,7 +14,7 @@ async function flagsString(languageCode: string): Promise<string> {
 }
 
 async function languageText(ctx: any, markdown = false): Promise<string> {
-	const flags = await flagsString(ctx.wd.locale())
+	const flags = await flagsString(ctx.wd.locale(), true)
 	const text = ctx.wd.label('menu.language')
 
 	if (markdown) {
@@ -27,8 +27,8 @@ async function languageText(ctx: any, markdown = false): Promise<string> {
 menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.5), {
 	columns: 3,
 	textFunc: async (_ctx, key) => {
-		const flags = await countryEmojisOfLanguage(key)
-		return `${flags.join('')} ${key}`
+		const flags = await flagsString(key, false)
+		return `${flags} ${key}`
 	},
 	isSetFunc: (ctx: any, key) => key === ctx.wd.locale(),
 	setFunc: (ctx: any, key) => {
