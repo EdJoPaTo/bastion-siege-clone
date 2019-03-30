@@ -7,9 +7,8 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
-import {
-	possibleEmoji
-} from './generals'
+import {formatNumberShort} from './format-number'
+import {possibleEmoji} from './generals'
 
 export function resourceLine(ctx: any, resource: ResourceName, amount: number): string {
 	const parts: string[] = []
@@ -18,7 +17,7 @@ export function resourceLine(ctx: any, resource: ResourceName, amount: number): 
 	parts.push(
 		`*${ctx.wd.label(`resource.${resource}`)}*`
 	)
-	parts.push(String(amount))
+	parts.push(formatNumberShort(amount, true))
 
 	return parts.join(' ')
 }

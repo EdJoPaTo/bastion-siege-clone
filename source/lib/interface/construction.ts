@@ -14,9 +14,8 @@ import {
 	ResourceName
 } from 'bastion-siege-logic'
 
-import {
-	possibleEmoji
-} from './generals'
+import {formatNumberShort} from './format-number'
+import {possibleEmoji} from './generals'
 
 export function constructionLine(ctx: any, construction: ConstructionName, level: number, canUpgrade: boolean): string {
 	const parts: string[] = []
@@ -58,7 +57,7 @@ function incomeString(ctx: any, income: number | string, unit: string): string {
 }
 
 function storageCapacityString(ctx: any, capacity: number, unit: ResourceName): string {
-	return simpleLineString(ctx.wd.label('bs.storageCapacity'), capacity, EMOJI[unit])
+	return simpleLineString(ctx.wd.label('bs.storageCapacity'), formatNumberShort(capacity, true), EMOJI[unit])
 }
 
 export function constructionPropertyString(ctx: any, construction: ConstructionName, constructions: Constructions): string | undefined {

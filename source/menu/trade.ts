@@ -8,6 +8,7 @@ import {
 } from 'bastion-siege-logic'
 
 import {resources} from '../lib/interface/resource'
+import {formatNumberShort} from '../lib/interface/format-number'
 
 function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
 	const result: Resources = {...currentResources}
@@ -42,9 +43,9 @@ function tradeResourceMenuText(ctx: any): string {
 	text += `*${ctx.wd.label('action.buy')}*\n`
 
 	text += '\n'
-	text += `${EMOJI.gold} ${ctx.wd.label('resource.gold')} ${currentResources.gold}${EMOJI.gold}\n`
-	text += `${EMOJI[resource]} ${ctx.wd.label(`resource.${resource}`)} ${currentResources[resource]}${EMOJI[resource]}\n`
-	text += `${ctx.wd.label('bs.storageCapacity')} ${storageCapacity}${EMOJI[resource]}\n`
+	text += `${EMOJI.gold} ${ctx.wd.label('resource.gold')} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
+	text += `${EMOJI[resource]} ${ctx.wd.label(`resource.${resource}`)} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
+	text += `${ctx.wd.label('bs.storageCapacity')} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
 	text += '\n'
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`
 	return text
@@ -82,7 +83,8 @@ resourceMenu.select('buy', buyOptions, {
 	columns: 3,
 	textFunc: (ctx: any, key: string) => {
 		const resource = resourceFromCtx(ctx)
-		return `${key}${EMOJI[resource]}`
+		const numberText = formatNumberShort(Number(key), true)
+		return `${numberText}${EMOJI[resource]}`
 	},
 	setFunc: (ctx: any, key: string) => {
 		const resource = resourceFromCtx(ctx)
