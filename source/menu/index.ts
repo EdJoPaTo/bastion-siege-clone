@@ -18,7 +18,7 @@ function menuText(ctx: any): string {
 
 	if (ctx.session.name) {
 		const {first, last} = ctx.session.name
-		text += `${ctx.wd.label('menu.name')} ${first} ${last}`
+		text += `${outEmoji.name} ${first} ${last}`
 		text += '\n\n'
 	}
 
