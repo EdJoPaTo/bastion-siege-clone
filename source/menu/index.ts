@@ -8,6 +8,7 @@ import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
 import languageMenu from './languages'
 import tradeMenu from './trade'
+import warMenu from './war'
 
 function menuText(ctx: any): string {
 	let text = ''
@@ -37,9 +38,8 @@ menu.submenu((ctx: any) => `${EMOJI.workshop} ${ctx.wd.label('bs.workshop')}`, '
 	joinLastRow: true
 })
 
-menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('bs.war')}`, 'war', {
-	hide: ctx => nameMenu.nameNeeded(ctx),
-	doFunc: ctx => ctx.answerCbQuery('work in progress…')
+menu.submenu((ctx: any) => `${EMOJI.war} ${ctx.wd.label('bs.war')}`, 'war', warMenu, {
+	hide: ctx => nameMenu.nameNeeded(ctx)
 })
 
 menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade', tradeMenu, {
