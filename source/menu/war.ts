@@ -49,7 +49,13 @@ function afterBattleMessageText(ctx: any, attack: boolean, win: boolean, name: {
 	headline += '*'
 	lines.push(headline)
 
-	lines.push(`*${ctx.wd.label('battle.target')}* ${name.first} ${name.last}`)
+	let enemyLine = ''
+	enemyLine += '*'
+	enemyLine += attack ? ctx.wd.label('battle.target') : ctx.wd.label('battle.attacker')
+	enemyLine += '*'
+	enemyLine += ' '
+	enemyLine += `${name.first} ${name.last}`
+	lines.push(enemyLine)
 
 	if (loot > 0) {
 		lines.push(`${formatNumberShort(loot, true)}${EMOJI.gold}`)
