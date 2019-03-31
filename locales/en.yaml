@@ -1,6 +1,5 @@
 battle:
-  attack:
-    yourself: Seriously? You attacked yourself. Everyone died.
+  yourself: Seriously? You attacked yourself. Everyone died.
 menu:
   back: back
 name:

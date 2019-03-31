@@ -119,7 +119,7 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 			// Easter egg: attack yourself duplicates gold
 			ctx.session.resources.gold *= 2
 
-			return ctx.editMessageText(ctx.i18n.t('battle.attack.yourself'))
+			return ctx.editMessageText(ctx.i18n.t('battle.yourself'))
 		}
 
 		const attackerLoot = attackerWins ? possibleLootFromTarget : 0
