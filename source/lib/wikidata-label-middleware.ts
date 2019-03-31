@@ -142,7 +142,7 @@ export default class WikidataLabel {
 						ctx.session.wikidataLanguageCode = code
 					}
 
-					return ctx.session.wikidataLanguageCode
+					return lang(ctx)
 				},
 				label: (key: string) => this.label(key, lang(ctx)),
 				url: (key: string) => this.url(key),
