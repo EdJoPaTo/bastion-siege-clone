@@ -7,6 +7,7 @@ import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
+import spyMenu from './spy'
 import languageMenu from './languages'
 import tradeMenu from './trade'
 import warMenu from './war'
@@ -44,6 +45,11 @@ menu.submenu((ctx: any) => `${EMOJI.workshop} ${ctx.wd.label('bs.workshop')}`, '
 
 menu.submenu((ctx: any) => `${EMOJI.war} ${ctx.wd.label('bs.war')}`, 'war', warMenu, {
 	hide: (ctx: any) => nameMenu.nameNeeded(ctx) || ctx.session.constructions.barracks === 0
+})
+
+menu.submenu((ctx: any) => `${EMOJI.search} ${ctx.wd.label('menu.spy')}`, 'spy', spyMenu, {
+	joinLastRow: true,
+	hide: (ctx: any) => nameMenu.nameNeeded(ctx)
 })
 
 menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade', tradeMenu, {

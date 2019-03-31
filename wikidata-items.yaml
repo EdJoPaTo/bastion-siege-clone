@@ -2,6 +2,7 @@ menu:
   language: Q315
   menu: Q846925
   name: Q1071027
+  spy: Q9352089
   wikidataItem: Q16222597
 bs:
   archer: Q890527
@@ -33,6 +34,8 @@ resource:
 action:
   attack: Q1174599
   buy: Q1369832
+  change: Q1150070
+  espionage: Q165950
   search: Q36963
   upgrade: Q920419
 battle:
