@@ -24,6 +24,9 @@ function menuText(ctx: any): string {
 
 	text += resources(ctx, ctx.session.resources)
 
+	text += '\n\n'
+	text += ctx.i18n.t('disclaimer')
+
 	return text
 }
 
