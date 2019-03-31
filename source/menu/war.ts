@@ -93,7 +93,7 @@ function menuText(ctx: any): string {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'attack', {
+menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'attack', {
 	hide: (ctx: any) => !ctx.session.attackTarget,
 	doFunc: (ctx: any) => {
 		const now = Date.now() / 1000
@@ -125,7 +125,7 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 			// Easter egg: attack yourself duplicates gold
 			ctx.session.resources.gold *= 2
 
-			return ctx.editMessageText(ctx.i18n.t('battle.yourself'))
+			return ctx.reply(ctx.i18n.t('battle.yourself'))
 		}
 
 		const attackerLoot = attackerWins ? possibleLootFromTarget : 0
@@ -144,7 +144,7 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 		const extra = Extra.markdown()
 
 		return Promise.all([
-			ctx.editMessageText(afterBattleMessageText(ctx, true, attackerWins, target.name, attackerLoot), extra),
+			ctx.reply(afterBattleMessageText(ctx, true, attackerWins, target.name, attackerLoot), extra),
 			ctx.tg.sendMessage(targetId, afterBattleMessageText(ctx, false, !attackerWins, attacker.name, targetLoot), extra)
 		])
 	}
