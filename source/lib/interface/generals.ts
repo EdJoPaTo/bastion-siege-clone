@@ -42,8 +42,7 @@ export function wikidataInfoHeader(ctx: any, wdKey: string, options: InfoHeaderO
 	if (ctx.wd.infoMissing(wdKey)) {
 		text += '\n\n'
 		const wdItem = ctx.wd.label('menu.wikidataItem')
-		// TODO: i18n
-		text += `Some info is missing in the ${wdItem}. Consider updating :)`
+		text += ctx.i18n.t('menu.infoMissing', {wdItem})
 	}
 
 	return text
