@@ -3,8 +3,8 @@
 
 This is a project trying to clone [Bastion Siege](https://t.me/BastionSiegeBot).
 
-The challenge of this project is to use telegraf-inline-menu in order to get a cool Telegram Bot within a short amount of time.
-For localisation Wikidata Labels are used as they provide a wide range of languages and context information (which is sadly currently not used besides the description).
+The challenge of this project is to use [telegraf-inline-menu](https://github.com/EdJoPaTo/telegraf-inline-menu) in order to get a cool Telegram Bot within a short amount of time.
+For localisation [Wikidata](https://wikidata.org/) Labels are used as they provide a wide range of languages and context information (which is sadly currently not used besides the descriptions and the name selector).
 
 The logic of BastionSiege is used from [Bastion Siege Logic](https://github.com/EdJoPaTo/bastion-siege-logic).
 
