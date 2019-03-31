@@ -1,0 +1,13 @@
+battle:
+  yourself: Echt jetzt? Du hast dich selbst angegriffen. Alle tot.
+menu:
+  back: zurück
+  infoMissing: Dem ${wdItem} fehlen einige Infos. Denk mal drüber nach diese hinzuzufügen :)
+name:
+  take: Fantastisch! Das bin ich!
+  question: Wie nennt man dich?
+disclaimer: >
+  Dieser Bot wurde als Duplikat von @BastionSiegeBot erstellt.
+  Ich habe keine absicht dessen Arbeit, die dort geleistet wurde zu stehlen.
+  Leider unterstützt die Neuauflage @BSv2Bot nur Russisch.
+  Das führte zur Idee eines Aprilscherzes 2019 mit ganz vielen Sprachen.
