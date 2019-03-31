@@ -129,7 +129,7 @@ export default class WikidataLabel {
 
 	middleware(): (ctx: any, next: any) => void {
 		function lang(ctx: any): string {
-			return ctx.session.wikidataLanguageCode || ctx.from.language_code || 'de'
+			return ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
 		}
 
 		return (ctx, next) => {
