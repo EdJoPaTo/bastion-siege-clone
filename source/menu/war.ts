@@ -19,17 +19,20 @@ function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60
 }
 
-function getWinChance(constructions: Constructions, people: PeopleInConstructions, attack: boolean): number {
-	const {wall, trebuchet} = constructions
+function getAttackerWinChance(constructions: Constructions, people: PeopleInConstructions): number {
+	const {trebuchet} = constructions
 	const {barracks} = people
+
+	let chance = barracks / 100
+	chance += trebuchet / 2
+	return chance
+}
+
+function getDefenderWinChance(constructions: Constructions): number {
+	const {barracks, wall} = constructions
+
 	let chance = barracks * 40 / 100
-
-	if (attack) {
-		chance += trebuchet / 2
-	} else {
-		chance += wall / 2
-	}
-
+	chance += wall / 2
 	return chance
 }
 
@@ -78,8 +81,8 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 		const targetConstructions = target.constructions as Constructions
 		const targetPeople = target.people as PeopleInConstructions
 
-		const attackerWinChance = getWinChance(attackerConstructions, attackerPeople, true)
-		const targetWinChance = getWinChance(targetConstructions, targetPeople, false)
+		const attackerWinChance = getAttackerWinChance(attackerConstructions, attackerPeople)
+		const targetWinChance = getDefenderWinChance(targetConstructions)
 
 		const possibleLootFromAttacker = getLoot(attackerConstructions)
 		const possibleLootFromTarget = getLoot(targetConstructions)
