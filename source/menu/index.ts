@@ -40,7 +40,7 @@ menu.submenu((ctx: any) => `${EMOJI.workshop} ${ctx.wd.label('bs.workshop')}`, '
 })
 
 menu.submenu((ctx: any) => `${EMOJI.war} ${ctx.wd.label('bs.war')}`, 'war', warMenu, {
-	hide: ctx => nameMenu.nameNeeded(ctx)
+	hide: (ctx: any) => nameMenu.nameNeeded(ctx) || ctx.session.constructions.barracks === 0
 })
 
 menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade', tradeMenu, {
