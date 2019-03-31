@@ -1,13 +1,18 @@
 import {
 	CONSTRUCTIONS,
-	estimateResourcesAfter
+	estimateResourcesAfter,
+	Resources
 } from 'bastion-siege-logic'
 
 const GAME_SPEEDUP = 30
 
-function initWhenMissing(ctx: any): void {
-	const {constructions, resources, resourcesTimestamp} = ctx.session
+function foodPenalty(ctx: any): number {
+	const resources = ctx.session.resources as Resources
+	return resources.food > 0 ? 1 : 0.2
+}
 
+function initWhenMissing(ctx: any, now: number): void {
+	const {constructions} = ctx.session
 	if (!constructions) {
 		ctx.session.constructions = {}
 		for (const key of CONSTRUCTIONS) {
@@ -19,25 +24,24 @@ function initWhenMissing(ctx: any): void {
 		ctx.session.constructions.houses = 1
 	}
 
+	const {resources, resourcesTimestamp} = ctx.session
 	if (!resources || !resourcesTimestamp) {
-		ctx.session.resourcesTimestamp = Date.now() / 1000
-		ctx.session.resources = {
+		ctx.session.resourcesTimestamp = now
+		const resources: Resources = {
 			gold: 500,
 			wood: 0,
 			stone: 0,
 			food: 200
 		}
+		ctx.session.resources = resources
 	}
 }
 
-export function calcCurrentResources(ctx: any): void {
-	const now = Date.now() / 1000
+function calcCurrentResources(ctx: any, now: number): void {
 	const {constructions, resources, resourcesTimestamp} = ctx.session
 
-	const foodPenalty = resources.food > 0 ? 1 : 0.2
-
 	const totalSeconds = now - resourcesTimestamp
-	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty * totalSeconds / 60)
+	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(ctx) * totalSeconds / 60)
 
 	if (totalMinutes > 0) {
 		ctx.session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
@@ -47,8 +51,10 @@ export function calcCurrentResources(ctx: any): void {
 
 export function middleware(): (ctx: any, next?: () => void) => void {
 	return (ctx, next) => {
-		initWhenMissing(ctx)
-		calcCurrentResources(ctx)
+		const now = Date.now() / 1000
+
+		initWhenMissing(ctx, now)
+		calcCurrentResources(ctx, now)
 
 		return next && next()
 	}
