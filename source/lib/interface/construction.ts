@@ -4,6 +4,7 @@ import {
 	calcGoldIncome,
 	calcGoldIncomePerPerson,
 	calcHousesCapacity,
+	calcHousesPeopleIncome,
 	calcProduction,
 	calcProductionFood,
 	calcStorageCapacity,
@@ -13,6 +14,8 @@ import {
 	EMOJI,
 	ResourceName
 } from 'bastion-siege-logic'
+
+import {PeopleInConstructions} from '../../types'
 
 import {formatNumberShort} from './format-number'
 import {possibleEmoji, wikidataInfoHeader} from './generals'
@@ -47,7 +50,11 @@ function storageCapacityString(ctx: any, capacity: number, unit: ResourceName): 
 	return simpleLineString(ctx.wd.label('bs.storageCapacity'), formatNumberShort(capacity, true), EMOJI[unit])
 }
 
-export function constructionPropertyString(ctx: any, construction: ConstructionName, constructions: Constructions): string | undefined {
+export function peopleString(label: string, available: number, capacity: number, unit: string): string {
+	return simpleLineString(label, formatNumberShort(available, true) + unit, '/', formatNumberShort(capacity, true) + unit)
+}
+
+export function constructionPropertyString(ctx: any, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): string | undefined {
 	if (construction === 'townhall') {
 		const lines = []
 		lines.push(storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))
@@ -67,7 +74,8 @@ export function constructionPropertyString(ctx: any, construction: ConstructionN
 
 	if (construction === 'houses') {
 		const lines = []
-		lines.push(simpleLineString(ctx.wd.label('bs.people'), calcHousesCapacity(constructions.houses), EMOJI.people))
+		lines.push(peopleString(ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
+		lines.push(incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people))
 		lines.push(incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food))
 
 		return lines.join('\n')
@@ -86,11 +94,11 @@ export function constructionPropertyString(ctx: any, construction: ConstructionN
 	}
 
 	if (construction === 'barracks') {
-		return simpleLineString(ctx.wd.label('bs.army'), calcBarracksCapacity(constructions.barracks), EMOJI.army)
+		return peopleString(ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	}
 
 	if (construction === 'wall') {
-		return simpleLineString(ctx.wd.label('bs.archer'), calcWallArcherCapacity(constructions.wall), EMOJI.archer)
+		return peopleString(ctx.wd.label('bs.archer'), people.wall, calcWallArcherCapacity(constructions.wall), EMOJI.archer)
 	}
 
 	return undefined

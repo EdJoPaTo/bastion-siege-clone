@@ -8,6 +8,8 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
+import {PeopleInConstructions} from '../types'
+
 import {infoHeader, constructionPropertyString} from '../lib/interface/construction'
 import {constructionResources} from '../lib/interface/resource'
 
@@ -23,6 +25,7 @@ function constructionFromCtx(ctx: any): {construction: ConstructionName; level: 
 
 function constructionText(ctx: any): string {
 	const constructions = ctx.session.constructions as Constructions
+	const people = ctx.session.people as PeopleInConstructions
 	const {construction, level} = constructionFromCtx(ctx)
 
 	const requiredResources = calcBuildingCost(construction, level)
@@ -31,7 +34,7 @@ function constructionText(ctx: any): string {
 	const textParts = []
 	textParts.push(infoHeader(ctx, construction, level))
 
-	const properties = constructionPropertyString(ctx, construction, constructions)
+	const properties = constructionPropertyString(ctx, constructions, people, construction)
 	if (properties) {
 		textParts.push(properties)
 	}

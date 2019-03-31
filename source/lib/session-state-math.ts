@@ -1,8 +1,15 @@
 import {
+	calcBarracksCapacity,
+	calcHousesCapacity,
+	calcHousesPeopleIncome,
+	calcWallArcherCapacity,
+	Constructions,
 	CONSTRUCTIONS,
 	estimateResourcesAfter,
 	Resources
 } from 'bastion-siege-logic'
+
+import {PeopleInConstructions} from '../types'
 
 const GAME_SPEEDUP = 30
 
@@ -35,6 +42,52 @@ function initWhenMissing(ctx: any, now: number): void {
 		}
 		ctx.session.resources = resources
 	}
+
+	const {people, peopleTimestamp} = ctx.session
+	if (!people || !peopleTimestamp) {
+		ctx.session.peopleTimestamp = now
+		const people: PeopleInConstructions = {
+			houses: 0,
+			barracks: 0,
+			wall: 0
+		}
+		ctx.session.people = people
+	}
+}
+
+function assignPeopleToConstruction(people: PeopleInConstructions, construction: keyof PeopleInConstructions, totalCapacity: number, peopleAvailable: number): number {
+	const freePlaces = totalCapacity - people[construction]
+	if (freePlaces > 0) {
+		const addPeople = Math.min(freePlaces, peopleAvailable)
+		people[construction] += addPeople
+		return addPeople
+	}
+
+	return 0
+}
+
+function calcCurrentPeople(ctx: any, now: number): void {
+	const {peopleTimestamp} = ctx.session
+	const constructions = ctx.session.constructions as Constructions
+	const people = ctx.session.people as PeopleInConstructions
+
+	const totalSeconds = now - peopleTimestamp
+	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(ctx) * totalSeconds / 60)
+
+	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses) * totalMinutes
+	if (totalPoepleIncome < 1) {
+		return
+	}
+
+	ctx.session.peopleTimestamp = now
+
+	let peopleAvailable = totalPoepleIncome + people.houses
+	people.houses = 0
+
+	peopleAvailable -= assignPeopleToConstruction(people, 'barracks', calcBarracksCapacity(constructions.barracks), peopleAvailable)
+	peopleAvailable -= assignPeopleToConstruction(people, 'wall', calcWallArcherCapacity(constructions.wall), peopleAvailable)
+
+	people.houses = Math.min(peopleAvailable, calcHousesCapacity(constructions.houses))
 }
 
 function calcCurrentResources(ctx: any, now: number): void {
@@ -55,6 +108,7 @@ export function middleware(): (ctx: any, next?: () => void) => void {
 
 		initWhenMissing(ctx, now)
 		calcCurrentResources(ctx, now)
+		calcCurrentPeople(ctx, now)
 
 		return next && next()
 	}

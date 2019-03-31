@@ -1,19 +1,34 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
+	calcBarracksCapacity,
+	calcHousesCapacity,
+	Constructions,
 	EMOJI
 } from 'bastion-siege-logic'
 
-import {formatNumberShort} from '../lib/interface/format-number'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {PeopleInConstructions} from '../types'
+
 import * as userSessions from '../lib/user-sessions'
 
+import {formatNumberShort} from '../lib/interface/format-number'
+import {peopleString} from '../lib/interface/construction'
+import {wikidataInfoHeader} from '../lib/interface/generals'
+
 function menuText(ctx: any): string {
+	const constructions = ctx.session.constructions as Constructions
+	const people = ctx.session.people as PeopleInConstructions
 	const attackTargetId = ctx.session.attackTarget as number
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
 	let text = ''
 	text += wikidataInfoHeader(ctx, 'bs.war', {titlePrefix: EMOJI.war})
 	text += '\n\n'
+	text += peopleString(ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += '\n'
+	text += peopleString(ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += '\n'
+
+	text += '\n'
 
 	if (attackTarget) {
 		const {name, resources} = attackTarget
@@ -32,10 +47,12 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'atta
 	hide: (ctx: any) => !ctx.session.attackTarget,
 	doFunc: (ctx: any) => {
 		const targetId = ctx.session.attackTarget
+		const attackArmy = ctx.session.people.barracks
 		delete ctx.session.attackTarget
+		ctx.session.people.barracks = 0
 
 		// TODO: do something useful
-		console.log('attack', targetId, ctx.session.attackTarget)
+		console.log('attack', targetId, ctx.session.people, attackArmy)
 		return ctx.answerCbQuery('Your army lost to a TODO')
 	}
 })
