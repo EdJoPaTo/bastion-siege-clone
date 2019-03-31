@@ -2,6 +2,7 @@ export const outEmoji: {[key: string]: string} = {
 	name: '👋',
 	nameFallback: '🔮',
 	language: '🏳️‍🌈',
+	chat: '💭',
 	win: '🎉',
 	lose: '😭',
 	possibleNo: '⛔️',

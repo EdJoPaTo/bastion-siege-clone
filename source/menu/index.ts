@@ -58,4 +58,6 @@ menu.submenu((ctx: any) => `${EMOJI.trade} ${ctx.wd.label('bs.trade')}`, 'trade'
 
 menu.submenu((ctx: any) => `${outEmoji.language} ${ctx.wd.label('menu.language')}`, 'lang', languageMenu)
 
+menu.urlButton((ctx: any) => `${outEmoji.chat} ${ctx.wd.label('menu.chat')}`, 'https://t.me/Bs1thApril')
+
 export default menu
