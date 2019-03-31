@@ -1,3 +1,11 @@
+battle:
+  attack:
+    lost: You lost against ${name}…
+    won: You won against ${name} and got ${loot}!
+    yourself: Seriously? You attacked yourself. Everyone died.
+  defence:
+    lost: You got attacked by ${name} and lost…
+    won: You got attacked by ${name} and won! You got ${loot}.
 menu:
   back: back
 name:
