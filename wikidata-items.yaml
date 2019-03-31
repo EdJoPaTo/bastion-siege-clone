@@ -36,9 +36,6 @@ action:
   search: Q36963
   upgrade: Q920419
 battle:
-  attacker: Q31924059
-  lose: Q14631121
   target: P533
-  win: Q50000
 other:
   income: Q1527264

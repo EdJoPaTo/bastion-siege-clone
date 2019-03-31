@@ -37,7 +37,7 @@ function getDefenderWinChance(constructions: Constructions): number {
 	return chance
 }
 
-function afterBattleMessageText(ctx: any, attack: boolean, win: boolean, name: {first: string, last: string}, loot: number) {
+function afterBattleMessageText(attack: boolean, win: boolean, name: {first: string, last: string}, loot: number) {
 	let lines = []
 
 	let headline = ''
@@ -45,17 +45,9 @@ function afterBattleMessageText(ctx: any, attack: boolean, win: boolean, name: {
 	headline += win ? outEmoji.win : outEmoji.lose
 	headline += ' '
 	headline += '*'
-	headline += win ? ctx.wd.label('battle.win') : ctx.wd.label('battle.lose')
+	headline += `${name.first} ${name.last}`
 	headline += '*'
 	lines.push(headline)
-
-	let enemyLine = ''
-	enemyLine += '*'
-	enemyLine += attack ? ctx.wd.label('battle.target') : ctx.wd.label('battle.attacker')
-	enemyLine += '*'
-	enemyLine += ' '
-	enemyLine += `${name.first} ${name.last}`
-	lines.push(enemyLine)
 
 	if (loot > 0) {
 		lines.push(`${formatNumberShort(loot, true)}${EMOJI.gold}`)
@@ -144,8 +136,8 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'atta
 		const extra = Extra.markdown()
 
 		return Promise.all([
-			ctx.reply(afterBattleMessageText(ctx, true, attackerWins, target.name, attackerLoot), extra),
-			ctx.tg.sendMessage(targetId, afterBattleMessageText(ctx, false, !attackerWins, attacker.name, targetLoot), extra)
+			ctx.reply(afterBattleMessageText(true, attackerWins, target.name, attackerLoot), extra),
+			ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name, targetLoot), extra)
 		])
 	}
 })
