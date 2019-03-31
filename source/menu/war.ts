@@ -37,8 +37,8 @@ function getDefenderWinChance(constructions: Constructions): number {
 	return chance
 }
 
-function afterBattleMessageText(attack: boolean, win: boolean, name: {first: string, last: string}, loot: number) {
-	let lines = []
+function afterBattleMessageText(attack: boolean, win: boolean, name: {first: string; last: string}, loot: number): string {
+	const lines = []
 
 	let headline = ''
 	headline += attack ? EMOJI.attack : EMOJI.defence

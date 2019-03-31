@@ -33,7 +33,7 @@ async function getPossibleSpies(lang: string): Promise<Spy[]> {
 async function currentSpy(ctx: any): Promise<Spy> {
 	const possibleSpies = await getPossibleSpies(ctx.wd.locale())
 
-	const selectedSpy = ctx.session.selectedSpy
+	const {selectedSpy} = ctx.session
 	const entries = possibleSpies.filter(o => o.value === selectedSpy)
 	if (entries.length === 1) {
 		return entries[0]
@@ -47,7 +47,7 @@ async function currentSpy(ctx: any): Promise<Spy> {
 
 async function tradeMenuText(ctx: any): Promise<string> {
 	let text = ''
-	text += wikidataInfoHeader(ctx, `menu.spy`, {titlePrefix: EMOJI.search})
+	text += wikidataInfoHeader(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
 
 	const mySpy = await currentSpy(ctx)
 
@@ -97,6 +97,6 @@ menu.button((ctx: any) => `${ctx.wd.label('action.change')}`, 'change', {
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => ctx.wd.url(`menu.spy`))
+menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => ctx.wd.url('menu.spy'))
 
 export default menu
