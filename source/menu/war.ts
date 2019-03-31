@@ -1,3 +1,4 @@
+import {Extra} from 'telegraf'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	calcBarracksCapacity,
@@ -13,7 +14,7 @@ import * as userSessions from '../lib/user-sessions'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {peopleString} from '../lib/interface/construction'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60
@@ -36,6 +37,27 @@ function getDefenderWinChance(constructions: Constructions): number {
 	return chance
 }
 
+function afterBattleMessageText(ctx: any, attack: boolean, win: boolean, name: {first: string, last: string}, loot: number) {
+	let lines = []
+
+	let headline = ''
+	headline += attack ? EMOJI.attack : EMOJI.defence
+	headline += win ? outEmoji.win : outEmoji.lose
+	headline += ' '
+	headline += '*'
+	headline += win ? ctx.wd.label('battle.win') : ctx.wd.label('battle.lose')
+	headline += '*'
+	lines.push(headline)
+
+	lines.push(`*${ctx.wd.label('battle.target')}* ${name.first} ${name.last}`)
+
+	if (loot > 0) {
+		lines.push(`${formatNumberShort(loot, true)}${EMOJI.gold}`)
+	}
+
+	return lines.join('\n')
+}
+
 function menuText(ctx: any): string {
 	const constructions = ctx.session.constructions as Constructions
 	const people = ctx.session.people as PeopleInConstructions
@@ -54,7 +76,7 @@ function menuText(ctx: any): string {
 
 	if (attackTarget) {
 		const {name, constructions} = attackTarget
-		text += `${ctx.wd.label('other.target')}\n`
+		text += `${ctx.wd.label('battle.target')}\n`
 		text += `${name.first} ${name.last}\n`
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
 		text += '\n\n'
@@ -71,13 +93,11 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 		const now = Date.now() / 1000
 
 		const attacker = ctx.session
-		const attackerNameString = `${attacker.name.first} ${attacker.name.last}`
 		const attackerConstructions = attacker.constructions as Constructions
 		const attackerPeople = attacker.people as PeopleInConstructions
 
 		const targetId = ctx.session.attackTarget
 		const target = userSessions.getUser(targetId)
-		const targetNameString = `${target.name.first} ${target.name.last}`
 		const targetConstructions = target.constructions as Constructions
 		const targetPeople = target.people as PeopleInConstructions
 
@@ -102,26 +122,24 @@ menu.simpleButton((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`,
 			return ctx.editMessageText(ctx.i18n.t('battle.attack.yourself'))
 		}
 
+		const attackerLoot = attackerWins ? possibleLootFromTarget : 0
+		const targetLoot = attackerWins ? 0 : possibleLootFromAttacker
+
+		ctx.session.resources.gold += attackerLoot
+		target.resources.gold += targetLoot
+
 		if (attackerWins) {
-			const loot = possibleLootFromTarget
-			ctx.session.resources.gold += loot
 			targetPeople.houses = 0
 			targetPeople.barracks = 0
 			targetPeople.wall = 0
 			target.peopleTimestamp = now
-
-			return Promise.all([
-				ctx.editMessageText(ctx.i18n.t('battle.attack.won', {name: targetNameString, loot: `${formatNumberShort(loot, true)}${EMOJI.gold}`})),
-				ctx.tg.sendMessage(targetId, ctx.i18n.t('battle.defence.lost', {name: attackerNameString}))
-			])
 		}
 
-		const loot = possibleLootFromAttacker
-		target.resources.gold += loot
+		const extra = Extra.markdown()
 
 		return Promise.all([
-			ctx.editMessageText(ctx.i18n.t('battle.attack.lost', {name: targetNameString})),
-			ctx.tg.sendMessage(targetId, ctx.i18n.t('battle.defence.won', {name: attackerNameString, loot: `${formatNumberShort(loot, true)}${EMOJI.gold}`}))
+			ctx.editMessageText(afterBattleMessageText(ctx, true, attackerWins, target.name, attackerLoot), extra),
+			ctx.tg.sendMessage(targetId, afterBattleMessageText(ctx, false, !attackerWins, attacker.name, targetLoot), extra)
 		])
 	}
 })

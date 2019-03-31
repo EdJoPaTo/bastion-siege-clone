@@ -35,6 +35,9 @@ action:
   buy: Q1369832
   search: Q36963
   upgrade: Q920419
+battle:
+  lose: Q14631121
+  target: P533
+  win: Q50000
 other:
   income: Q1527264
-  target: P533
