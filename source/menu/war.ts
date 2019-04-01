@@ -117,7 +117,9 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'atta
 			// Easter egg: attack yourself duplicates gold
 			ctx.session.resources.gold *= 2
 
-			return ctx.reply(ctx.i18n.t('battle.yourself'))
+			return ctx.replyWithMarkdown(
+				wikidataInfoHeader(ctx, 'battle.suicide', {titlePrefix: outEmoji.suicide})
+			)
 		}
 
 		const attackerLoot = attackerWins ? possibleLootFromTarget : 0

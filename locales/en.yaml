@@ -1,5 +1,3 @@
-battle:
-  yourself: Seriously? You attacked yourself. Everyone died.
 menu:
   back: back
   infoMissing: Some info is missing in the ${wdItem}. Consider updating :)

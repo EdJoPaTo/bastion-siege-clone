@@ -40,6 +40,7 @@ action:
   search: Q36963
   upgrade: Q920419
 battle:
+  suicide: Q10737
   target: P533
 other:
   income: Q1527264

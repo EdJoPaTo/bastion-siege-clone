@@ -5,6 +5,7 @@ export const outEmoji: {[key: string]: string} = {
 	chat: '💭',
 	win: '🎉',
 	lose: '😭',
+	suicide: '😵',
 	possibleNo: '⛔️',
 	possibleYes: '✅'
 }

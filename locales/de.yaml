@@ -1,5 +1,3 @@
-battle:
-  yourself: Echt jetzt? Du hast dich selbst angegriffen. Alle tot.
 menu:
   back: zurück
   infoMissing: Dem ${wdItem} fehlen einige Infos. Denk mal drüber nach diese hinzuzufügen :)
