@@ -31,6 +31,7 @@
 	"dependencies": {
 		"@sindresorhus/tsconfig": "^0.3.0",
 		"@types/js-yaml": "^3.12.0",
+		"array-filter-unique": "^2.1.0",
 		"bastion-siege-logic": "^1.2.0",
 		"js-yaml": "^3.13.0",
 		"telegraf": "^3.28.0",

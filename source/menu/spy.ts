@@ -1,6 +1,8 @@
 import * as wdkGot from 'wikidata-sdk-got'
+import arrayFilterUnique from 'array-filter-unique'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
+	ConstructionName,
 	Constructions,
 	CONSTRUCTIONS,
 	EMOJI
@@ -45,6 +47,17 @@ async function currentSpy(ctx: any): Promise<Spy> {
 	return possibleSpies[rand]
 }
 
+function getSpyableConstructions(qNumber: string): ConstructionName[] {
+	const possibleConstructions = qNumber
+		.slice(1)
+		.split('')
+		.map(o => Number(o))
+		.filter(arrayFilterUnique())
+		.map(o => CONSTRUCTIONS[o])
+
+	return possibleConstructions
+}
+
 async function tradeMenuText(ctx: any): Promise<string> {
 	let text = ''
 	text += wikidataInfoHeader(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
@@ -72,8 +85,10 @@ menu.simpleButton((ctx: any) => `${ctx.wd.label('action.espionage')}`, 'espionag
 		const session = possibleSessions[pickedSessionId].data
 		const name = session.name as {first: string; last: string}
 		const constructions = session.constructions as Constructions
-		const pickedConstructionIndex = Math.floor(Math.random() * CONSTRUCTIONS.length)
-		const pickedConstructionKey = CONSTRUCTIONS[pickedConstructionIndex]
+
+		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
+		const pickedIndex = Math.floor(Math.random() * spyableConstructions.length)
+		const pickedConstructionKey = spyableConstructions[pickedIndex]
 		const pickedConstructionLevel = constructions[pickedConstructionKey]
 
 		let message = ''
