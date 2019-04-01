@@ -116,7 +116,9 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attac
 			ctx.session.people.wall = 0
 
 			// Easter egg: attack yourself duplicates gold
-			ctx.session.resources.gold *= 2
+			if (ctx.session.resources.gold > 0) {
+				ctx.session.resources.gold *= 2
+			}
 
 			return ctx.replyWithMarkdown(
 				await wikidataInfoHeader(ctx, 'battle.suicide', {titlePrefix: outEmoji.suicide})
