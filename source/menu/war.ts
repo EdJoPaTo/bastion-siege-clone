@@ -56,25 +56,26 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: {first: str
 	return lines.join('\n')
 }
 
-function menuText(ctx: any): string {
+async function menuText(ctx: any): Promise<string> {
 	const constructions = ctx.session.constructions as Constructions
 	const people = ctx.session.people as PeopleInConstructions
 	const attackTargetId = ctx.session.attackTarget as number
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
 	let text = ''
-	text += wikidataInfoHeader(ctx, 'bs.war', {titlePrefix: EMOJI.war})
+	text += await wikidataInfoHeader(ctx, 'bs.war', {titlePrefix: EMOJI.war})
 	text += '\n\n'
-	text += peopleString(ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += peopleString(await ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	text += '\n'
-	text += peopleString(ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += peopleString(await ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
 	text += '\n'
 
 	text += '\n'
 
 	if (attackTarget) {
 		const {name, constructions} = attackTarget
-		text += `${ctx.wd.label('battle.target')}\n`
+		text += await ctx.wd.label('battle.target')
+		text += '\n'
 		text += `${name.first} ${name.last}\n`
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
 		text += '\n\n'
@@ -85,9 +86,9 @@ function menuText(ctx: any): string {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'attack', {
+menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attack')}`, 'attack', {
 	hide: (ctx: any) => !ctx.session.attackTarget,
-	doFunc: (ctx: any) => {
+	doFunc: async (ctx: any) => {
 		const now = Date.now() / 1000
 
 		const attacker = ctx.session
@@ -118,7 +119,7 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'atta
 			ctx.session.resources.gold *= 2
 
 			return ctx.replyWithMarkdown(
-				wikidataInfoHeader(ctx, 'battle.suicide', {titlePrefix: outEmoji.suicide})
+				await wikidataInfoHeader(ctx, 'battle.suicide', {titlePrefix: outEmoji.suicide})
 			)
 		}
 
@@ -145,7 +146,7 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.label('action.attack')}`, 'atta
 	}
 })
 
-menu.button((ctx: any) => `${EMOJI.search} ${ctx.wd.label('action.search')}`, 'search', {
+menu.button(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.label('action.search')}`, 'search', {
 	doFunc: (ctx: any) => {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)

@@ -23,7 +23,7 @@ function constructionFromCtx(ctx: any): {construction: ConstructionName; level: 
 	return {construction, level}
 }
 
-function constructionText(ctx: any): string {
+async function constructionText(ctx: any): Promise<string> {
 	const constructions = ctx.session.constructions as Constructions
 	const people = ctx.session.people as PeopleInConstructions
 	const {construction, level} = constructionFromCtx(ctx)
@@ -32,19 +32,19 @@ function constructionText(ctx: any): string {
 	const currentResources = ctx.session.resources as Resources
 
 	const textParts = []
-	textParts.push(infoHeader(ctx, construction, level))
+	textParts.push(await infoHeader(ctx, construction, level))
 
-	const properties = constructionPropertyString(ctx, constructions, people, construction)
+	const properties = await constructionPropertyString(ctx, constructions, people, construction)
 	if (properties) {
 		textParts.push(properties)
 	}
 
-	textParts.push(constructionResources(ctx, requiredResources, currentResources))
+	textParts.push(await constructionResources(ctx, requiredResources, currentResources))
 
 	return textParts.join('\n\n')
 }
 
-menu.button((ctx: any) => `⬆️ ${ctx.wd.label('action.upgrade')}`, 'upgrade', {
+menu.button(async (ctx: any) => `⬆️ ${await ctx.wd.label('action.upgrade')}`, 'upgrade', {
 	hide: (ctx: any) => {
 		const constructions = ctx.session.constructions as Constructions
 		const {construction, level} = constructionFromCtx(ctx)
@@ -64,7 +64,7 @@ menu.button((ctx: any) => `⬆️ ${ctx.wd.label('action.upgrade')}`, 'upgrade',
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => {
+menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => {
 	const {construction} = constructionFromCtx(ctx)
 	const wdKey = `construction.${construction}`
 	return ctx.wd.url(wdKey)

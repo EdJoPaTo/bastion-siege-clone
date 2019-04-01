@@ -10,33 +10,35 @@ import {
 import {formatNumberShort} from './format-number'
 import {possibleEmoji} from './generals'
 
-export function resourceLine(ctx: any, resource: ResourceName, amount: number): string {
+export async function resourceLine(ctx: any, resource: ResourceName, amount: number): Promise<string> {
 	const parts: string[] = []
 
 	parts.push(EMOJI[resource])
 	parts.push(
-		`*${ctx.wd.label(`resource.${resource}`)}*`
+		`*${await ctx.wd.label(`resource.${resource}`)}*`
 	)
 	parts.push(formatNumberShort(amount, true))
 
 	return parts.join(' ')
 }
 
-export function constructionResourceLine(ctx: any, resource: ResourceName, amount: number, possible: boolean): string {
-	return `${possibleEmoji(possible)} ${resourceLine(ctx, resource, amount)}`
+export async function constructionResourceLine(ctx: any, resource: ResourceName, amount: number, possible: boolean): Promise<string> {
+	return `${possibleEmoji(possible)} ${await resourceLine(ctx, resource, amount)}`
 }
 
-export function resources(ctx: any, resources: Resources): string {
-	const lines = RESOURCES
+export async function resources(ctx: any, resources: Resources): Promise<string> {
+	const linePromises = RESOURCES
 		.map(o => resourceLine(ctx, o, resources[o]))
 
+	const lines = await Promise.all(linePromises)
 	return lines.join('\n')
 }
 
-export function constructionResources(ctx: any, required: ConstructionResources, available: Resources): string {
-	const lines = CONSTRUCTION_RESOURCES
+export async function constructionResources(ctx: any, required: ConstructionResources, available: Resources): Promise<string> {
+	const linePromises = CONSTRUCTION_RESOURCES
 		.filter(o => required[o])
 		.map(o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o]))
 
+	const lines = await Promise.all(linePromises)
 	return lines.join('\n')
 }

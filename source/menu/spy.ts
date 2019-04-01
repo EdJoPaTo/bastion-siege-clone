@@ -60,7 +60,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 
 async function tradeMenuText(ctx: any): Promise<string> {
 	let text = ''
-	text += wikidataInfoHeader(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
+	text += await wikidataInfoHeader(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
 
 	const mySpy = await currentSpy(ctx)
 
@@ -76,8 +76,8 @@ async function tradeMenuText(ctx: any): Promise<string> {
 
 const menu = new TelegrafInlineMenu(tradeMenuText)
 
-menu.simpleButton((ctx: any) => `${ctx.wd.label('action.espionage')}`, 'espionage', {
-	doFunc: (ctx: any) => {
+menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}`, 'espionage', {
+	doFunc: async (ctx: any) => {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
 
@@ -97,7 +97,7 @@ menu.simpleButton((ctx: any) => `${ctx.wd.label('action.espionage')}`, 'espionag
 		message += `${name.first} ${name.last}`
 		message += ' '
 		message += EMOJI[pickedConstructionKey]
-		message += ctx.wd.label(`construction.${pickedConstructionKey}`)
+		message += await ctx.wd.label(`construction.${pickedConstructionKey}`)
 		message += ' '
 		message += pickedConstructionLevel
 
@@ -105,18 +105,18 @@ menu.simpleButton((ctx: any) => `${ctx.wd.label('action.espionage')}`, 'espionag
 	}
 })
 
-menu.button((ctx: any) => `${ctx.wd.label('action.change')}`, 'change', {
+menu.button(async (ctx: any) => `${await ctx.wd.label('action.change')}`, 'change', {
 	joinLastRow: true,
 	doFunc: (ctx: any) => {
 		delete ctx.session.selectedSpy
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')} ${ctx.wd.label('menu.spy')}`, (ctx: any) => ctx.wd.url('menu.spy'))
+menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${await ctx.wd.label('menu.spy')}`, (ctx: any) => ctx.wd.url('menu.spy'))
 
 menu.urlButton(async (ctx: any) => {
 	const mySpy = await currentSpy(ctx)
-	return `ℹ️ ${ctx.wd.label('menu.wikidataItem')} ${mySpy.emoji} ${mySpy.label}`
+	return `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${mySpy.emoji} ${mySpy.label}`
 }, async (ctx: any) => {
 	const mySpy = await currentSpy(ctx)
 	return `https://www.wikidata.org/wiki/${mySpy.value}`

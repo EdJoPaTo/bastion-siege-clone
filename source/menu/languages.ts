@@ -16,7 +16,7 @@ async function flagsString(languageCode: string, fallbackFlag: boolean): Promise
 
 async function languageMenuText(ctx: any): Promise<string> {
 	const flags = await flagsString(ctx.wd.locale(), true)
-	const text = wikidataInfoHeader(ctx, 'menu.language', {titlePrefix: flags})
+	const text = await wikidataInfoHeader(ctx, 'menu.language', {titlePrefix: flags})
 	return text
 }
 

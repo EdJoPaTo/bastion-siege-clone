@@ -21,26 +21,29 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]): string {
+async function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]): Promise<string> {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources as Resources
 	const constructions = ctx.session.constructions as Constructions
 
 	let text = ''
-	text += wikidataInfoHeader(ctx, wdKey, {titlePrefix: EMOJI[key]})
+	text += await wikidataInfoHeader(ctx, wdKey, {titlePrefix: EMOJI[key]})
 
 	text += '\n\n'
 
-	text += entries
-		.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
+	const constructionLines = await Promise.all(
+		entries.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
+	)
+
+	text += constructionLines
 		.join('\n')
 
 	return text
 }
 
-function constructionButtonTextFunc(ctx: any, key: string): string {
+async function constructionButtonTextFunc(ctx: any, key: string): Promise<string> {
 	const wdKey = `construction.${key}`
-	return `${EMOJI[key]} ${ctx.wd.label(wdKey)}`
+	return `${EMOJI[key]} ${await ctx.wd.label(wdKey)}`
 }
 
 export const buildingsMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'buildings', BUILDINGS))

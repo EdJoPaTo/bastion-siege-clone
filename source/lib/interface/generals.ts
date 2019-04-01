@@ -19,10 +19,10 @@ interface InfoHeaderOptions {
 	titleSuffix?: string;
 }
 
-export function wikidataInfoHeader(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): string {
+export async function wikidataInfoHeader(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
 	const {titlePrefix, titleSuffix} = options
-	const label = ctx.wd.label(wdKey)
-	const description = ctx.wd.description(wdKey)
+	const label = await ctx.wd.label(wdKey)
+	const description = await ctx.wd.description(wdKey)
 
 	let text = ''
 
@@ -41,9 +41,9 @@ export function wikidataInfoHeader(ctx: any, wdKey: string, options: InfoHeaderO
 	text += '\n'
 	text += `${description}`
 
-	if (ctx.wd.infoMissing(wdKey)) {
+	if (await ctx.wd.infoMissing(wdKey)) {
 		text += '\n\n'
-		const wdItem = ctx.wd.label('menu.wikidataItem')
+		const wdItem = await ctx.wd.label('menu.wikidataItem')
 		text += ctx.i18n.t('menu.infoMissing', {wdItem})
 	}
 
