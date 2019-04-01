@@ -1,5 +1,6 @@
 import {
 	calcBarracksCapacity,
+	calcGoldIncome,
 	calcHousesCapacity,
 	calcHousesPeopleIncome,
 	calcWallArcherCapacity,
@@ -98,6 +99,11 @@ function calcCurrentResources(ctx: any, now: number): void {
 
 	if (totalMinutes > 0) {
 		ctx.session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
+
+		// Max negative gold should be recoverable in 12h realtime hours
+		const goldIncome24h = calcGoldIncome(constructions.townhall, constructions.houses) * 12 * 60 * GAME_SPEEDUP * foodPenalty(ctx)
+		ctx.session.resources.gold = Math.max(-goldIncome24h, ctx.session.resources.gold)
+
 		ctx.session.resourcesTimestamp = now
 	}
 }
