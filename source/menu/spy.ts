@@ -15,7 +15,7 @@ import {wikidataInfoHeader} from '../lib/interface/generals'
 interface Spy {
 	emoji: string;
 	value: string;
-	label?: string;
+	label: string;
 	description?: string;
 }
 
@@ -112,6 +112,14 @@ menu.button((ctx: any) => `${ctx.wd.label('action.change')}`, 'change', {
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => ctx.wd.url('menu.spy'))
+menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.label('menu.wikidataItem')} ${ctx.wd.label('menu.spy')}`, (ctx: any) => ctx.wd.url('menu.spy'))
+
+menu.urlButton(async (ctx: any) => {
+	const mySpy = await currentSpy(ctx)
+	return `ℹ️ ${ctx.wd.label('menu.wikidataItem')} ${mySpy.emoji} ${mySpy.label}`
+}, async (ctx: any) => {
+	const mySpy = await currentSpy(ctx)
+	return `https://www.wikidata.org/wiki/${mySpy.value}`
+})
 
 export default menu
