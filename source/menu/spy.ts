@@ -35,9 +35,9 @@ async function getPossibleSpies(lang: string): Promise<Spy[]> {
 async function currentSpy(ctx: any): Promise<Spy> {
 	const possibleSpies = await getPossibleSpies(ctx.wd.locale())
 
-	const {selectedSpy} = ctx.session
-	const entries = possibleSpies.filter(o => o.value === selectedSpy)
-	if (entries.length === 1) {
+	const {selectedSpy, selectedSpyEmoji} = ctx.session
+	const entries = possibleSpies.filter(o => o.value === selectedSpy && o.emoji === selectedSpyEmoji)
+	if (entries.length > 0) {
 		return entries[0]
 	}
 
