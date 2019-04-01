@@ -16,6 +16,7 @@
 		"build": "del dist && tsc",
 		"prepack": "npm run build",
 		"start": "ts-node source/index.ts",
+		"pretest": "tsc",
 		"test": "xo && nyc ava"
 	},
 	"config": {
