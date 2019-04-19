@@ -62,6 +62,10 @@ export default class WikidataLabel {
 		console.timeEnd('wikidata label cache load')
 	}
 
+	availableResourceKeys(): string[] {
+		return Object.keys(this._qNumbers)
+	}
+
 	availableLocales(filter: (o: number) => boolean = () => true): ReadonlyArray<string> {
 		return Object.keys(this._languageCodes)
 			.filter(o => filter(this._languageCodes[o]))
@@ -69,6 +73,10 @@ export default class WikidataLabel {
 
 	translationProgress(languageCode: string): number {
 		return this._languageCodes[languageCode] || 0
+	}
+
+	qNumberOfKey(key: string): string {
+		return this._qNumbers[key]
 	}
 
 	entityByQNumber(qNumber: string): EntitySimplified {
@@ -132,7 +140,7 @@ export default class WikidataLabel {
 			return ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
 		}
 
-		return (ctx, next) => {
+		return (ctx, next): void => {
 			ctx.wd = {
 				description: (key: string) => this.description(key, lang(ctx)),
 				entity: (key: string) => this.entity(key),
