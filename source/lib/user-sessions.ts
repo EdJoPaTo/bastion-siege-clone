@@ -2,6 +2,11 @@
 /* eslint @typescript-eslint/no-require-imports: warn */
 const LocalSession = require('telegraf-session-local')
 
+interface SessionRawEntry {
+	user: number;
+	data: any;
+}
+
 const localSession = new LocalSession({
 	// Database name/path, where sessions will be located (default: 'sessions.json')
 	database: 'persist/sessions.json',
@@ -13,7 +18,7 @@ const localSession = new LocalSession({
 	getSessionKey: (ctx: any) => `${ctx.from.id}`
 })
 
-export function getRaw(): {user: number; data: any}[] {
+export function getRaw(): ReadonlyArray<SessionRawEntry> {
 	return localSession.DB
 		.get('sessions').value()
 		.map((o: {id: string; data: any}) => {
@@ -28,6 +33,13 @@ export function getUser(userId: number): any {
 		.getById(`${userId}`)
 		.get('data')
 		.value() || {}
+}
+
+export function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): SessionRawEntry {
+	const rawArr = getRaw()
+		.filter(filter)
+	const pickedIndex = Math.floor(Math.random() * rawArr.length)
+	return rawArr[pickedIndex]
 }
 
 export function middleware(): (ctx: any, next: any) => void {

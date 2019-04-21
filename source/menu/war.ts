@@ -150,12 +150,8 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attac
 
 menu.button(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.label('action.search')}`, 'search', {
 	doFunc: (ctx: any) => {
-		const possibleSessions = userSessions.getRaw()
-			.filter(o => o.data.name)
-			.filter(o => o.user !== ctx.session.attackTarget)
-
-		const pickId = Math.floor(Math.random() * possibleSessions.length)
-		ctx.session.attackTarget = possibleSessions[pickId].user
+		const chosen = userSessions.getRandomUser(o => o.data.name && o.user !== ctx.session.attackTarget)
+		ctx.session.attackTarget = chosen.user
 	}
 })
 

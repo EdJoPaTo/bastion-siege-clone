@@ -57,7 +57,7 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 	try {
 		const {qNumber} = getCurrentMystical()
 
-		const {user, data: session} = getRandomUser()
+		const {user, data: session} = userSessions.getRandomUser(o => o.data.name)
 		const languageCode = session.wikidataLanguageCode || 'en'
 
 		const battleResult = calcBattle(qNumber, session)
@@ -96,12 +96,6 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 	} catch (error) {
 		console.log('mystics attack error', error.message)
 	}
-}
-
-function getRandomUser(): {user: number; data: RequiredSession} {
-	const rawArr = userSessions.getRaw()
-	const pickedIndex = Math.floor(Math.random() * rawArr.length)
-	return rawArr[pickedIndex]
 }
 
 interface RequiredSession {
