@@ -11,6 +11,7 @@ import {
 import * as userSessions from '../lib/user-sessions'
 
 import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import WikidataItemStore from '../lib/wikidata-item-store'
 
 interface Spy {
 	emoji: string;
@@ -34,6 +35,12 @@ async function getPossibleSpies(lang: string): Promise<Spy[]> {
 
 async function currentSpy(ctx: any): Promise<Spy> {
 	const possibleSpies = await getPossibleSpies(ctx.wd.locale())
+
+	const itemStore = ctx.wd.itemStore as WikidataItemStore
+	await itemStore.preloadQNumbers(...possibleSpies
+		.map(o => o.value)
+		.filter(arrayFilterUnique())
+	)
 
 	const {selectedSpy, selectedSpyEmoji} = ctx.session
 	const entries = possibleSpies.filter(o => o.value === selectedSpy && o.emoji === selectedSpyEmoji)
