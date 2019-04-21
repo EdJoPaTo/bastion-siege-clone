@@ -1,3 +1,5 @@
+import {WikidataItemReader} from '../wikidata-item-reader'
+
 export const outEmoji: {[key: string]: string} = {
 	name: '👋',
 	nameFallback: '🔮',
@@ -20,9 +22,22 @@ interface InfoHeaderOptions {
 }
 
 export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
+	let text = ''
+	text += wikidataInfoHeaderV2(ctx.wd.r(wdKey), options)
+
+	if (await ctx.wd.infoMissing(wdKey)) {
+		text += '\n\n'
+		const wdItem = await ctx.wd.r('menu.wikidataItem').label()
+		text += ctx.i18n.t('menu.infoMissing', {wdItem})
+	}
+
+	return text
+}
+
+export function wikidataInfoHeaderV2(wdr: WikidataItemReader, options: InfoHeaderOptions = {}): string {
 	const {titlePrefix, titleSuffix} = options
-	const label = await ctx.wd.label(wdKey)
-	const description = await ctx.wd.description(wdKey)
+	const label = wdr.label()
+	const description = wdr.description()
 
 	let text = ''
 
@@ -38,13 +53,9 @@ export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, opt
 		text += titleSuffix
 	}
 
-	text += '\n'
-	text += `${description}`
-
-	if (await ctx.wd.infoMissing(wdKey)) {
-		text += '\n\n'
-		const wdItem = await ctx.wd.label('menu.wikidataItem')
-		text += ctx.i18n.t('menu.infoMissing', {wdItem})
+	if (description) {
+		text += '\n'
+		text += `${description}`
 	}
 
 	return text

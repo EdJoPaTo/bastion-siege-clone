@@ -3,10 +3,11 @@ import {readFileSync} from 'fs'
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 
-import * as userSessions from './lib/user-sessions'
-import WikidataLabel from './lib/wikidata-label-middleware'
-import menu from './menu'
 import * as ensureSessionContent from './lib/session-state-math'
+import * as userSessions from './lib/user-sessions'
+import menu from './menu'
+import WikidataItemStore from './lib/wikidata-item-store'
+import WikidataLabel from './lib/wikidata-label-middleware'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
@@ -24,7 +25,8 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware())
 
-const wdLabel = new WikidataLabel('wikidata-items.yaml')
+const wdItemStore = new WikidataItemStore('labels', 'descriptions', 'claims')
+const wdLabel = new WikidataLabel(wdItemStore, 'wikidata-items.yaml')
 wdLabel.load()
 bot.use(wdLabel.middleware())
 
