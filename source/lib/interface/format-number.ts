@@ -14,7 +14,8 @@ export function formatNumberShort(value: number, isInteger = false): string {
 	const engineerExponentLevel = Math.max(0, Math.floor(exponent / 3))
 	const engineerExponent = engineerExponentLevel * 3
 	const letter = allLetters[engineerExponentLevel]
-	const shortValue = value / (10 ** engineerExponent)
+	const exploded = 10 ** engineerExponent
+	const shortValue = value / exploded
 
 	let fractionDigits = Math.min(2, 3 - (1 + exponent - engineerExponent))
 	if (isInteger && engineerExponentLevel === 0) {

@@ -20,8 +20,8 @@ export function getValueByKey(root: Dictionary<any>, key: string): any {
 	const splitted = key.split('.')
 
 	let cursor = root
-	for (let i = 0; i < splitted.length; i++) {
-		cursor = cursor[splitted[i]]
+	for (const elem of splitted) {
+		cursor = cursor[elem]
 	}
 
 	return cursor
