@@ -28,7 +28,7 @@ async function getPossibleSpies(lang: string): Promise<Spy[]> {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "${lang},en". }
 }`
 	const result = await wdkGot.sparqlQuerySimplified(query, {cache: spyCache})
-	const mapped: any = result.map((o: any) => ({...o.item, emoji: o.emoji}))
+	const mapped: any[] = result.map((o: any) => ({...o.item, emoji: o.emoji}))
 	return mapped as Spy[]
 }
 
@@ -58,7 +58,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 	return possibleConstructions
 }
 
-async function tradeMenuText(ctx: any): Promise<string> {
+async function menuText(ctx: any): Promise<string> {
 	let text = ''
 	text += await wikidataInfoHeaderFromContext(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
 
@@ -74,7 +74,7 @@ async function tradeMenuText(ctx: any): Promise<string> {
 	return text
 }
 
-const menu = new TelegrafInlineMenu(tradeMenuText)
+const menu = new TelegrafInlineMenu(menuText)
 
 menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}`, 'espionage', {
 	doFunc: async (ctx: any) => {
