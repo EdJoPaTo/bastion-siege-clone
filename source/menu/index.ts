@@ -7,8 +7,9 @@ import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
-import spyMenu from './spy'
 import languageMenu from './languages'
+import mysticsMenu from './mystic'
+import spyMenu from './spy'
 import tradeMenu from './trade'
 import warMenu from './war'
 
@@ -51,13 +52,17 @@ menu.submenu(buttonText(EMOJI.war, 'bs.war'), 'war', warMenu, {
 	hide: (ctx: any) => nameMenu.nameNeeded(ctx) || ctx.session.constructions.barracks === 0
 })
 
-menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
-	joinLastRow: true,
+menu.submenu(buttonText(EMOJI.trade, 'bs.trade'), 'trade', tradeMenu, {
+	joinLastRow: true
+})
+
+menu.submenu(buttonText(EMOJI.dragon, 'menu.mystical'), 'mystic', mysticsMenu, {
 	hide: (ctx: any) => nameMenu.nameNeeded(ctx)
 })
 
-menu.submenu(buttonText(EMOJI.trade, 'bs.trade'), 'trade', tradeMenu, {
-	joinLastRow: true
+menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
+	joinLastRow: true,
+	hide: (ctx: any) => nameMenu.nameNeeded(ctx)
 })
 
 menu.submenu(buttonText(outEmoji.language, 'menu.language'), 'lang', languageMenu)

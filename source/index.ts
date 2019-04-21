@@ -3,6 +3,7 @@ import {readFileSync} from 'fs'
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 
+import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import menu from './menu'
@@ -29,6 +30,8 @@ const wdItemStore = new WikidataItemStore('labels', 'descriptions', 'claims')
 const wdLabel = new WikidataLabel(wdItemStore, 'wikidata-items.yaml')
 wdLabel.load()
 bot.use(wdLabel.middleware())
+
+attackingMystics.start(bot.telegram, wdItemStore)
 
 bot.use(menu.init({
 	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,

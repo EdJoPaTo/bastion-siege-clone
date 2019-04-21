@@ -1,4 +1,4 @@
-import {EntitySimplified} from 'wikidata-sdk'
+import {getImageUrl, EntitySimplified} from 'wikidata-sdk'
 
 export class WikidataItemReader {
 	constructor(
@@ -20,6 +20,21 @@ export class WikidataItemReader {
 
 	url(): string {
 		return url(this.entity)
+	}
+
+	claim(claim: string): ReadonlyArray<any> {
+		const {claims} = this.entity
+		if (!claims || !claims[claim]) {
+			return []
+		}
+
+		return claims[claim]
+	}
+
+	images(width?: number): ReadonlyArray<string> {
+		const images = this.claim('P18')
+			.map(o => getImageUrl(o, width))
+		return images
 	}
 }
 

@@ -5,9 +5,11 @@ export const outEmoji: {[key: string]: string} = {
 	nameFallback: '🔮',
 	language: '🏳️‍🌈',
 	chat: '💭',
+	health: '❤️',
 	win: '🎉',
 	lose: '😭',
 	suicide: '😵',
+	fire: '🔥',
 	possibleNo: '⛔️',
 	possibleYes: '✅'
 }
