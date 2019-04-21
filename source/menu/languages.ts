@@ -1,7 +1,7 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {countryEmojisOfLanguage} from '../lib/interface/language-code-emojis'
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
 
@@ -16,7 +16,7 @@ async function flagsString(languageCode: string, fallbackFlag: boolean): Promise
 
 async function languageMenuText(ctx: any): Promise<string> {
 	const flags = await flagsString(ctx.wd.locale(), true)
-	const text = await wikidataInfoHeader(ctx, 'menu.language', {titlePrefix: flags})
+	const text = await wikidataInfoHeaderFromContext(ctx, 'menu.language', {titlePrefix: flags})
 	return text
 }
 

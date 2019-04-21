@@ -18,7 +18,7 @@ import {
 import {PeopleInConstructions} from '../../types'
 
 import {formatNumberShort} from './format-number'
-import {possibleEmoji, wikidataInfoHeader} from './generals'
+import {possibleEmoji, wikidataInfoHeaderFromContext} from './generals'
 
 export async function constructionLine(ctx: any, construction: ConstructionName, level: number, canUpgrade: boolean): Promise<string> {
 	const parts: string[] = []
@@ -35,7 +35,7 @@ export async function constructionLine(ctx: any, construction: ConstructionName,
 
 export async function infoHeader(ctx: any, construction: ConstructionName, currentLevel: number): Promise<string> {
 	const wdKey = `construction.${construction}`
-	return wikidataInfoHeader(ctx, wdKey, {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
+	return wikidataInfoHeaderFromContext(ctx, wdKey, {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
 }
 
 function simpleLineString(...args: (string | number)[]): string {

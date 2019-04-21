@@ -10,7 +10,7 @@ import {
 
 import * as userSessions from '../lib/user-sessions'
 
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
 
 interface Spy {
 	emoji: string;
@@ -60,7 +60,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 
 async function tradeMenuText(ctx: any): Promise<string> {
 	let text = ''
-	text += await wikidataInfoHeader(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
+	text += await wikidataInfoHeaderFromContext(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
 
 	const mySpy = await currentSpy(ctx)
 

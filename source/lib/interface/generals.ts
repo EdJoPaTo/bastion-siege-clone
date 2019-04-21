@@ -19,7 +19,7 @@ interface InfoHeaderOptions {
 	titleSuffix?: string;
 }
 
-export async function wikidataInfoHeader(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
+export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
 	const {titlePrefix, titleSuffix} = options
 	const label = await ctx.wd.label(wdKey)
 	const description = await ctx.wd.description(wdKey)

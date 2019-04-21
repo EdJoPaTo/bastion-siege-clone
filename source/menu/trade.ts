@@ -9,7 +9,7 @@ import {
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {resources} from '../lib/interface/resource'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
 
 function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
 	const result: Resources = {...currentResources}
@@ -22,7 +22,7 @@ async function tradeMenuText(ctx: any): Promise<string> {
 	const currentResources = ctx.session.resources as Resources
 
 	let text = ''
-	text += await wikidataInfoHeader(ctx, 'action.buy', {titlePrefix: EMOJI.trade})
+	text += await wikidataInfoHeaderFromContext(ctx, 'action.buy', {titlePrefix: EMOJI.trade})
 	text += '\n\n'
 	text += await resources(ctx, currentResources)
 	return text
@@ -41,7 +41,7 @@ async function tradeResourceMenuText(ctx: any): Promise<string> {
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
 	let text = ''
-	text += await wikidataInfoHeader(ctx, `resource.${resource}`, {titlePrefix: EMOJI[resource]})
+	text += await wikidataInfoHeaderFromContext(ctx, `resource.${resource}`, {titlePrefix: EMOJI[resource]})
 
 	text += '\n\n'
 	text += `${EMOJI.gold} ${await ctx.wd.label('resource.gold')} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
