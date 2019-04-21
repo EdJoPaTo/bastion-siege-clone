@@ -34,30 +34,34 @@ async function menuText(ctx: any): Promise<string> {
 const menu = new TelegrafInlineMenu(menuText)
 menu.setCommand('start')
 
-menu.submenu(async (ctx: any) => `${outEmoji.name} ${await ctx.wd.label('menu.name')}`, 'name', nameMenu.menu, {
+function buttonText(emoji: string, resourceKey: string): (ctx: any) => string {
+	return (ctx: any) => `${emoji} ${ctx.wd.label(resourceKey)}`
+}
+
+menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu.menu, {
 	hide: ctx => !nameMenu.nameNeeded(ctx)
 })
 
-menu.submenu(async (ctx: any) => `${EMOJI.buildings} ${await ctx.wd.label('bs.buildings')}`, 'b', buildingsMenu)
-menu.submenu(async (ctx: any) => `${EMOJI.workshop} ${await ctx.wd.label('bs.workshop')}`, 'w', workshopMenu, {
+menu.submenu(buttonText(EMOJI.buildings, 'bs.buildings'), 'b', buildingsMenu)
+menu.submenu(buttonText(EMOJI.workshop, 'bs.workshop'), 'w', workshopMenu, {
 	joinLastRow: true
 })
 
-menu.submenu(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('bs.war')}`, 'war', warMenu, {
+menu.submenu(buttonText(EMOJI.war, 'bs.war'), 'war', warMenu, {
 	hide: (ctx: any) => nameMenu.nameNeeded(ctx) || ctx.session.constructions.barracks === 0
 })
 
-menu.submenu(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.label('menu.spy')}`, 'spy', spyMenu, {
+menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
 	joinLastRow: true,
 	hide: (ctx: any) => nameMenu.nameNeeded(ctx)
 })
 
-menu.submenu(async (ctx: any) => `${EMOJI.trade} ${await ctx.wd.label('bs.trade')}`, 'trade', tradeMenu, {
+menu.submenu(buttonText(EMOJI.trade, 'bs.trade'), 'trade', tradeMenu, {
 	joinLastRow: true
 })
 
-menu.submenu(async (ctx: any) => `${outEmoji.language} ${await ctx.wd.label('menu.language')}`, 'lang', languageMenu)
+menu.submenu(buttonText(outEmoji.language, 'menu.language'), 'lang', languageMenu)
 
-menu.urlButton(async (ctx: any) => `${outEmoji.chat} ${await ctx.wd.label('menu.chat')}`, 'https://t.me/Bs1thApril')
+menu.urlButton(buttonText(outEmoji.chat, 'menu.chat'), 'https://t.me/Bs1thApril')
 
 export default menu
