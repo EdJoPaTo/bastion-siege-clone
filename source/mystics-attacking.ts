@@ -69,8 +69,13 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
-		text += wikidataInfoHeaderV2(wdItemStore.reader(qNumber, languageCode), {
+		text += wikidataInfoHeaderV2(wdItemStore.reader('construction.ballista', languageCode), {
 			titlePrefix: won ? outEmoji.win : outEmoji.lose
+		})
+
+		text += '\n\n'
+		text += wikidataInfoHeaderV2(wdItemStore.reader(qNumber, languageCode), {
+			titlePrefix: won ? outEmoji.lose : outEmoji.win
 		})
 		text += '\n'
 
