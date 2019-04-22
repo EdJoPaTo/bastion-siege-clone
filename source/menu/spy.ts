@@ -3,7 +3,6 @@ import arrayFilterUnique from 'array-filter-unique'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	ConstructionName,
-	Constructions,
 	CONSTRUCTIONS,
 	EMOJI
 } from 'bastion-siege-logic'
@@ -91,12 +90,11 @@ menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}
 		const pickedSessionId = Math.floor(Math.random() * possibleSessions.length)
 		const session = possibleSessions[pickedSessionId].data
 		const name = session.name as {first: string; last: string}
-		const constructions = session.constructions as Constructions
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
 		const pickedIndex = Math.floor(Math.random() * spyableConstructions.length)
 		const pickedConstructionKey = spyableConstructions[pickedIndex]
-		const pickedConstructionLevel = constructions[pickedConstructionKey]
+		const pickedConstructionLevel = session.constructions[pickedConstructionKey]
 
 		let message = ''
 		message += ctx.session.selectedSpyEmoji

@@ -1,4 +1,4 @@
-import {Constructions, Resources, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
+import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
 import {Extra, Telegram} from 'telegraf'
 
 import {buildCache, getRandomMystic} from './lib/mystics'
@@ -54,7 +54,7 @@ export function calcBallistaDamage(constructions: Constructions): number {
 }
 
 async function tryAttack(telegram: Telegram): Promise<void> {
-	const {user, data: session} = userSessions.getRandomUser(o => o.data.name && !o.data.blocked)
+	const {user, data: session} = userSessions.getRandomUser(o => Boolean(o.data.name && !o.data.blocked))
 
 	try {
 		const {qNumber} = getCurrentMystical()
@@ -100,20 +100,13 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 	}
 }
 
-interface RequiredSession {
-	constructions: Constructions;
-	resources: Resources;
-	resourcesTimestamp: number;
-	wikidataLanguageCode: string;
-}
-
 interface BattleResult {
 	won: boolean;
 	gold: number;
 	townhall: number;
 }
 
-function calcBattle(mystic: string, session: RequiredSession): BattleResult {
+function calcBattle(mystic: string, session: userSessions.Session): BattleResult {
 	const {constructions} = session
 
 	const attackStrength = calcBallistaDamage(constructions)

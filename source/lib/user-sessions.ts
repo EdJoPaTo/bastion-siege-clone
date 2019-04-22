@@ -1,10 +1,32 @@
+import {Constructions, Resources} from 'bastion-siege-logic'
+
 /* eslint @typescript-eslint/no-var-requires: warn */
 /* eslint @typescript-eslint/no-require-imports: warn */
 const LocalSession = require('telegraf-session-local')
 
+export interface Session {
+	constructions: Constructions;
+	resources: Resources;
+	resourcesTimestamp: number;
+	wikidataLanguageCode: string;
+	blocked?: boolean;
+	name?: {
+		first: string;
+		last: string;
+	};
+	people: {
+		houses: number;
+		barracks: number;
+		wall: number;
+	};
+	peopleTimestamp: number;
+	selectedSpy: string;
+	selectedSpyEmoji: string;
+}
+
 interface SessionRawEntry {
 	user: number;
-	data: any;
+	data: Session;
 }
 
 const localSession = new LocalSession({

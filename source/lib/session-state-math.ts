@@ -4,55 +4,56 @@ import {
 	calcHousesCapacity,
 	calcHousesPeopleIncome,
 	calcWallArcherCapacity,
-	Constructions,
-	CONSTRUCTIONS,
-	estimateResourcesAfter,
-	Resources
+	estimateResourcesAfter
 } from 'bastion-siege-logic'
 
 import {PeopleInConstructions} from '../types'
 
+import {Session} from './user-sessions'
+
 const GAME_SPEEDUP = 30
 
-function foodPenalty(ctx: any): number {
-	const resources = ctx.session.resources as Resources
-	return resources.food > 0 ? 1 : 0.2
+function foodPenalty(session: Session): number {
+	return session.resources.food > 0 ? 1 : 0.2
 }
 
-function initWhenMissing(ctx: any, now: number): void {
-	const {constructions} = ctx.session
+function initWhenMissing(session: Session, now: number): void {
+	const {constructions} = session
 	if (!constructions) {
-		ctx.session.constructions = {}
-		for (const key of CONSTRUCTIONS) {
-			ctx.session.constructions[key] = 0
+		session.constructions = {
+			townhall: 1,
+			storage: 1,
+			houses: 1,
+			sawmill: 0,
+			mine: 0,
+			farm: 1,
+			barracks: 0,
+			wall: 0,
+			trebuchet: 0,
+			ballista: 0
 		}
-
-		ctx.session.constructions.townhall = 1
-		ctx.session.constructions.storage = 1
-		ctx.session.constructions.houses = 1
 	}
 
-	const {resources, resourcesTimestamp} = ctx.session
+	const {resources, resourcesTimestamp} = session
 	if (!resources || !resourcesTimestamp) {
-		ctx.session.resourcesTimestamp = now
-		const resources: Resources = {
+		session.resourcesTimestamp = now
+		session.resources = {
 			gold: 500,
 			wood: 0,
 			stone: 0,
 			food: 200
 		}
-		ctx.session.resources = resources
 	}
 
-	const {people, peopleTimestamp} = ctx.session
+	const {people, peopleTimestamp} = session
 	if (!people || !peopleTimestamp) {
-		ctx.session.peopleTimestamp = now
+		session.peopleTimestamp = now
 		const people: PeopleInConstructions = {
 			houses: 0,
 			barracks: 0,
 			wall: 0
 		}
-		ctx.session.people = people
+		session.people = people
 	}
 }
 
@@ -67,20 +68,18 @@ function assignPeopleToConstruction(people: PeopleInConstructions, construction:
 	return 0
 }
 
-function calcCurrentPeople(ctx: any, now: number): void {
-	const {peopleTimestamp} = ctx.session
-	const constructions = ctx.session.constructions as Constructions
-	const people = ctx.session.people as PeopleInConstructions
+function calcCurrentPeople(session: Session, now: number): void {
+	const {constructions, people, peopleTimestamp} = session
 
 	const totalSeconds = now - peopleTimestamp
-	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(ctx) * totalSeconds / 60)
+	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60)
 
 	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses) * totalMinutes
 	if (totalPoepleIncome < 1) {
 		return
 	}
 
-	ctx.session.peopleTimestamp = now
+	session.peopleTimestamp = now
 
 	let peopleAvailable = totalPoepleIncome + people.houses
 	people.houses = 0
@@ -91,30 +90,30 @@ function calcCurrentPeople(ctx: any, now: number): void {
 	people.houses = Math.min(peopleAvailable, calcHousesCapacity(constructions.houses))
 }
 
-function calcCurrentResources(ctx: any, now: number): void {
-	const {constructions, resources, resourcesTimestamp} = ctx.session
+function calcCurrentResources(session: Session, now: number): void {
+	const {constructions, resources, resourcesTimestamp} = session
 
 	const totalSeconds = now - resourcesTimestamp
-	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(ctx) * totalSeconds / 60)
+	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60)
 
 	if (totalMinutes > 0) {
-		ctx.session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
+		session.resources = estimateResourcesAfter(resources, constructions, totalMinutes)
 
 		// Max negative gold should be recoverable in 12h realtime hours
-		const goldIncome24h = calcGoldIncome(constructions.townhall, constructions.houses) * 12 * 60 * GAME_SPEEDUP * foodPenalty(ctx)
-		ctx.session.resources.gold = Math.max(-goldIncome24h, ctx.session.resources.gold)
+		const goldIncome24h = calcGoldIncome(constructions.townhall, constructions.houses) * 12 * 60 * GAME_SPEEDUP * foodPenalty(session)
+		session.resources.gold = Math.max(-goldIncome24h, session.resources.gold)
 
-		ctx.session.resourcesTimestamp = now
+		session.resourcesTimestamp = now
 	}
 }
 
 export function middleware(): (ctx: any, next?: () => void) => void {
-	return (ctx, next) => {
+	return (ctx: {session: Session}, next) => {
 		const now = Date.now() / 1000
 
-		initWhenMissing(ctx, now)
-		calcCurrentResources(ctx, now)
-		calcCurrentPeople(ctx, now)
+		initWhenMissing(ctx.session, now)
+		calcCurrentResources(ctx.session, now)
+		calcCurrentPeople(ctx.session, now)
 
 		return next && next()
 	}
