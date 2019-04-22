@@ -1,17 +1,19 @@
 import {WikidataItemReader} from '../wikidata-item-reader'
 
 export const outEmoji: {[key: string]: string} = {
+	activeUser: '💙',
+	chat: '💭',
+	fire: '🔥',
+	health: '❤️',
+	language: '🏳️‍🌈',
+	lose: '😭',
 	name: '👋',
 	nameFallback: '🔮',
-	language: '🏳️‍🌈',
-	chat: '💭',
-	health: '❤️',
-	win: '🎉',
-	lose: '😭',
-	suicide: '😵',
-	fire: '🔥',
 	possibleNo: '⛔️',
-	possibleYes: '✅'
+	possibleYes: '✅',
+	statistics: '📊',
+	suicide: '😵',
+	win: '🎉'
 }
 
 export function possibleEmoji(condition: boolean): string {

@@ -10,6 +10,7 @@ import * as nameMenu from './name-picker'
 import languageMenu from './languages'
 import mysticsMenu from './mystic'
 import spyMenu from './spy'
+import statsMenu from './stats'
 import tradeMenu from './trade'
 import warMenu from './war'
 
@@ -66,6 +67,10 @@ menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
 })
 
 menu.submenu(buttonText(outEmoji.language, 'menu.language'), 'lang', languageMenu)
+
+menu.submenu(buttonText(outEmoji.statistics, 'menu.statistics'), 'stats', statsMenu, {
+	joinLastRow: true
+})
 
 menu.urlButton(buttonText(outEmoji.chat, 'menu.chat'), 'https://t.me/Bs1thApril')
 
