@@ -66,6 +66,7 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 		const languageCode = session.wikidataLanguageCode || 'en'
 
 		const battleResult = calcBattle(qNumber, session)
+		console.log('after mystics battle', user, currentHealth, calcBallistaDamage(session.constructions))
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
