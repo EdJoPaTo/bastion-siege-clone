@@ -18,7 +18,7 @@ async function menuText(ctx: any): Promise<string> {
 
 	const statLines = []
 
-	statLines.push(`${allSessions.length} ${EMOJI.people} (${allSessionData.filter(o => !o.blocked).length} ${outEmoji.activeUser})`)
+	statLines.push(`${allSessions.length} ${EMOJI.people} (${allSessionData.filter(o => !o.blocked && o.name).length} ${outEmoji.activeUser})`)
 
 	statLines.push(maxConstructionLevelLine(ctx, allSessionData, 'townhall'))
 	statLines.push(maxConstructionLevelLine(ctx, allSessionData, 'barracks'))
