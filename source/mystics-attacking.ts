@@ -35,6 +35,10 @@ export function getCurrentMystical(): {qNumber: string; current: number; max: nu
 	if (!currentMysticQNumber || currentHealth <= 0) {
 		// Reset Mystic
 		currentMysticQNumber = getRandomMystic()
+		if (!currentMysticQNumber) {
+			throw new Error('mystics not yet initialized')
+		}
+
 		currentHealth = calcMysticStrenght(currentMysticQNumber)
 		currentGoldStored = 0
 	}
