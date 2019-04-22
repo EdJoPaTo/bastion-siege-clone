@@ -54,10 +54,11 @@ export function calcBallistaDamage(constructions: Constructions): number {
 }
 
 async function tryAttack(telegram: Telegram): Promise<void> {
+	const {user, data: session} = userSessions.getRandomUser(o => o.data.name && !o.data.blocked)
+
 	try {
 		const {qNumber} = getCurrentMystical()
 
-		const {user, data: session} = userSessions.getRandomUser(o => o.data.name)
 		const languageCode = session.wikidataLanguageCode || 'en'
 
 		const battleResult = calcBattle(qNumber, session)
@@ -94,7 +95,8 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 
 		await telegram.sendMessage(user, text, Extra.markdown() as any)
 	} catch (error) {
-		console.log('mystics attack error', error.message)
+		session.blocked = true
+		console.log('mystics attack error', user, error.message)
 	}
 }
 

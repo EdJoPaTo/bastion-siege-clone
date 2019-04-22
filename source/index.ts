@@ -31,6 +31,11 @@ const wdLabel = new WikidataLabel(wdItemStore, 'wikidata-items.yaml')
 wdLabel.load()
 bot.use(wdLabel.middleware())
 
+bot.use((ctx: any, next) => {
+	delete ctx.session.blocked
+	return next && next()
+})
+
 attackingMystics.start(bot.telegram, wdItemStore)
 
 bot.use(menu.init({

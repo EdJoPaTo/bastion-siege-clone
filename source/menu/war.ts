@@ -143,7 +143,10 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attac
 		return Promise.all([
 			ctx.reply(afterBattleMessageText(true, attackerWins, target.name, attackerLoot), extra),
 			ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name, targetLoot), extra)
-				.catch((error: Error) => console.error('send defender battlereport failed', error.message))
+				.catch((error: Error) => {
+					target.blocked = true
+					console.error('send defender battlereport failed', targetId, error.message)
+				})
 		])
 	}
 })
