@@ -20,7 +20,7 @@ async function languageMenuText(ctx: any): Promise<string> {
 	return text
 }
 
-menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.5), {
+menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.2), {
 	columns: 3,
 	textFunc: async (_ctx, key) => {
 		const flags = await flagsString(key, false)
