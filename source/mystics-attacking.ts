@@ -154,9 +154,9 @@ function calcBattle(mystic: string, session: userSessions.Session): BattleResult
 function calcTownhallChange(mystic: string, constructions: Constructions, won: boolean): number {
 	const {townhall} = constructions
 	const mysticStrength = calcMysticStrenght(mystic)
-	const townhallBaseChange = Math.floor(mysticStrength * 0.2)
+	const townhallBaseChange = Math.floor(mysticStrength * 0.15)
 	const maxChange = Math.floor(townhall / 20)
-	const townhallChange = Math.min(townhallBaseChange, maxChange) * (won ? 2 : -1)
+	const townhallChange = Math.min(townhallBaseChange, maxChange) * (won ? 3 : -1)
 
 	return townhallChange
 }
