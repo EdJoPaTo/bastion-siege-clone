@@ -17,7 +17,7 @@ async function menuText(ctx: any): Promise<string> {
 	text += await wikidataInfoHeaderFromContext(ctx, qNumber)
 	text += '\n\n'
 
-	text += Math.round(current)
+	text += Math.round(Math.max(1, current))
 	text += outEmoji.health
 	text += ' / '
 	text += Math.round(max)
