@@ -125,7 +125,7 @@ function calcBattle(mystic: string, session: userSessions.Session): BattleResult
 	const won = currentHealth <= 0
 
 	const {townhall} = constructions
-	const townhallChange = calcTownhallChange(mystic, constructions, won)
+	const townhallChange = calcTownhallChange(mystic, won)
 	session.constructions.townhall = Math.max(1, townhall + townhallChange)
 
 	if (won) {
@@ -151,12 +151,15 @@ function calcBattle(mystic: string, session: userSessions.Session): BattleResult
 	}
 }
 
-function calcTownhallChange(mystic: string, constructions: Constructions, won: boolean): number {
-	const {townhall} = constructions
+function calcTownhallChange(mystic: string, won: boolean): number {
 	const mysticStrength = calcMysticStrenght(mystic)
-	const townhallBaseChange = Math.floor(mysticStrength * 0.15)
-	const maxChange = Math.floor(townhall / 20)
-	const townhallChange = Math.min(townhallBaseChange, maxChange) * (won ? 3 : -1)
 
+	if (!won) {
+		// The average of strength is 27.3
+		// Less then the average deals more dmg but dies faster
+		return mysticStrength < 27 ? -2 : -1
+	}
+
+	const townhallChange = Math.floor(mysticStrength * 0.5)
 	return townhallChange
 }
