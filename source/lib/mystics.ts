@@ -39,8 +39,7 @@ async function loadMystics(): Promise<string[]> {
 	console.timeEnd('loadMystics')
 
 	console.log('mystics found', results.length)
-	// TODO: support more than 50 entries with wikidata-sdk-got
-	return results.slice(0, 50) as string[]
+	return results as string[]
 }
 
 export function getRandomMystic(): string {
