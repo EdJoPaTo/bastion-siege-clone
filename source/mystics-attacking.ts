@@ -61,12 +61,12 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 	const {user, data: session} = userSessions.getRandomUser(o => Boolean(o.data.name && !o.data.blocked))
 
 	try {
-		const {qNumber} = getCurrentMystical()
+		const {qNumber, max} = getCurrentMystical()
 
 		const languageCode = session.wikidataLanguageCode || 'en'
 
 		const battleResult = calcBattle(qNumber, session)
-		console.log('after mystics battle', user, currentHealth, calcBallistaDamage(session.constructions))
+		console.log('after mystics battle', user, max, currentHealth, calcBallistaDamage(session.constructions))
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
