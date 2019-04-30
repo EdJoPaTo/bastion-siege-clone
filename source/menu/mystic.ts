@@ -34,6 +34,7 @@ function menuPhoto(ctx: any): string | undefined {
 	const {qNumber} = getCurrentMystical()
 	const reader = ctx.wd.r(qNumber) as WikidataItemReader
 	const images = reader.images(800)
+		.map(o => encodeURI(o))
 	return images[0]
 }
 
