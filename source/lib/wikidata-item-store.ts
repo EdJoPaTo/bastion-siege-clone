@@ -12,7 +12,7 @@ export default class WikidataItemStore {
 
 	// TODO: check each function if its possible with the defined properties
 	// TODO: add claim related functions
-	private readonly _properties: Property[];
+	private readonly _properties: Property[]
 
 	constructor(
 		...properties: Property[]
