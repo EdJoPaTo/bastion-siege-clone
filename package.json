@@ -10,7 +10,7 @@
 		"url": "EdJoPaTo.de"
 	},
 	"engines": {
-		"node": ">=11"
+		"node": ">=12"
 	},
 	"scripts": {
 		"build": "del dist && tsc",
@@ -44,7 +44,7 @@
 		"wikidata-sdk-got": "^1.1.0"
 	},
 	"devDependencies": {
-		"@types/node": "^11.13.4",
+		"@types/node": "^12.0.2",
 		"@typescript-eslint/eslint-plugin": "^1.6.0",
 		"ava": "^1.2.1",
 		"del-cli": "^1.1.0",
