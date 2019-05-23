@@ -8,8 +8,6 @@ export default class WikidataItemStore {
 
 	private readonly _entities: Dictionary<EntitySimplified> = {}
 
-	// TODO: check each function if its possible with the defined properties
-	// TODO: add claim related functions
 	private readonly _properties: Property[]
 
 	constructor(
