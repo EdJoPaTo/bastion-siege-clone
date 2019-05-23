@@ -26,10 +26,12 @@ interface InfoHeaderOptions {
 }
 
 export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
-	let text = ''
-	text += wikidataInfoHeaderV2(ctx.wd.r(wdKey), options)
+	const reader = ctx.wd.r(wdKey) as WikidataItemReader
 
-	if (await ctx.wd.infoMissing(wdKey)) {
+	let text = ''
+	text += wikidataInfoHeaderV2(reader, options)
+
+	if (reader.label() === reader.qNumber() || !reader.description()) {
 		text += '\n\n'
 		const wdItem = await ctx.wd.r('menu.wikidataItem').label()
 		text += ctx.i18n.t('menu.infoMissing', {wdItem})

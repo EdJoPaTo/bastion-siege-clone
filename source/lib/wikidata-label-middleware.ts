@@ -42,14 +42,6 @@ export default class WikidataLabel {
 		return new WikidataItemReader(this.entity(key), defaultLanguageCode)
 	}
 
-	infoMissing(key: string, defaultLanguageCode?: string): boolean {
-		// TODO: think about removing / moving it out
-		// This is kinda specific and more apropriate in the logic of the user, not the middleware, not the store, not the reader
-		const reader = this.reader(key, defaultLanguageCode)
-		return reader.qNumber() === reader.label() ||
-			!reader.description()
-	}
-
 	middleware(): (ctx: any, next: any) => void {
 		return (ctx, next): void => {
 			const lang = ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
@@ -59,7 +51,6 @@ export default class WikidataLabel {
 				reader: readerFunc,
 				r: readerFunc,
 				entity: (key: string) => this.entity(key),
-				infoMissing: (key: string) => this.infoMissing(key, lang),
 				locale: (code?: string) => {
 					if (code) {
 						ctx.session.wikidataLanguageCode = code
