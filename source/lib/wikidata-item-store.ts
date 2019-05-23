@@ -1,8 +1,6 @@
 import {EntitySimplified, Property} from 'wikidata-sdk'
 import {getEntitiesSimplified} from 'wikidata-sdk-got'
 
-import {WikidataItemReader} from './wikidata-item-reader'
-
 type Dictionary<T> = {[key: string]: T}
 
 export default class WikidataItemStore {
@@ -107,10 +105,6 @@ export default class WikidataItemStore {
 		}
 
 		return this._entities[qNumber] || fallback
-	}
-
-	reader(keyOrQNumber: string, defaultLanguageCode?: string): WikidataItemReader {
-		return new WikidataItemReader(this.entity(keyOrQNumber), defaultLanguageCode)
 	}
 
 	private _allLocaleProgress(): Dictionary<number> {

@@ -39,7 +39,7 @@ export default class WikidataLabel {
 	}
 
 	reader(key: string, defaultLanguageCode?: string): WikidataItemReader {
-		return this.itemStore.reader(key, defaultLanguageCode)
+		return new WikidataItemReader(this.entity(key), defaultLanguageCode)
 	}
 
 	infoMissing(key: string, defaultLanguageCode?: string): boolean {

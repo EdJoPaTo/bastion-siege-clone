@@ -4,6 +4,7 @@ import {Extra, Telegram} from 'telegraf'
 import {buildCache, getRandomMystic} from './lib/mystics'
 import {formatNumberShort} from './lib/interface/format-number'
 import {wikidataInfoHeaderV2, outEmoji} from './lib/interface/generals'
+import {WikidataItemReader} from './lib/wikidata-item-reader'
 import * as userSessions from './lib/user-sessions'
 import WikidataItemStore from './lib/wikidata-item-store'
 
@@ -73,12 +74,12 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
-		text += wikidataInfoHeaderV2(wdItemStore.reader('construction.ballista', languageCode), {
+		text += wikidataInfoHeaderV2(new WikidataItemReader(wdItemStore.entity('construction.ballista'), languageCode), {
 			titlePrefix: won ? outEmoji.win : outEmoji.lose
 		})
 
 		text += '\n\n'
-		text += wikidataInfoHeaderV2(wdItemStore.reader(qNumber, languageCode), {
+		text += wikidataInfoHeaderV2(new WikidataItemReader(wdItemStore.entity(qNumber), languageCode), {
 			titlePrefix: won ? outEmoji.lose : outEmoji.win
 		})
 		text += '\n'
@@ -103,7 +104,7 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 
 			text += townhall
 			text += ' '
-			text += wdItemStore.reader('construction.townhall', languageCode).label()
+			text += new WikidataItemReader(wdItemStore.entity('construction.townhall'), languageCode).label()
 		}
 
 		await telegram.sendMessage(user, text, Extra.markdown() as any)
