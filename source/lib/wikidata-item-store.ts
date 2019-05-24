@@ -4,9 +4,9 @@ import {getEntitiesSimplified} from 'wikidata-sdk-got'
 type Dictionary<T> = {[key: string]: T}
 
 export default class WikidataItemStore {
-	private readonly _resourceKeys: Dictionary<string> = {}
+	private readonly _resourceKeys: Map<string, string> = new Map()
 
-	private readonly _entities: Dictionary<EntitySimplified> = {}
+	private readonly _entities: Map<string, EntitySimplified> = new Map()
 
 	private readonly _properties: Property[]
 
@@ -35,15 +35,13 @@ export default class WikidataItemStore {
 		await this.preloadQNumbers(...qNumbers)
 
 		for (const {key, qNumber} of entries) {
-			this._resourceKeys[key] = qNumber
+			this._resourceKeys.set(key, qNumber)
 		}
 	}
 
 	async preloadQNumbers(...qNumbers: string[]): Promise<void> {
-		const existingQNumbers = this.availableEntities()
-
 		const neededQNumbers = qNumbers
-			.filter(o => !existingQNumbers.includes(o))
+			.filter(o => !this._entities.has(o))
 
 		return this.forceloadQNumbers(...neededQNumbers)
 	}
@@ -60,16 +58,16 @@ export default class WikidataItemStore {
 		})
 
 		for (const qNumber of Object.keys(entities)) {
-			this._entities[qNumber] = entities[qNumber]
+			this._entities.set(qNumber, entities[qNumber])
 		}
 	}
 
 	availableResourceKeys(): ReadonlyArray<string> {
-		return Object.keys(this._resourceKeys)
+		return Array.from(this._resourceKeys.keys())
 	}
 
 	availableEntities(): ReadonlyArray<string> {
-		return Object.keys(this._entities)
+		return Array.from(this._entities.keys())
 	}
 
 	availableLocales(filter: (o: number) => boolean = () => true): ReadonlyArray<string> {
@@ -85,8 +83,8 @@ export default class WikidataItemStore {
 	}
 
 	qNumber(keyOrQNumber: string): string {
-		if (keyOrQNumber in this._resourceKeys) {
-			return this._resourceKeys[keyOrQNumber]
+		if (this._resourceKeys.has(keyOrQNumber)) {
+			return this._resourceKeys.get(keyOrQNumber) as string
 		}
 
 		// TODO: check if this is a qNumber
@@ -102,14 +100,13 @@ export default class WikidataItemStore {
 			type: 'item'
 		}
 
-		return this._entities[qNumber] || fallback
+		return this._entities.get(qNumber) || fallback
 	}
 
 	private _allLocaleProgress(): Dictionary<number> {
-		const entries = Object.keys(this._entities).length
+		const entries = this._entities.size
 
-		const localeProgress = Object.keys(this._entities)
-			.map(o => this._entities[o])
+		const localeProgress = Array.from(this._entities.values())
 			.flatMap(o => Object.keys(o.labels || {}))
 			.reduce((coll: {[key: string]: number}, add) => {
 				if (!coll[add]) {
