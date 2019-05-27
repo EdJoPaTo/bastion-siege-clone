@@ -54,9 +54,10 @@ export default class WikidataLabel {
 	}
 
 	middleware(): (ctx: any, next: any) => void {
+		const lang = (ctx: any): string => ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
+
 		return (ctx, next): void => {
-			const lang = ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
-			const readerFunc = (key: string): WikidataEntityReader => this.reader(key, lang)
+			const readerFunc = (key: string): WikidataEntityReader => this.reader(key, lang(ctx))
 
 			ctx.wd = {
 				reader: readerFunc,
@@ -68,7 +69,7 @@ export default class WikidataLabel {
 						return code
 					}
 
-					return lang
+					return lang(ctx)
 				},
 				description: (key: string) => readerFunc(key).description(),
 				label: (key: string) => readerFunc(key).label(),
