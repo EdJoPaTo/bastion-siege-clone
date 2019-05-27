@@ -2,11 +2,11 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	EMOJI
 } from 'bastion-siege-logic'
+import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {getCurrentMystical} from '../mystics-attacking'
 import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
-import {WikidataItemReader} from '../lib/wikidata-item-reader'
 
 async function menuText(ctx: any): Promise<string> {
 	const {qNumber, current, max, gold} = getCurrentMystical()
@@ -32,9 +32,8 @@ async function menuText(ctx: any): Promise<string> {
 
 function menuPhoto(ctx: any): string | undefined {
 	const {qNumber} = getCurrentMystical()
-	const reader = ctx.wd.r(qNumber) as WikidataItemReader
+	const reader = ctx.wd.r(qNumber) as WikidataEntityReader
 	const images = reader.images(800)
-		.map(o => encodeURI(o))
 	return images[0]
 }
 

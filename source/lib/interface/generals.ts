@@ -1,4 +1,4 @@
-import {WikidataItemReader} from '../wikidata-item-reader'
+import WikidataEntityReader from 'wikidata-entity-reader'
 
 export const outEmoji: {[key: string]: string} = {
 	activeUser: '💙',
@@ -26,7 +26,7 @@ interface InfoHeaderOptions {
 }
 
 export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
-	const reader = ctx.wd.r(wdKey) as WikidataItemReader
+	const reader = ctx.wd.r(wdKey) as WikidataEntityReader
 
 	let text = ''
 	text += wikidataInfoHeaderV2(reader, options)
@@ -40,7 +40,7 @@ export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, opt
 	return text
 }
 
-export function wikidataInfoHeaderV2(wdr: WikidataItemReader, options: InfoHeaderOptions = {}): string {
+export function wikidataInfoHeaderV2(wdr: WikidataEntityReader, options: InfoHeaderOptions = {}): string {
 	const {titlePrefix, titleSuffix} = options
 	const label = wdr.label()
 	const description = wdr.description()

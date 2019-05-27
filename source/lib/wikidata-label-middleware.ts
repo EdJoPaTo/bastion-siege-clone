@@ -1,9 +1,9 @@
 import {promises as fsPromises} from 'fs'
 
 import {EntitySimplified} from 'wikidata-sdk'
+import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
-import {WikidataItemReader} from './wikidata-item-reader'
 import loadYaml from './load-yaml'
 
 export default class WikidataLabel {
@@ -49,14 +49,14 @@ export default class WikidataLabel {
 		return this.entityStore.entity(key)
 	}
 
-	reader(key: string, defaultLanguageCode?: string): WikidataItemReader {
-		return new WikidataItemReader(this.entity(key), defaultLanguageCode)
+	reader(key: string, defaultLanguageCode?: string): WikidataEntityReader {
+		return new WikidataEntityReader(this.entity(key), defaultLanguageCode)
 	}
 
 	middleware(): (ctx: any, next: any) => void {
 		return (ctx, next): void => {
 			const lang = ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
-			const readerFunc = (key: string): WikidataItemReader => this.reader(key, lang)
+			const readerFunc = (key: string): WikidataEntityReader => this.reader(key, lang)
 
 			ctx.wd = {
 				reader: readerFunc,

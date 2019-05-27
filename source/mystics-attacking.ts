@@ -1,11 +1,11 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
 import {Extra, Telegram} from 'telegraf'
+import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
 import {buildCache, getRandomMystic} from './lib/mystics'
 import {formatNumberShort} from './lib/interface/format-number'
 import {wikidataInfoHeaderV2, outEmoji} from './lib/interface/generals'
-import {WikidataItemReader} from './lib/wikidata-item-reader'
 import * as userSessions from './lib/user-sessions'
 
 const ATTACK_INTERVAL = 1000 * 60 * 30 // 30 Minutes
@@ -74,12 +74,12 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
-		text += wikidataInfoHeaderV2(new WikidataItemReader(wdEntityStore.entity('construction.ballista'), languageCode), {
+		text += wikidataInfoHeaderV2(new WikidataEntityReader(wdEntityStore.entity('construction.ballista'), languageCode), {
 			titlePrefix: won ? outEmoji.win : outEmoji.lose
 		})
 
 		text += '\n\n'
-		text += wikidataInfoHeaderV2(new WikidataItemReader(wdEntityStore.entity(qNumber), languageCode), {
+		text += wikidataInfoHeaderV2(new WikidataEntityReader(wdEntityStore.entity(qNumber), languageCode), {
 			titlePrefix: won ? outEmoji.lose : outEmoji.win
 		})
 		text += '\n'
@@ -104,7 +104,7 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 
 			text += townhall
 			text += ' '
-			text += new WikidataItemReader(wdEntityStore.entity('construction.townhall'), languageCode).label()
+			text += new WikidataEntityReader(wdEntityStore.entity('construction.townhall'), languageCode).label()
 		}
 
 		await telegram.sendMessage(user, text, Extra.markdown() as any)
