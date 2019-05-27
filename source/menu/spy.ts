@@ -1,5 +1,6 @@
 import * as wdkGot from 'wikidata-sdk-got'
 import arrayFilterUnique from 'array-filter-unique'
+import randomItem from 'random-item'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityStore from 'wikidata-entity-store'
 import {
@@ -87,13 +88,11 @@ menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
 
-		const pickedSessionId = Math.floor(Math.random() * possibleSessions.length)
-		const session = possibleSessions[pickedSessionId].data
+		const session = randomItem(possibleSessions).data
 		const name = session.name as {first: string; last: string}
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
-		const pickedIndex = Math.floor(Math.random() * spyableConstructions.length)
-		const pickedConstructionKey = spyableConstructions[pickedIndex]
+		const pickedConstructionKey = randomItem(spyableConstructions)
 		const pickedConstructionLevel = session.constructions[pickedConstructionKey]
 
 		let message = ''

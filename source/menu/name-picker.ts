@@ -1,3 +1,4 @@
+import randomItem from 'random-item'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {getGivenNames, getFamilyNames} from '../lib/name-options'
@@ -21,23 +22,16 @@ async function menuText(ctx: any): Promise<string> {
 
 export const menu = new TelegrafInlineMenu(menuText)
 
-function randomEntry<T>(possibilities: ReadonlyArray<T>): T {
-	const rand = Math.floor(Math.random() * possibilities.length)
-	return possibilities[rand]
-}
-
 menu.button((ctx: any) => ctx.session.createFirst || outEmoji.nameFallback, 'first', {
 	doFunc: (ctx: any) => {
-		const possible = getGivenNames()
-		ctx.session.createFirst = randomEntry(possible)
+		ctx.session.createFirst = randomItem(getGivenNames())
 	}
 })
 
 menu.button((ctx: any) => ctx.session.createLast || outEmoji.nameFallback, 'last', {
 	joinLastRow: true,
 	doFunc: (ctx: any) => {
-		const possible = getFamilyNames()
-		ctx.session.createLast = randomEntry(possible)
+		ctx.session.createLast = randomItem(getFamilyNames())
 	}
 })
 

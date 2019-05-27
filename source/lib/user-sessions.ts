@@ -1,4 +1,5 @@
 import {Constructions, Resources} from 'bastion-siege-logic'
+import randomItem from 'random-item'
 
 /* eslint @typescript-eslint/no-var-requires: warn */
 /* eslint @typescript-eslint/no-require-imports: warn */
@@ -60,8 +61,7 @@ export function getUser(userId: number): any {
 export function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): SessionRawEntry {
 	const rawArr = getRaw()
 		.filter(filter)
-	const pickedIndex = Math.floor(Math.random() * rawArr.length)
-	return rawArr[pickedIndex]
+	return randomItem(rawArr)
 }
 
 export function middleware(): (ctx: any, next: any) => void {

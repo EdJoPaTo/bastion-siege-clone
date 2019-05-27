@@ -1,4 +1,5 @@
 import * as wdkGot from 'wikidata-sdk-got'
+import randomItem from 'random-item'
 import WikidataEntityStore from 'wikidata-entity-store'
 
 const mystics: string[] = []
@@ -42,6 +43,5 @@ async function loadMystics(): Promise<string[]> {
 }
 
 export function getRandomMystic(): string {
-	const pickedIndex = Math.floor(Math.random() * mystics.length)
-	return mystics[pickedIndex]
+	return randomItem(mystics)
 }
