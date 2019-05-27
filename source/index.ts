@@ -2,12 +2,12 @@ import {readFileSync} from 'fs'
 
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
+import WikidataEntityStore from 'wikidata-entity-store'
 
 import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import menu from './menu'
-import WikidataItemStore from './lib/wikidata-item-store'
 import WikidataLabel from './lib/wikidata-label-middleware'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
@@ -26,8 +26,10 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware())
 
-const wdItemStore = new WikidataItemStore('labels', 'descriptions', 'claims')
-const wdLabel = new WikidataLabel(wdItemStore, 'wikidata-items.yaml')
+const wdEntityStore = new WikidataEntityStore({
+	properties: ['labels', 'descriptions', 'claims']
+})
+const wdLabel = new WikidataLabel(wdEntityStore, 'wikidata-items.yaml')
 wdLabel.load()
 bot.use(wdLabel.middleware())
 
@@ -36,7 +38,7 @@ bot.use((ctx: any, next) => {
 	return next && next()
 })
 
-attackingMystics.start(bot.telegram, wdItemStore)
+attackingMystics.start(bot.telegram, wdEntityStore)
 
 bot.use(menu.init({
 	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,

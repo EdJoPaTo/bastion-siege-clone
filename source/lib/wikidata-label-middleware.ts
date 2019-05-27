@@ -1,14 +1,14 @@
 import {promises as fsPromises} from 'fs'
 
 import {EntitySimplified} from 'wikidata-sdk'
+import WikidataEntityStore from 'wikidata-entity-store'
 
 import {WikidataItemReader} from './wikidata-item-reader'
 import loadYaml from './load-yaml'
-import WikidataItemStore from './wikidata-item-store'
 
 export default class WikidataLabel {
 	constructor(
-		public readonly itemStore: WikidataItemStore,
+		public readonly entityStore: WikidataEntityStore,
 		public readonly qNumberFilePath: string
 	) {}
 
@@ -17,25 +17,36 @@ export default class WikidataLabel {
 		const contentString = await fsPromises.readFile(this.qNumberFilePath, 'utf8')
 
 		const content = loadYaml(contentString)
-		await this.itemStore.addResourceKeyDict(content)
+		await this.entityStore.addResourceKeyDict(content)
 
 		console.timeEnd('wikidata label cache load')
 	}
 
 	availableResourceKeys(): ReadonlyArray<string> {
-		return this.itemStore.availableResourceKeys()
+		return this.entityStore.availableResourceKeys()
 	}
 
 	availableLocales(filter: (o: number) => boolean = () => true): ReadonlyArray<string> {
-		return this.itemStore.availableLocales(filter)
-	}
+		const allEntries = this.entityStore.allEntities()
 
-	translationProgress(languageCode: string): number {
-		return this.itemStore.translationProgress(languageCode)
+		const localeProgress = allEntries
+			.flatMap(o => Object.keys(o.labels || {}))
+			.reduce((coll: {[key: string]: number}, add) => {
+				if (!coll[add]) {
+					coll[add] = 0
+				}
+
+				coll[add] += 1 / allEntries.length
+				return coll
+			}, {}) as {[key: string]: number}
+
+		return Object.keys(localeProgress)
+			.filter(o => filter(localeProgress[o]))
+			.sort((a, b) => a.localeCompare(b))
 	}
 
 	entity(key: string): EntitySimplified {
-		return this.itemStore.entity(key)
+		return this.entityStore.entity(key)
 	}
 
 	reader(key: string, defaultLanguageCode?: string): WikidataItemReader {
@@ -62,7 +73,7 @@ export default class WikidataLabel {
 				description: (key: string) => readerFunc(key).description(),
 				label: (key: string) => readerFunc(key).label(),
 				url: (key: string) => readerFunc(key).url(),
-				itemStore: this.itemStore,
+				entityStore: this.entityStore,
 				wikidata: this
 			}
 

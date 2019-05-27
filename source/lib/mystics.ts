@@ -1,15 +1,14 @@
 import * as wdkGot from 'wikidata-sdk-got'
-
-import WikidataItemStore from './wikidata-item-store'
+import WikidataEntityStore from 'wikidata-entity-store'
 
 const mystics: string[] = []
 
-export async function buildCache(itemStore: WikidataItemStore): Promise<void> {
+export async function buildCache(store: WikidataEntityStore): Promise<void> {
 	try {
 		console.time('build mystics cache')
 
 		const result = await loadMystics()
-		await itemStore.preloadQNumbers(...result)
+		await store.preloadQNumbers(...result)
 
 		for (const qNumber of result) {
 			if (!(qNumber in mystics)) {

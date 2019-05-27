@@ -1,6 +1,7 @@
 import * as wdkGot from 'wikidata-sdk-got'
 import arrayFilterUnique from 'array-filter-unique'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
+import WikidataEntityStore from 'wikidata-entity-store'
 import {
 	ConstructionName,
 	CONSTRUCTIONS,
@@ -10,7 +11,6 @@ import {
 import * as userSessions from '../lib/user-sessions'
 
 import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
-import WikidataItemStore from '../lib/wikidata-item-store'
 
 interface Spy {
 	emoji: string;
@@ -35,8 +35,8 @@ async function getPossibleSpies(lang: string): Promise<Spy[]> {
 async function currentSpy(ctx: any): Promise<Spy> {
 	const possibleSpies = await getPossibleSpies(ctx.wd.locale())
 
-	const itemStore = ctx.wd.itemStore as WikidataItemStore
-	await itemStore.preloadQNumbers(...possibleSpies
+	const entityStore = ctx.wd.entityStore as WikidataEntityStore
+	await entityStore.preloadQNumbers(...possibleSpies
 		.map(o => o.value)
 		.filter(arrayFilterUnique())
 	)

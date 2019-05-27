@@ -40,6 +40,7 @@
 		"telegraf-session-local": "0.0.7",
 		"ts-node": "^8.0.3",
 		"typescript": "^3.4.3",
+		"wikidata-entity-store": "^1.0.0",
 		"wikidata-sdk": "^6.3.0",
 		"wikidata-sdk-got": "^1.1.0"
 	},
