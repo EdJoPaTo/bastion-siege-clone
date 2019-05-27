@@ -1,7 +1,5 @@
+import {EMOJI} from 'bastion-siege-logic'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
-import {
-	EMOJI
-} from 'bastion-siege-logic'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {formatNumberShort} from '../lib/interface/format-number'
