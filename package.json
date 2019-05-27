@@ -17,7 +17,7 @@
 		"prepack": "npm run build",
 		"start": "ts-node source/index.ts",
 		"pretest": "tsc",
-		"test": "xo && nyc ava"
+		"test": "xo"
 	},
 	"config": {
 		"tokenpath": "/run/secrets/bastion-siege-clone-token.txt"
@@ -35,6 +35,7 @@
 		"bastion-siege-logic": "^1.3.1",
 		"js-yaml": "^3.13.1",
 		"random-item": "^3.0.0",
+		"tableize-object": "^0.1.0",
 		"telegraf": "^3.28.0",
 		"telegraf-i18n": "^6.5.0",
 		"telegraf-inline-menu": "^3.5.2",
@@ -49,37 +50,9 @@
 	"devDependencies": {
 		"@types/node": "^12.0.2",
 		"@typescript-eslint/eslint-plugin": "^1.6.0",
-		"ava": "^1.2.1",
 		"del-cli": "^1.1.0",
 		"eslint-config-xo-typescript": "^0.12.0",
-		"nyc": "^14.0.0",
 		"xo": "^0.24.0"
-	},
-	"ava": {
-		"babel": false,
-		"compileEnhancements": false,
-		"extensions": [
-			"ts"
-		],
-		"require": [
-			"ts-node/register"
-		]
-	},
-	"nyc": {
-		"extension": [
-			".ts"
-		],
-		"include": [
-			"source"
-		],
-		"exclude": [
-			"**/*.test.ts"
-		],
-		"all": true,
-		"reporter": [
-			"lcov",
-			"text"
-		]
 	},
 	"xo": {
 		"extends": "xo-typescript",
@@ -90,7 +63,6 @@
 		"rules": {
 			"import/named": "warn",
 			"@typescript-eslint/promise-function-async": "off",
-			"ava/no-ignored-test-files": "off",
 			"@typescript-eslint/array-type": "off",
 			"@typescript-eslint/semi": [
 				"error",
