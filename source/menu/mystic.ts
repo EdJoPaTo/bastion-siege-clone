@@ -39,14 +39,14 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto
 })
 
-menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${await ctx.wd.label('menu.mystical')}`, (ctx: any) => ctx.wd.url('menu.mystical'))
+menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${await ctx.wd.r('menu.mystical').label()}`, (ctx: any) => ctx.wd.r('menu.mystical').url())
 
 menu.urlButton(async (ctx: any) => {
 	const {qNumber} = getCurrentMystical()
-	return `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${ctx.wd.label(qNumber)}`
+	return `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r(qNumber).label()}`
 }, async (ctx: any) => {
 	const {qNumber} = getCurrentMystical()
-	return ctx.wd.url(qNumber)
+	return ctx.wd.r(qNumber).url()
 })
 
 export default menu

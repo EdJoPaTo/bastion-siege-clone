@@ -27,7 +27,7 @@ export async function constructionLine(ctx: any, construction: ConstructionName,
 	parts.push(EMOJI[construction])
 	parts.push(String(level))
 	parts.push(
-		`*${await ctx.wd.label(`construction.${construction}`)}*`
+		`*${await ctx.wd.r(`construction.${construction}`).label()}*`
 	)
 
 	return parts.join(' ')
@@ -43,11 +43,11 @@ function simpleLineString(...args: (string | number)[]): string {
 }
 
 async function incomeString(ctx: any, income: number | string, unit: string): Promise<string> {
-	return simpleLineString(await ctx.wd.label('other.income'), income, `${unit} / ${await ctx.wd.label('bs.day')}`)
+	return simpleLineString(await ctx.wd.r('other.income').label(), income, `${unit} / ${await ctx.wd.r('bs.day').label()}`)
 }
 
 async function storageCapacityString(ctx: any, capacity: number, unit: ResourceName): Promise<string> {
-	return simpleLineString(await ctx.wd.label('bs.storageCapacity'), formatNumberShort(capacity, true), EMOJI[unit])
+	return simpleLineString(await ctx.wd.r('bs.storageCapacity').label(), formatNumberShort(capacity, true), EMOJI[unit])
 }
 
 export function peopleString(label: string, available: number, capacity: number, unit: string): string {
@@ -58,7 +58,7 @@ export async function constructionPropertyString(ctx: any, constructions: Constr
 	if (construction === 'townhall') {
 		const linePromises = []
 		linePromises.push(storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))
-		linePromises.push(incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${await ctx.wd.label('bs.inhabitant')}`))
+		linePromises.push(incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${await ctx.wd.r('bs.inhabitant').label()}`))
 		linePromises.push(incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold))
 
 		const lines = await Promise.all(linePromises)
@@ -76,7 +76,7 @@ export async function constructionPropertyString(ctx: any, constructions: Constr
 
 	if (construction === 'houses') {
 		const lines = []
-		lines.push(peopleString(await ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
+		lines.push(peopleString(await ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
 		lines.push(await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people))
 		lines.push(await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food))
 
@@ -96,11 +96,11 @@ export async function constructionPropertyString(ctx: any, constructions: Constr
 	}
 
 	if (construction === 'barracks') {
-		return peopleString(await ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+		return peopleString(await ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	}
 
 	if (construction === 'wall') {
-		return peopleString(await ctx.wd.label('bs.archer'), people.wall, calcWallArcherCapacity(constructions.wall), EMOJI.archer)
+		return peopleString(await ctx.wd.r('bs.archer').label(), people.wall, calcWallArcherCapacity(constructions.wall), EMOJI.archer)
 	}
 
 	return undefined

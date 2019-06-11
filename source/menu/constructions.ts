@@ -43,7 +43,7 @@ async function constructionMenuText(ctx: any, key: string, entries: Construction
 
 async function constructionButtonTextFunc(ctx: any, key: string): Promise<string> {
 	const wdKey = `construction.${key}`
-	return `${EMOJI[key]} ${await ctx.wd.label(wdKey)}`
+	return `${EMOJI[key]} ${await ctx.wd.r(wdKey).label()}`
 }
 
 export const buildingsMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'buildings', BUILDINGS))

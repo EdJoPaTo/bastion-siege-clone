@@ -65,16 +65,16 @@ async function menuText(ctx: any): Promise<string> {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
-	text += peopleString(await ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += peopleString(await ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	text += '\n'
-	text += peopleString(await ctx.wd.label('bs.people'), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += peopleString(await ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
 	text += '\n'
 
 	text += '\n'
 
 	if (attackTarget) {
 		const {name, constructions} = attackTarget
-		text += await ctx.wd.label('battle.target')
+		text += await ctx.wd.r('battle.target').label()
 		text += '\n'
 		text += `${name.first} ${name.last}\n`
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
@@ -86,7 +86,7 @@ async function menuText(ctx: any): Promise<string> {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attack')}`, 'attack', {
+menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.r('action.attack').label()}`, 'attack', {
 	hide: (ctx: any) => !ctx.session.attackTarget,
 	doFunc: async (ctx: any) => {
 		const now = Date.now() / 1000
@@ -153,7 +153,7 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attac
 	}
 })
 
-menu.button(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.label('action.search')}`, 'search', {
+menu.button(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.r('action.search').label()}`, 'search', {
 	doFunc: (ctx: any) => {
 		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user

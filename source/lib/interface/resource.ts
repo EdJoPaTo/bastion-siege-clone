@@ -15,7 +15,7 @@ export async function resourceLine(ctx: any, resource: ResourceName, amount: num
 
 	parts.push(EMOJI[resource])
 	parts.push(
-		`*${await ctx.wd.label(`resource.${resource}`)}*`
+		`*${await ctx.wd.r(`resource.${resource}`).label()}*`
 	)
 	parts.push(formatNumberShort(amount, true))
 

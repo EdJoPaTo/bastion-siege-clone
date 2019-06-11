@@ -37,7 +37,7 @@ const menu = new TelegrafInlineMenu(menuText)
 menu.setCommand('start')
 
 function buttonText(emoji: string, resourceKey: string): (ctx: any) => string {
-	return (ctx: any) => `${emoji} ${ctx.wd.label(resourceKey)}`
+	return (ctx: any) => `${emoji} ${ctx.wd.r(resourceKey).label()}`
 }
 
 menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu.menu, {

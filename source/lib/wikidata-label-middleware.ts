@@ -74,9 +74,6 @@ export default class WikidataLabel {
 
 					return lang(ctx)
 				},
-				description: (key: string) => readerFunc(key).description(),
-				label: (key: string) => readerFunc(key).label(),
-				url: (key: string) => readerFunc(key).url(),
 				entityStore: this.entityStore,
 				wikidata: this
 			}

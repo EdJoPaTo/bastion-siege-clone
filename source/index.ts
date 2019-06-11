@@ -42,7 +42,7 @@ attackingMystics.start(bot.telegram, wdEntityStore)
 
 bot.use(menu.init({
 	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,
-	mainMenuButtonText: (ctx: any) => `🔝 ${ctx.wd.label('menu.menu')}`
+	mainMenuButtonText: (ctx: any) => `🔝 ${ctx.wd.r('menu.menu').label()}`
 }))
 
 bot.catch((error: any) => {

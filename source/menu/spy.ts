@@ -83,7 +83,7 @@ async function menuText(ctx: any): Promise<string> {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}`, 'espionage', {
+menu.simpleButton(async (ctx: any) => `${await ctx.wd.r('action.espionage').label()}`, 'espionage', {
 	doFunc: async (ctx: any) => {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
@@ -101,7 +101,7 @@ menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}
 		message += `${name.first} ${name.last}`
 		message += ' '
 		message += EMOJI[pickedConstructionKey]
-		message += await ctx.wd.label(`construction.${pickedConstructionKey}`)
+		message += await ctx.wd.r(`construction.${pickedConstructionKey}`).label()
 		message += ' '
 		message += pickedConstructionLevel
 
@@ -109,18 +109,18 @@ menu.simpleButton(async (ctx: any) => `${await ctx.wd.label('action.espionage')}
 	}
 })
 
-menu.button(async (ctx: any) => `${await ctx.wd.label('action.change')}`, 'change', {
+menu.button(async (ctx: any) => `${await ctx.wd.r('action.change').label()}`, 'change', {
 	joinLastRow: true,
 	doFunc: (ctx: any) => {
 		delete ctx.session.selectedSpy
 	}
 })
 
-menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${await ctx.wd.label('menu.spy')}`, (ctx: any) => ctx.wd.url('menu.spy'))
+menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${await ctx.wd.r('menu.spy').label()}`, (ctx: any) => ctx.wd.r('menu.spy').url())
 
 menu.urlButton(async (ctx: any) => {
 	const mySpy = await currentSpy(ctx)
-	return `ℹ️ ${await ctx.wd.label('menu.wikidataItem')} ${mySpy.emoji} ${mySpy.label}`
+	return `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${mySpy.emoji} ${mySpy.label}`
 }, async (ctx: any) => {
 	const mySpy = await currentSpy(ctx)
 	return `https://www.wikidata.org/wiki/${mySpy.value}`

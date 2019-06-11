@@ -44,9 +44,9 @@ async function tradeResourceMenuText(ctx: any): Promise<string> {
 	text += wikidataInfoHeader(ctx.wd.r(`resource.${resource}`), {titlePrefix: EMOJI[resource]})
 
 	text += '\n\n'
-	text += `${EMOJI.gold} ${await ctx.wd.label('resource.gold')} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
-	text += `${EMOJI[resource]} ${await ctx.wd.label(`resource.${resource}`)} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
-	text += `${await ctx.wd.label('bs.storageCapacity')} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
+	text += `${EMOJI.gold} ${await ctx.wd.r('resource.gold').label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
+	text += `${EMOJI[resource]} ${await ctx.wd.r(`resource.${resource}`).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
+	text += `${await ctx.wd.r('bs.storageCapacity').label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
 	text += '\n'
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`
 	return text
@@ -55,7 +55,7 @@ async function tradeResourceMenuText(ctx: any): Promise<string> {
 const resourceMenu = new TelegrafInlineMenu(tradeResourceMenuText)
 
 menu.selectSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	textFunc: async (ctx: any, key) => `${EMOJI[key]} ${await ctx.wd.label(`resource.${key}`)}`
+	textFunc: async (ctx: any, key) => `${EMOJI[key]} ${await ctx.wd.r(`resource.${key}`).label()}`
 })
 
 function buyOptions(ctx: any): string[] {
@@ -94,10 +94,10 @@ resourceMenu.select('buy', buyOptions, {
 	}
 })
 
-resourceMenu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => {
+resourceMenu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
 	const resource = resourceFromCtx(ctx)
 	const wdKey = `resource.${resource}`
-	return ctx.wd.url(wdKey)
+	return ctx.wd.r(wdKey).url()
 })
 
 export default menu

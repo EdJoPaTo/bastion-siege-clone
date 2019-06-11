@@ -44,7 +44,7 @@ async function constructionText(ctx: any): Promise<string> {
 	return textParts.join('\n\n')
 }
 
-menu.button(async (ctx: any) => `⬆️ ${await ctx.wd.label('action.upgrade')}`, 'upgrade', {
+menu.button(async (ctx: any) => `⬆️ ${await ctx.wd.r('action.upgrade').label()}`, 'upgrade', {
 	hide: (ctx: any) => {
 		const constructions = ctx.session.constructions as Constructions
 		const {construction, level} = constructionFromCtx(ctx)
@@ -64,10 +64,10 @@ menu.button(async (ctx: any) => `⬆️ ${await ctx.wd.label('action.upgrade')}`
 	}
 })
 
-menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.label('menu.wikidataItem')}`, (ctx: any) => {
+menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
 	const {construction} = constructionFromCtx(ctx)
 	const wdKey = `construction.${construction}`
-	return ctx.wd.url(wdKey)
+	return ctx.wd.r(wdKey).url()
 })
 
 export default menu
