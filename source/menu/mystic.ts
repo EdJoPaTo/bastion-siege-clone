@@ -6,7 +6,7 @@ import {formatNumberShort} from '../lib/interface/format-number'
 import {getCurrentMystical} from '../mystics-attacking'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-async function menuText(ctx: any): Promise<string> {
+function menuText(ctx: any): string {
 	const {qNumber, current, max, gold} = getCurrentMystical()
 
 	let text = ''
@@ -39,12 +39,12 @@ const menu = new TelegrafInlineMenu(menuText, {
 	photo: menuPhoto
 })
 
-menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${await ctx.wd.r('menu.mystical').label()}`, (ctx: any) => ctx.wd.r('menu.mystical').url())
+menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r('menu.mystical').label()}`, (ctx: any) => ctx.wd.r('menu.mystical').url())
 
-menu.urlButton(async (ctx: any) => {
+menu.urlButton((ctx: any) => {
 	const {qNumber} = getCurrentMystical()
-	return `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r(qNumber).label()}`
-}, async (ctx: any) => {
+	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r(qNumber).label()}`
+}, (ctx: any) => {
 	const {qNumber} = getCurrentMystical()
 	return ctx.wd.r(qNumber).url()
 })

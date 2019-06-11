@@ -18,13 +18,13 @@ function buy(currentResources: Resources, resource: ResourceName, amount: number
 	return result
 }
 
-async function tradeMenuText(ctx: any): Promise<string> {
+function tradeMenuText(ctx: any): string {
 	const currentResources = ctx.session.resources as Resources
 
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('action.buy'), {titlePrefix: EMOJI.trade})
 	text += '\n\n'
-	text += await resources(ctx, currentResources)
+	text += resources(ctx, currentResources)
 	return text
 }
 
@@ -34,7 +34,7 @@ function resourceFromCtx(ctx: any): ResourceName {
 	return ctx.match[1]
 }
 
-async function tradeResourceMenuText(ctx: any): Promise<string> {
+function tradeResourceMenuText(ctx: any): string {
 	const resource = resourceFromCtx(ctx)
 	const currentResources = ctx.session.resources as Resources
 	const constructions = ctx.session.constructions as Constructions
@@ -44,9 +44,9 @@ async function tradeResourceMenuText(ctx: any): Promise<string> {
 	text += wikidataInfoHeader(ctx.wd.r(`resource.${resource}`), {titlePrefix: EMOJI[resource]})
 
 	text += '\n\n'
-	text += `${EMOJI.gold} ${await ctx.wd.r('resource.gold').label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
-	text += `${EMOJI[resource]} ${await ctx.wd.r(`resource.${resource}`).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
-	text += `${await ctx.wd.r('bs.storageCapacity').label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
+	text += `${EMOJI.gold} ${ctx.wd.r('resource.gold').label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
+	text += `${EMOJI[resource]} ${ctx.wd.r(`resource.${resource}`).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
+	text += `${ctx.wd.r('bs.storageCapacity').label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
 	text += '\n'
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`
 	return text
@@ -55,7 +55,7 @@ async function tradeResourceMenuText(ctx: any): Promise<string> {
 const resourceMenu = new TelegrafInlineMenu(tradeResourceMenuText)
 
 menu.selectSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	textFunc: async (ctx: any, key) => `${EMOJI[key]} ${await ctx.wd.r(`resource.${key}`).label()}`
+	textFunc: (ctx: any, key) => `${EMOJI[key]} ${ctx.wd.r(`resource.${key}`).label()}`
 })
 
 function buyOptions(ctx: any): string[] {
@@ -94,7 +94,7 @@ resourceMenu.select('buy', buyOptions, {
 	}
 })
 
-resourceMenu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
+resourceMenu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
 	const resource = resourceFromCtx(ctx)
 	const wdKey = `resource.${resource}`
 	return ctx.wd.r(wdKey).url()

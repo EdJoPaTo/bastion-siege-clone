@@ -56,7 +56,7 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: {first: str
 	return lines.join('\n')
 }
 
-async function menuText(ctx: any): Promise<string> {
+function menuText(ctx: any): string {
 	const constructions = ctx.session.constructions as Constructions
 	const people = ctx.session.people as PeopleInConstructions
 	const attackTargetId = ctx.session.attackTarget as number
@@ -65,16 +65,16 @@ async function menuText(ctx: any): Promise<string> {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
-	text += peopleString(await ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += peopleString(ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	text += '\n'
-	text += peopleString(await ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += peopleString(ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
 	text += '\n'
 
 	text += '\n'
 
 	if (attackTarget) {
 		const {name, constructions} = attackTarget
-		text += await ctx.wd.r('battle.target').label()
+		text += ctx.wd.r('battle.target').label()
 		text += '\n'
 		text += `${name.first} ${name.last}\n`
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
@@ -86,7 +86,7 @@ async function menuText(ctx: any): Promise<string> {
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.r('action.attack').label()}`, 'attack', {
+menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attack', {
 	hide: (ctx: any) => !ctx.session.attackTarget,
 	doFunc: async (ctx: any) => {
 		const now = Date.now() / 1000
@@ -153,7 +153,7 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.r('action.attack').
 	}
 })
 
-menu.button(async (ctx: any) => `${EMOJI.search} ${await ctx.wd.r('action.search').label()}`, 'search', {
+menu.button((ctx: any) => `${EMOJI.search} ${ctx.wd.r('action.search').label()}`, 'search', {
 	doFunc: (ctx: any) => {
 		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user

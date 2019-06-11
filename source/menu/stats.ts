@@ -8,7 +8,7 @@ import * as userSessions from '../lib/user-sessions'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-async function menuText(ctx: any): Promise<string> {
+function menuText(ctx: any): string {
 	const allSessions = userSessions.getRaw()
 	const allSessionData = allSessions.map(o => o.data)
 
@@ -34,6 +34,6 @@ function maxConstructionLevelLine(ctx: any, sessions: ReadonlyArray<userSessions
 
 const menu = new TelegrafInlineMenu(menuText)
 
-menu.urlButton(async (ctx: any) => `ℹ️ ${await ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => ctx.wd.r('menu.statistics').url())
+menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => ctx.wd.r('menu.statistics').url())
 
 export default menu

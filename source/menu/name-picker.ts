@@ -8,7 +8,7 @@ export function nameNeeded(ctx: any): boolean {
 	return !ctx.session.name
 }
 
-async function menuText(ctx: any): Promise<string> {
+function menuText(ctx: any): string {
 	let text = ''
 
 	text += outEmoji.name

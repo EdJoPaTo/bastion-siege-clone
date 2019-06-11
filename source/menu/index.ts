@@ -14,7 +14,7 @@ import statsMenu from './stats'
 import tradeMenu from './trade'
 import warMenu from './war'
 
-async function menuText(ctx: any): Promise<string> {
+function menuText(ctx: any): string {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
@@ -25,7 +25,7 @@ async function menuText(ctx: any): Promise<string> {
 		text += '\n\n'
 	}
 
-	text += await resources(ctx, ctx.session.resources)
+	text += resources(ctx, ctx.session.resources)
 
 	text += '\n\n'
 	text += ctx.i18n.t('disclaimer')

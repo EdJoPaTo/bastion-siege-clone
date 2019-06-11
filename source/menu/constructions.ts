@@ -21,7 +21,7 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-async function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]): Promise<string> {
+function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]): string {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources as Resources
 	const constructions = ctx.session.constructions as Constructions
@@ -31,19 +31,16 @@ async function constructionMenuText(ctx: any, key: string, entries: Construction
 
 	text += '\n\n'
 
-	const constructionLines = await Promise.all(
-		entries.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
-	)
-
-	text += constructionLines
+	text += entries
+		.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
 		.join('\n')
 
 	return text
 }
 
-async function constructionButtonTextFunc(ctx: any, key: string): Promise<string> {
+function constructionButtonTextFunc(ctx: any, key: string): string {
 	const wdKey = `construction.${key}`
-	return `${EMOJI[key]} ${await ctx.wd.r(wdKey).label()}`
+	return `${EMOJI[key]} ${ctx.wd.r(wdKey).label()}`
 }
 
 export const buildingsMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'buildings', BUILDINGS))
