@@ -14,7 +14,7 @@ import * as userSessions from '../lib/user-sessions'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {peopleString} from '../lib/interface/construction'
-import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60
@@ -63,7 +63,7 @@ async function menuText(ctx: any): Promise<string> {
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, 'bs.war', {titlePrefix: EMOJI.war})
+	text += wikidataInfoHeader(ctx.wd.r('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
 	text += peopleString(await ctx.wd.label('bs.army'), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	text += '\n'
@@ -121,7 +121,7 @@ menu.button(async (ctx: any) => `${EMOJI.war} ${await ctx.wd.label('action.attac
 			}
 
 			return ctx.replyWithMarkdown(
-				await wikidataInfoHeaderFromContext(ctx, 'battle.suicide', {titlePrefix: outEmoji.suicide})
+				wikidataInfoHeader(ctx.wd.r('battle.suicide'), {titlePrefix: outEmoji.suicide})
 			)
 		}
 

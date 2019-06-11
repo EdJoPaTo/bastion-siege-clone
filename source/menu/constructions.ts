@@ -11,7 +11,7 @@ import {
 } from 'bastion-siege-logic'
 
 import {constructionLine} from '../lib/interface/construction'
-import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
 import entryMenu from './construction'
 
@@ -27,7 +27,7 @@ async function constructionMenuText(ctx: any, key: string, entries: Construction
 	const constructions = ctx.session.constructions as Constructions
 
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, wdKey, {titlePrefix: EMOJI[key]})
+	text += wikidataInfoHeader(ctx.wd.r(wdKey), {titlePrefix: EMOJI[key]})
 
 	text += '\n\n'
 

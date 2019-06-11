@@ -11,7 +11,7 @@ import {
 
 import * as userSessions from '../lib/user-sessions'
 
-import {wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {wikidataInfoHeader} from '../lib/interface/generals'
 
 interface Spy {
 	emoji: string;
@@ -67,7 +67,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 
 async function menuText(ctx: any): Promise<string> {
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, 'menu.spy', {titlePrefix: EMOJI.search})
+	text += wikidataInfoHeader(ctx.wd.r('menu.spy'), {titlePrefix: EMOJI.search})
 
 	const mySpy = await currentSpy(ctx)
 

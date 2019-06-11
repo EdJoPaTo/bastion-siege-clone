@@ -5,7 +5,7 @@ import WikidataEntityStore from 'wikidata-entity-store'
 
 import {buildCache, getRandomMystic} from './lib/mystics'
 import {formatNumberShort} from './lib/interface/format-number'
-import {wikidataInfoHeaderV2, outEmoji} from './lib/interface/generals'
+import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 
 const ATTACK_INTERVAL = 1000 * 60 * 30 // 30 Minutes
@@ -74,12 +74,12 @@ async function tryAttack(telegram: Telegram): Promise<void> {
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
-		text += wikidataInfoHeaderV2(new WikidataEntityReader(wdEntityStore.entity('construction.ballista'), languageCode), {
+		text += wikidataInfoHeader(new WikidataEntityReader(wdEntityStore.entity('construction.ballista'), languageCode), {
 			titlePrefix: won ? outEmoji.win : outEmoji.lose
 		})
 
 		text += '\n\n'
-		text += wikidataInfoHeaderV2(new WikidataEntityReader(wdEntityStore.entity(qNumber), languageCode), {
+		text += wikidataInfoHeader(new WikidataEntityReader(wdEntityStore.entity(qNumber), languageCode), {
 			titlePrefix: won ? outEmoji.lose : outEmoji.win
 		})
 		text += '\n'

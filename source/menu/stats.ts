@@ -6,14 +6,14 @@ import {
 
 import * as userSessions from '../lib/user-sessions'
 
-import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 async function menuText(ctx: any): Promise<string> {
 	const allSessions = userSessions.getRaw()
 	const allSessionData = allSessions.map(o => o.data)
 
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, 'menu.statistics', {titlePrefix: outEmoji.statistics})
+	text += wikidataInfoHeader(ctx.wd.r('menu.statistics'), {titlePrefix: outEmoji.statistics})
 	text += '\n\n'
 
 	const statLines = []

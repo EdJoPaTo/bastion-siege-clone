@@ -4,15 +4,15 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {getCurrentMystical} from '../mystics-attacking'
-import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 async function menuText(ctx: any): Promise<string> {
 	const {qNumber, current, max, gold} = getCurrentMystical()
 
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, 'menu.mystical', {titlePrefix: EMOJI.dragon})
+	text += wikidataInfoHeader(ctx.wd.r('menu.mystical'), {titlePrefix: EMOJI.dragon})
 	text += '\n\n'
-	text += await wikidataInfoHeaderFromContext(ctx, qNumber)
+	text += wikidataInfoHeader(ctx.wd.r(qNumber))
 	text += '\n\n'
 
 	text += Math.round(Math.max(1, current))

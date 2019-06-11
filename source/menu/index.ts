@@ -3,7 +3,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {EMOJI} from 'bastion-siege-logic'
 
 import {resources} from '../lib/interface/resource'
-import {outEmoji, wikidataInfoHeaderFromContext} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
@@ -16,7 +16,7 @@ import warMenu from './war'
 
 async function menuText(ctx: any): Promise<string> {
 	let text = ''
-	text += await wikidataInfoHeaderFromContext(ctx, 'menu.menu')
+	text += wikidataInfoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
 
 	if (ctx.session.name) {

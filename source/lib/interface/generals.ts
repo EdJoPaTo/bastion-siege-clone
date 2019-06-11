@@ -25,22 +25,7 @@ interface InfoHeaderOptions {
 	titleSuffix?: string;
 }
 
-export async function wikidataInfoHeaderFromContext(ctx: any, wdKey: string, options: InfoHeaderOptions = {}): Promise<string> {
-	const reader = ctx.wd.r(wdKey) as WikidataEntityReader
-
-	let text = ''
-	text += wikidataInfoHeaderV2(reader, options)
-
-	if (reader.label() === reader.qNumber() || !reader.description()) {
-		text += '\n\n'
-		const wdItem = await ctx.wd.r('menu.wikidataItem').label()
-		text += ctx.i18n.t('menu.infoMissing', {wdItem})
-	}
-
-	return text
-}
-
-export function wikidataInfoHeaderV2(wdr: WikidataEntityReader, options: InfoHeaderOptions = {}): string {
+export function wikidataInfoHeader(wdr: WikidataEntityReader, options: InfoHeaderOptions = {}): string {
 	const {titlePrefix, titleSuffix} = options
 	const label = wdr.label()
 	const description = wdr.description()

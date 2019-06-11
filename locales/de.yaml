@@ -1,6 +1,5 @@
 menu:
   back: zurück
-  infoMissing: Dem ${wdItem} fehlen einige Infos. Denk mal drüber nach diese hinzuzufügen :)
 name:
   take: Fantastisch! Das bin ich!
   question: Wie nennt man dich?
