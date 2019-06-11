@@ -1,6 +1,5 @@
 import {promises as fsPromises} from 'fs'
 
-import {EntitySimplified} from 'wikidata-sdk'
 import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
@@ -41,12 +40,8 @@ export default class WikidataLabel {
 			.sort((a, b) => a.localeCompare(b))
 	}
 
-	entity(key: string): EntitySimplified {
-		return this.entityStore.entity(key)
-	}
-
 	reader(key: string, defaultLanguageCode?: string): WikidataEntityReader {
-		return new WikidataEntityReader(this.entity(key), defaultLanguageCode)
+		return new WikidataEntityReader(this.entityStore.entity(key), defaultLanguageCode)
 	}
 
 	middleware(): (ctx: any, next: any) => void {
@@ -58,7 +53,6 @@ export default class WikidataLabel {
 			ctx.wd = {
 				reader: readerFunc,
 				r: readerFunc,
-				entity: (key: string) => this.entity(key),
 				locale: (code?: string) => {
 					if (code) {
 						ctx.session.wikidataLanguageCode = code
