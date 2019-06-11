@@ -1,13 +1,8 @@
 import {promises as fsPromises} from 'fs'
 
 import {EntitySimplified} from 'wikidata-sdk'
-import * as yaml from 'js-yaml'
 import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
-
-/* eslint @typescript-eslint/no-var-requires: warn */
-/* eslint @typescript-eslint/no-require-imports: warn */
-const tableize = require('tableize-object')
 
 export default class WikidataLabel {
 	constructor(
@@ -18,9 +13,7 @@ export default class WikidataLabel {
 	async load(): Promise<void> {
 		console.time('wikidata label cache load')
 		const contentString = await fsPromises.readFile(this.qNumberFilePath, 'utf8')
-		const contentYaml = yaml.safeLoad(contentString)
-		const content = tableize(contentYaml)
-		await this.entityStore.addResourceKeyDict(content)
+		await this.entityStore.addResourceKeyYaml(contentString)
 
 		console.timeEnd('wikidata label cache load')
 	}
