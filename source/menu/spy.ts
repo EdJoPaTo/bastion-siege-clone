@@ -1,8 +1,7 @@
-import * as wdkGot from 'wikidata-sdk-got'
 import arrayFilterUnique from 'array-filter-unique'
 import randomItem from 'random-item'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
-import WikidataEntityStore from 'wikidata-entity-store'
+import WikidataEntityReader from 'wikidata-entity-reader'
 import {
 	ConstructionName,
 	CONSTRUCTIONS,
@@ -10,48 +9,23 @@ import {
 } from 'bastion-siege-logic'
 
 import * as userSessions from '../lib/user-sessions'
+import * as wdSets from '../lib/wikidata-sets'
 
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
-interface Spy {
-	emoji: string;
-	value: string;
-	label: string;
-	description?: string;
-}
-
-const spyCache = new Map()
-
-async function getPossibleSpies(lang: string): Promise<Spy[]> {
-	const query = `SELECT ?item ?itemLabel ?itemDescription ?emoji WHERE {
-  ?item wdt:P279+ wd:Q729.
-	?item wdt:P487 ?emoji.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${lang},en". }
-}`
-	const result = await wdkGot.sparqlQuerySimplified(query, {cache: spyCache})
-	const mapped: any[] = result.map((o: any) => ({...o.item, emoji: o.emoji}))
-	return mapped as Spy[]
-}
-
-async function currentSpy(ctx: any): Promise<Spy> {
-	const possibleSpies = await getPossibleSpies(ctx.wd.locale())
-
-	const entityStore = ctx.wd.entityStore as WikidataEntityStore
-	await entityStore.preloadQNumbers(...possibleSpies
-		.map(o => o.value)
-		.filter(arrayFilterUnique())
-	)
-
-	const {selectedSpy, selectedSpyEmoji} = ctx.session
-	const entries = possibleSpies.filter(o => o.value === selectedSpy && o.emoji === selectedSpyEmoji)
-	if (entries.length > 0) {
-		return entries[0]
+function getSpy(ctx: any): WikidataEntityReader {
+	if (!ctx.session.selectedSpy) {
+		ctx.session.selectedSpy = wdSets.getRandom('spies')
 	}
 
-	const rand = Math.floor(Math.random() * possibleSpies.length)
-	ctx.session.selectedSpy = possibleSpies[rand].value
-	ctx.session.selectedSpyEmoji = possibleSpies[rand].emoji
-	return possibleSpies[rand]
+	const reader = ctx.wd.r(ctx.session.selectedSpy) as WikidataEntityReader
+
+	if (!ctx.session.selectedSpyEmoji) {
+		const spymojis = reader.unicodeChars()
+		ctx.session.selectedSpyEmoji = randomItem(spymojis)
+	}
+
+	return reader
 }
 
 function getSpyableConstructions(qNumber: string): ConstructionName[] {
@@ -69,12 +43,13 @@ async function menuText(ctx: any): Promise<string> {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('menu.spy'), {titlePrefix: EMOJI.search})
 
-	const mySpy = await currentSpy(ctx)
+	const spyReader = getSpy(ctx)
+	const description = spyReader.description()
 
 	text += '\n\n'
-	text += `${ctx.session.selectedSpyEmoji} ${mySpy.label}\n`
-	if (mySpy.description) {
-		text += mySpy.description
+	text += `${ctx.session.selectedSpyEmoji} ${spyReader.label()}\n`
+	if (description) {
+		text += description
 		text += '\n'
 	}
 
@@ -113,17 +88,15 @@ menu.button((ctx: any) => `${ctx.wd.r('action.change').label()}`, 'change', {
 	joinLastRow: true,
 	doFunc: (ctx: any) => {
 		delete ctx.session.selectedSpy
+		delete ctx.session.selectedSpyEmoji
 	}
 })
 
 menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r('menu.spy').label()}`, (ctx: any) => ctx.wd.r('menu.spy').url())
 
-menu.urlButton(async (ctx: any) => {
-	const mySpy = await currentSpy(ctx)
-	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${mySpy.emoji} ${mySpy.label}`
-}, async (ctx: any) => {
-	const mySpy = await currentSpy(ctx)
-	return `https://www.wikidata.org/wiki/${mySpy.value}`
-})
+menu.urlButton((ctx: any) => {
+	const spyReader = getSpy(ctx)
+	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`
+}, ctx => getSpy(ctx).url())
 
 export default menu

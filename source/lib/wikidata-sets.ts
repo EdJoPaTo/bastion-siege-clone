@@ -10,6 +10,10 @@ const queries: Dictionary<string> = {
 ?item rdfs:label ?label.
 ?item wdt:P18 ?image.
 FILTER(LANG(?label) = "en")
+}`,
+	spies: `SELECT DISTINCT ?item WHERE {
+?item wdt:P279+ wd:Q729.
+?item wdt:P487 ?emoji.
 }`
 }
 
