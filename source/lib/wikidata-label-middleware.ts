@@ -29,15 +29,11 @@ export default class WikidataLabel {
 			.sort((a, b) => a.localeCompare(b))
 	}
 
-	reader(key: string, defaultLanguageCode?: string): WikidataEntityReader {
-		return new WikidataEntityReader(this.entityStore.entity(key), defaultLanguageCode)
-	}
-
 	middleware(): (ctx: any, next: any) => void {
 		const lang = (ctx: any): string => ctx.session.wikidataLanguageCode || ctx.from.language_code || 'en'
 
 		return (ctx, next): void => {
-			const readerFunc = (key: string): WikidataEntityReader => this.reader(key, lang(ctx))
+			const readerFunc = (key: string): WikidataEntityReader => this._reader(key, lang(ctx))
 
 			ctx.wd = {
 				reader: readerFunc,
@@ -57,5 +53,9 @@ export default class WikidataLabel {
 
 			return next()
 		}
+	}
+
+	private _reader(key: string, defaultLanguageCode?: string): WikidataEntityReader {
+		return new WikidataEntityReader(this.entityStore.entity(key), defaultLanguageCode)
 	}
 }
