@@ -31,10 +31,12 @@ console.time('preload wikidata entity store')
 const wdEntityStore = new WikidataEntityStore({
 	properties: ['labels', 'descriptions', 'claims']
 })
-const wdLabel = new WikidataLabel(wdEntityStore, 'wikidata-items.yaml')
-wdLabel.load()
+
+bot.use(new WikidataLabel(wdEntityStore).middleware())
+
+const wikidataResourceKeyYaml = readFileSync('wikidata-items.yaml', 'utf8')
+wdEntityStore.addResourceKeyYaml(wikidataResourceKeyYaml)
 	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-middleware'))
-bot.use(wdLabel.middleware())
 
 wdSets.build(wdEntityStore)
 	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-sets'))

@@ -1,21 +1,10 @@
-import {promises as fsPromises} from 'fs'
-
 import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
 export default class WikidataLabel {
 	constructor(
-		public readonly entityStore: WikidataEntityStore,
-		public readonly qNumberFilePath: string
+		public readonly entityStore: WikidataEntityStore
 	) {}
-
-	async load(): Promise<void> {
-		console.time('wikidata label cache load')
-		const contentString = await fsPromises.readFile(this.qNumberFilePath, 'utf8')
-		await this.entityStore.addResourceKeyYaml(contentString)
-
-		console.timeEnd('wikidata label cache load')
-	}
 
 	availableResourceKeys(): ReadonlyArray<string> {
 		return this.entityStore.availableResourceKeys()
