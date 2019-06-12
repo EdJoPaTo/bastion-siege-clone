@@ -3,15 +3,15 @@ import WikidataEntityStore from 'wikidata-entity-store'
 
 export default class WikidataLabel {
 	constructor(
-		public readonly entityStore: WikidataEntityStore
+		public readonly store: WikidataEntityStore
 	) {}
 
 	availableResourceKeys(): ReadonlyArray<string> {
-		return this.entityStore.availableResourceKeys()
+		return this.store.availableResourceKeys()
 	}
 
 	availableLocales(percentageOfLabelsRequired = 0.1): readonly string[] {
-		const allEntries = this.entityStore.allEntities()
+		const allEntries = this.store.allEntities()
 
 		const localeProgress = allEntries
 			.flatMap(o => Object.keys(o.labels || {}))
@@ -46,7 +46,7 @@ export default class WikidataLabel {
 
 					return lang(ctx)
 				},
-				entityStore: this.entityStore,
+				store: this.store,
 				availableLocales: (percentageOfLabelsRequired = 0.1) => this.availableLocales(percentageOfLabelsRequired),
 				wikidata: this
 			}
@@ -56,6 +56,6 @@ export default class WikidataLabel {
 	}
 
 	private _reader(key: string, defaultLanguageCode?: string): WikidataEntityReader {
-		return new WikidataEntityReader(this.entityStore.entity(key), defaultLanguageCode)
+		return new WikidataEntityReader(this.store.entity(key), defaultLanguageCode)
 	}
 }
