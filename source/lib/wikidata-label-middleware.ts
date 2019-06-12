@@ -10,7 +10,7 @@ export default class WikidataLabel {
 		return this.entityStore.availableResourceKeys()
 	}
 
-	availableLocales(filter: (o: number) => boolean = () => true): ReadonlyArray<string> {
+	availableLocales(percentageOfLabelsRequired = 0.1): readonly string[] {
 		const allEntries = this.entityStore.allEntities()
 
 		const localeProgress = allEntries
@@ -25,7 +25,7 @@ export default class WikidataLabel {
 			}, {}) as {[key: string]: number}
 
 		return Object.keys(localeProgress)
-			.filter(o => filter(localeProgress[o]))
+			.filter(o => localeProgress[o] > percentageOfLabelsRequired)
 			.sort((a, b) => a.localeCompare(b))
 	}
 
@@ -51,6 +51,7 @@ export default class WikidataLabel {
 					return lang(ctx)
 				},
 				entityStore: this.entityStore,
+				availableLocales: (percentageOfLabelsRequired = 0.1) => this.availableLocales(percentageOfLabelsRequired),
 				wikidata: this
 			}
 

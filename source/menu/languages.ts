@@ -23,7 +23,7 @@ function languageMenuText(ctx: any): string {
 	return text
 }
 
-menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.1), {
+menu.select('lang', (ctx: any) => ctx.wd.availableLocales(), {
 	columns: 3,
 	textFunc: (_ctx, key) => {
 		const flag = flagString(key)
