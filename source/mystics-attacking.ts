@@ -3,10 +3,10 @@ import {Extra, Telegram} from 'telegraf'
 import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
-import {buildCache, getRandomMystic} from './lib/mystics'
 import {formatNumberShort} from './lib/interface/format-number'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
+import * as wdSets from './lib/wikidata-sets'
 
 const ATTACK_INTERVAL = 1000 * 60 * 30 // 30 Minutes
 let currentMysticQNumber: string | undefined
@@ -16,7 +16,6 @@ let currentGoldStored = 0
 let wdEntityStore: WikidataEntityStore
 
 export async function start(telegram: Telegram, entityStore: WikidataEntityStore): Promise<void> {
-	await buildCache(entityStore)
 	wdEntityStore = entityStore
 
 	setInterval(tryAttack, ATTACK_INTERVAL, telegram)
@@ -35,7 +34,7 @@ function calcMysticStrenght(mystic: string): number {
 export function getCurrentMystical(): {qNumber: string; current: number; max: number; gold: number} {
 	if (!currentMysticQNumber || currentHealth <= 0) {
 		// Reset Mystic
-		currentMysticQNumber = getRandomMystic()
+		currentMysticQNumber = wdSets.getRandom('mystics')
 		if (!currentMysticQNumber) {
 			throw new Error('mystics not yet initialized')
 		}

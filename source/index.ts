@@ -7,6 +7,7 @@ import WikidataEntityStore from 'wikidata-entity-store'
 import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
+import * as wdSets from './lib/wikidata-sets'
 import menu from './menu'
 import WikidataLabel from './lib/wikidata-label-middleware'
 
@@ -32,6 +33,8 @@ const wdEntityStore = new WikidataEntityStore({
 const wdLabel = new WikidataLabel(wdEntityStore, 'wikidata-items.yaml')
 wdLabel.load()
 bot.use(wdLabel.middleware())
+
+wdSets.build(wdEntityStore)
 
 bot.use((ctx: any, next) => {
 	delete ctx.session.blocked
