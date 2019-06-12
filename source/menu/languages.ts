@@ -1,30 +1,33 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-import {countryEmojisOfLanguage} from '../lib/interface/language-code-emojis'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+
+/* eslint @typescript-eslint/no-var-requires: warn */
+/* eslint @typescript-eslint/no-require-imports: warn */
+const localeEmoji = require('locale-emoji')
 
 const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
 
-async function flagsString(languageCode: string, fallbackFlag: boolean): Promise<string> {
-	const flags = await countryEmojisOfLanguage(languageCode)
-	if (flags.length === 0 && fallbackFlag) {
+function flagString(languageCode: string, useFallbackFlag = false): string {
+	const flag = localeEmoji(languageCode)
+	if (!flag && useFallbackFlag) {
 		return outEmoji.language
 	}
 
-	return flags.join('')
+	return flag
 }
 
-async function languageMenuText(ctx: any): Promise<string> {
-	const flags = await flagsString(ctx.wd.locale(), true)
-	const text = wikidataInfoHeader(ctx.wd.r('menu.language'), {titlePrefix: flags})
+function languageMenuText(ctx: any): string {
+	const flag = flagString(ctx.wd.locale(), true)
+	const text = wikidataInfoHeader(ctx.wd.r('menu.language'), {titlePrefix: flag})
 	return text
 }
 
 menu.select('lang', (ctx: any) => ctx.wd.wikidata.availableLocales((o: number) => o > 0.1), {
 	columns: 3,
-	textFunc: async (_ctx, key) => {
-		const flags = await flagsString(key, false)
-		return `${flags} ${key}`
+	textFunc: (_ctx, key) => {
+		const flag = flagString(key)
+		return `${flag} ${key}`
 	},
 	isSetFunc: (ctx: any, key) => key === ctx.wd.locale(),
 	setFunc: (ctx: any, key) => {
