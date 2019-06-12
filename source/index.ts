@@ -27,14 +27,17 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware())
 
+console.time('preload wikidata entity store')
 const wdEntityStore = new WikidataEntityStore({
 	properties: ['labels', 'descriptions', 'claims']
 })
 const wdLabel = new WikidataLabel(wdEntityStore, 'wikidata-items.yaml')
 wdLabel.load()
+	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-middleware'))
 bot.use(wdLabel.middleware())
 
 wdSets.build(wdEntityStore)
+	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-sets'))
 
 bot.use((ctx: any, next) => {
 	delete ctx.session.blocked
