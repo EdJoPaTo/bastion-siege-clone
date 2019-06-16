@@ -2,6 +2,7 @@ import {readFileSync} from 'fs'
 
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
+import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
 
 import * as attackingMystics from './mystics-attacking'
@@ -9,7 +10,6 @@ import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
 import menu from './menu'
-import WikidataLabel from './lib/wikidata-label-middleware'
 
 const tokenFilePath = process.env.NODE_ENV === 'production' ? process.env.npm_package_config_tokenpath as string : 'token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
@@ -32,7 +32,9 @@ const wdEntityStore = new WikidataEntityStore({
 	properties: ['labels', 'descriptions', 'claims']
 })
 
-bot.use(new WikidataLabel(wdEntityStore).middleware())
+bot.use(new TelegrafWikibase(wdEntityStore, {
+	contextKey: 'wd'
+}).middleware())
 
 const wikidataResourceKeyYaml = readFileSync('wikidata-items.yaml', 'utf8')
 wdEntityStore.addResourceKeyYaml(wikidataResourceKeyYaml)
