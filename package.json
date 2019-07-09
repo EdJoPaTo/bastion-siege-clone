@@ -19,9 +19,6 @@
 		"pretest": "tsc",
 		"test": "xo"
 	},
-	"config": {
-		"tokenpath": "/run/secrets/bastion-siege-clone-token.txt"
-	},
 	"main": "dist",
 	"types": "dist",
 	"files": [
