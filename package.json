@@ -59,7 +59,6 @@
 		],
 		"rules": {
 			"import/named": "warn",
-			"@typescript-eslint/promise-function-async": "off",
 			"@typescript-eslint/array-type": "off",
 			"@typescript-eslint/semi": [
 				"error",
