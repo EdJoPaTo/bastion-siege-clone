@@ -15,7 +15,7 @@ let currentGoldStored = 0
 
 let wdEntityStore: WikidataEntityStore
 
-export async function start(telegram: Telegram, entityStore: WikidataEntityStore): Promise<void> {
+export function start(telegram: Telegram, entityStore: WikidataEntityStore): void {
 	wdEntityStore = entityStore
 
 	setInterval(tryAttack, ATTACK_INTERVAL, telegram)
