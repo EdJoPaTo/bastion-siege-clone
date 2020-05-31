@@ -1,15 +1,15 @@
-import TelegrafInlineMenu from 'telegraf-inline-menu'
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	ConstructionName,
 	EMOJI
 } from 'bastion-siege-logic'
 
-import {Context, Session} from '../lib/context'
+import {Context, Session, backButtons} from '../lib/context'
 import * as userSessions from '../lib/user-sessions'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-function menuText(ctx: Context): string {
+function menuBody(ctx: Context): Body {
 	const allSessions = userSessions.getRaw()
 	const allSessionData = allSessions.map(o => o.data)
 
@@ -26,15 +26,18 @@ function menuText(ctx: Context): string {
 
 	text += statLines.join('\n')
 
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
 function maxConstructionLevelLine(ctx: Context, sessions: ReadonlyArray<Session>, construction: ConstructionName): string {
 	return `${EMOJI[construction]} ≤${Math.max(...sessions.map(o => o.constructions[construction]))} ${ctx.wd.r(`construction.${construction}`).label()}`
 }
 
-const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
+export const menu = new MenuTemplate(menuBody)
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => ctx.wd.r('menu.statistics').url())
+menu.url(
+	ctx => `ℹ️ ${ctx.wd.reader('menu.wikidataItem').label()}`,
+	ctx => ctx.wd.reader('menu.statistics').url()
+)
 
-export default menu
+menu.manualRow(backButtons)

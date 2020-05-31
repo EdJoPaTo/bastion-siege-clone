@@ -1,5 +1,5 @@
 import {Extra} from 'telegraf'
-import TelegrafInlineMenu from 'telegraf-inline-menu'
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	calcBarracksCapacity,
 	calcHousesCapacity,
@@ -12,7 +12,7 @@ import {PeopleInConstructions} from '../types'
 
 import * as userSessions from '../lib/user-sessions'
 
-import {Context, Name} from '../lib/context'
+import {Context, Name, backButtons} from '../lib/context'
 import {formatNumberShort} from '../lib/interface/format-number'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 import {peopleString} from '../lib/interface/construction'
@@ -57,7 +57,7 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot:
 	return lines.join('\n')
 }
 
-function menuText(ctx: Context): string {
+function menuBody(ctx: Context): Body {
 	const {constructions, people} = ctx.session
 	const attackTargetId = ctx.session.attackTarget
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
@@ -82,21 +82,21 @@ function menuText(ctx: Context): string {
 		text += '\n\n'
 	}
 
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
-const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
+export const menu = new MenuTemplate(menuBody)
 
-menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attack', {
-	hide: (ctx: any) => !ctx.session.attackTarget,
-	doFunc: async (ctx: any) => {
+menu.interact(ctx => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attack', {
+	hide: ctx => !ctx.session.attackTarget,
+	do: async ctx => {
 		const now = Date.now() / 1000
 
 		const attacker = ctx.session
-		const attackerConstructions = attacker.constructions as Constructions
-		const attackerPeople = attacker.people as PeopleInConstructions
+		const attackerConstructions = attacker.constructions
+		const attackerPeople = attacker.people
 
-		const targetId = ctx.session.attackTarget
+		const targetId = ctx.session.attackTarget!
 		const target = userSessions.getUser(targetId)!
 		const targetConstructions = target.constructions
 		const targetPeople = target.people
@@ -112,18 +112,22 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 		delete ctx.session.attackTarget
 		ctx.session.people.barracks = 0
 
-		if (targetId === ctx.from.id) {
+		if (targetId === ctx.from!.id) {
 			ctx.session.people.houses = 0
 			ctx.session.people.wall = 0
 
 			// Easter egg: attack yourself duplicates gold
 			if (ctx.session.resources.gold > 0) {
-				ctx.session.resources.gold *= 2
+				ctx.session.resources = {
+					...ctx.session.resources,
+					gold: ctx.session.resources.gold * 2
+				}
 			}
 
-			return ctx.replyWithMarkdown(
+			await ctx.replyWithMarkdown(
 				wikidataInfoHeader(ctx.wd.r('battle.suicide'), {titlePrefix: outEmoji.suicide})
 			)
+			return '.'
 		}
 
 		const attackerLoot = attackerWins ? possibleLootFromTarget : 0
@@ -131,7 +135,7 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 
 		ctx.session.resources = {
 			...ctx.session.resources,
-			gold: (ctx.session.resources.gold as number) + attackerLoot
+			gold: ctx.session.resources.gold + attackerLoot
 		}
 
 		target.resources = {
@@ -146,26 +150,27 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 			target.peopleTimestamp = now
 		}
 
-		const extra = Extra.markdown()
-
-		await ctx.reply(afterBattleMessageText(true, attackerWins, target.name!, attackerLoot), extra)
+		await ctx.replyWithMarkdown(afterBattleMessageText(true, attackerWins, target.name!, attackerLoot))
 
 		if (!target.blocked) {
 			try {
-				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name, targetLoot), extra)
+				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), Extra.markdown() as any)
 			} catch (error) {
 				console.error('send defender battlereport failed', targetId, error.message)
 				target.blocked = true
 			}
 		}
+
+		return '.'
 	}
 })
 
-menu.button((ctx: any) => `${EMOJI.search} ${ctx.wd.r('action.search').label()}`, 'search', {
-	doFunc: (ctx: any) => {
+menu.interact(ctx => `${EMOJI.search} ${ctx.wd.r('action.search').label()}`, 'search', {
+	do: ctx => {
 		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user
+		return '.'
 	}
 })
 
-export default menu
+menu.manualRow(backButtons)

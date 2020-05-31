@@ -1,4 +1,4 @@
-import TelegrafInlineMenu from 'telegraf-inline-menu'
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	calcStorageCapacity,
 	EMOJI,
@@ -6,7 +6,7 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
-import {Context} from '../lib/context'
+import {Context, backButtons} from '../lib/context'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {resources} from '../lib/interface/resource'
@@ -19,21 +19,21 @@ function buy(currentResources: Resources, resource: ResourceName, amount: number
 	return result
 }
 
-function tradeMenuText(ctx: Context): string {
+function tradeMenuBody(ctx: Context): Body {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('action.buy'), {titlePrefix: EMOJI.trade})
 	text += '\n\n'
 	text += resources(ctx, ctx.session.resources)
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
-const menu = new TelegrafInlineMenu((ctx: any) => tradeMenuText(ctx))
+export const menu = new MenuTemplate(tradeMenuBody)
 
 function resourceFromCtx(ctx: Context): ResourceName {
 	return ctx.match![1] as ResourceName
 }
 
-function tradeResourceMenuText(ctx: Context): string {
+function tradeResourceMenuBody(ctx: Context): Body {
 	const resource = resourceFromCtx(ctx)
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
@@ -48,14 +48,16 @@ function tradeResourceMenuText(ctx: Context): string {
 	text += `${ctx.wd.r('bs.storageCapacity').label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
 	text += '\n'
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
-const resourceMenu = new TelegrafInlineMenu((ctx: any) => tradeResourceMenuText(ctx))
+const resourceMenu = new MenuTemplate(tradeResourceMenuBody)
 
-menu.selectSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	textFunc: (ctx: any, key) => `${EMOJI[key as ResourceName]} ${ctx.wd.r(`resource.${key}`).label()}`
+menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
+	buttonText: (ctx, key) => `${EMOJI[key as ResourceName]} ${ctx.wd.r(`resource.${key}`).label()}`
 })
+
+menu.manualRow(backButtons)
 
 function buyOptions(ctx: Context): string[] {
 	const resource = resourceFromCtx(ctx)
@@ -79,24 +81,25 @@ function buyOptions(ctx: Context): string[] {
 		.map(o => String(o))
 }
 
-resourceMenu.select('buy', (ctx: any) => buyOptions(ctx), {
+resourceMenu.choose('buy', buyOptions, {
 	columns: 3,
-	textFunc: (ctx: any, key: string) => {
+	buttonText: (ctx, key) => {
 		const resource = resourceFromCtx(ctx)
 		const numberText = formatNumberShort(Number(key), true)
 		return `${numberText}${EMOJI[resource]}`
 	},
-	setFunc: (ctx: any, key: string) => {
+	do: (ctx, key) => {
 		const resource = resourceFromCtx(ctx)
-		const currentResources = ctx.session.resources as Resources
+		const currentResources = ctx.session.resources
 		ctx.session.resources = buy(currentResources, resource, Number(key))
+		return '.'
 	}
 })
 
-resourceMenu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
+resourceMenu.url(ctx => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, ctx => {
 	const resource = resourceFromCtx(ctx)
 	const wdKey = `resource.${resource}`
 	return ctx.wd.r(wdKey).url()
 })
 
-export default menu
+resourceMenu.manualRow(backButtons)

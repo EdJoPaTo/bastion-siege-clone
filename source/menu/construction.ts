@@ -1,19 +1,17 @@
-import TelegrafInlineMenu from 'telegraf-inline-menu'
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	calcBuildingCost,
 	calcMinutesNeeded,
 	calcResourcesAfterConstruction,
-	ConstructionName,
-	Constructions,
-	Resources
+	ConstructionName
 } from 'bastion-siege-logic'
 
-import {Context} from '../lib/context'
+import {Context, backButtons} from '../lib/context'
 
 import {infoHeader, constructionPropertyString} from '../lib/interface/construction'
 import {constructionResources} from '../lib/interface/resource'
 
-const menu = new TelegrafInlineMenu((ctx: any) => constructionText(ctx))
+export const menu = new MenuTemplate<Context>(constructionBody)
 
 function constructionFromCtx(ctx: Context): {construction: ConstructionName; level: number} {
 	const construction = ctx.match![1] as ConstructionName
@@ -23,7 +21,7 @@ function constructionFromCtx(ctx: Context): {construction: ConstructionName; lev
 	return {construction, level}
 }
 
-function constructionText(ctx: Context): string {
+function constructionBody(ctx: Context): Body {
 	const {constructions, people} = ctx.session
 	const {construction, level} = constructionFromCtx(ctx)
 
@@ -39,34 +37,39 @@ function constructionText(ctx: Context): string {
 	}
 
 	textParts.push(constructionResources(ctx, requiredResources, currentResources))
+	const text = textParts.join('\n\n')
 
-	return textParts.join('\n\n')
+	return {text, parse_mode: 'Markdown'}
 }
 
-menu.button((ctx: any) => `⬆️ ${ctx.wd.r('action.upgrade').label()}`, 'upgrade', {
-	hide: (ctx: any) => {
-		const constructions = ctx.session.constructions as Constructions
+menu.interact(ctx => `⬆️ ${ctx.wd.r('action.upgrade').label()}`, 'upgrade', {
+	hide: ctx => {
+		const {constructions} = ctx.session
 		const {construction, level} = constructionFromCtx(ctx)
 		const requiredResources = calcBuildingCost(construction, level)
-		const currentResources = ctx.session.resources as Resources
+		const currentResources = ctx.session.resources
 
 		const minutes = calcMinutesNeeded(requiredResources, constructions, currentResources)
 		return minutes > 0
 	},
-	doFunc: (ctx: any) => {
+	do: ctx => {
 		const {construction, level} = constructionFromCtx(ctx)
 		const requiredResources = calcBuildingCost(construction, level)
-		const currentResources = ctx.session.resources as Resources
+		const currentResources = ctx.session.resources
 
 		ctx.session.resources = calcResourcesAfterConstruction(currentResources, requiredResources)
-		ctx.session.constructions[construction] = level + 1
+		const constructions = {...ctx.session.constructions}
+		constructions[construction] = level + 1
+		ctx.session.constructions = constructions
+
+		return '.'
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => {
+menu.url(ctx => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, ctx => {
 	const {construction} = constructionFromCtx(ctx)
 	const wdKey = `construction.${construction}`
 	return ctx.wd.r(wdKey).url()
 })
 
-export default menu
+menu.manualRow(backButtons)

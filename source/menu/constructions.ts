@@ -1,4 +1,4 @@
-import TelegrafInlineMenu from 'telegraf-inline-menu'
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	BUILDINGS,
 	calcBuildingCost,
@@ -10,12 +10,12 @@ import {
 	WORKSHOP
 } from 'bastion-siege-logic'
 
-import {Context} from '../lib/context'
+import {Context, backButtons} from '../lib/context'
 
 import {constructionLine} from '../lib/interface/construction'
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
-import entryMenu from './construction'
+import {menu as entryMenu} from './construction'
 
 function canUpgrade(constructions: Constructions, construction: ConstructionName, currentResources: Resources): boolean {
 	const cost = calcBuildingCost(construction, constructions[construction])
@@ -23,7 +23,7 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-function constructionMenuText(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): string {
+function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): Body {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
@@ -37,7 +37,7 @@ function constructionMenuText(ctx: Context, key: 'buildings' | 'workshop', entri
 		.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
 		.join('\n')
 
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
 function constructionButtonTextFunc(ctx: Context, key: string): string {
@@ -45,16 +45,20 @@ function constructionButtonTextFunc(ctx: Context, key: string): string {
 	return `${EMOJI[key as ConstructionName]} ${ctx.wd.r(wdKey).label()}`
 }
 
-export const buildingsMenu = new TelegrafInlineMenu((ctx: any) => constructionMenuText(ctx, 'buildings', BUILDINGS))
+export const buildingsMenu = new MenuTemplate<Context>(ctx => constructionMenuBody(ctx, 'buildings', BUILDINGS))
 
-buildingsMenu.selectSubmenu('', BUILDINGS, entryMenu, {
+buildingsMenu.chooseIntoSubmenu('', BUILDINGS, entryMenu, {
 	columns: 2,
-	textFunc: (ctx: any, key) => constructionButtonTextFunc(ctx, key)
+	buttonText: (ctx, key) => constructionButtonTextFunc(ctx, key)
 })
 
-export const workshopMenu = new TelegrafInlineMenu((ctx: any) => constructionMenuText(ctx, 'workshop', WORKSHOP))
+buildingsMenu.manualRow(backButtons)
 
-workshopMenu.selectSubmenu('', WORKSHOP, entryMenu, {
+export const workshopMenu = new MenuTemplate<Context>(ctx => constructionMenuBody(ctx, 'workshop', WORKSHOP))
+
+workshopMenu.chooseIntoSubmenu('', WORKSHOP, entryMenu, {
 	columns: 2,
-	textFunc: (ctx: any, key) => constructionButtonTextFunc(ctx, key)
+	buttonText: (ctx, key) => constructionButtonTextFunc(ctx, key)
 })
+
+workshopMenu.manualRow(backButtons)

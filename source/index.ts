@@ -1,5 +1,6 @@
 import {existsSync, readFileSync} from 'fs'
 
+import {MenuMiddleware} from 'telegraf-inline-menu'
 import Telegraf from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
@@ -10,7 +11,7 @@ import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
-import menu from './menu'
+import {menu} from './menu'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
@@ -51,10 +52,9 @@ bot.use(async (ctx, next) => {
 
 attackingMystics.start(bot.telegram, wdEntityStore)
 
-bot.use(menu.init({
-	backButtonText: (ctx: any) => `🔙 ${ctx.i18n.t('menu.back')}`,
-	mainMenuButtonText: (ctx: any) => `🔝 ${ctx.wd.r('menu.menu').label()}`
-}))
+const menuMiddleware = new MenuMiddleware('/', menu)
+bot.command('start', async ctx => menuMiddleware.replyToContext(ctx))
+bot.use(menuMiddleware.middleware())
 
 bot.catch((error: any) => {
 	console.error('telegraf error occured', error)

@@ -1,6 +1,6 @@
+import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import randomItem from 'random-item'
-import TelegrafInlineMenu from 'telegraf-inline-menu'
 import WikidataEntityReader from 'wikidata-entity-reader'
 import {
 	ConstructionName,
@@ -8,7 +8,7 @@ import {
 	EMOJI
 } from 'bastion-siege-logic'
 
-import {Context, Name} from '../lib/context'
+import {Context, Name, backButtons} from '../lib/context'
 import * as userSessions from '../lib/user-sessions'
 import * as wdSets from '../lib/wikidata-sets'
 
@@ -40,7 +40,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 	return possibleConstructions
 }
 
-async function menuText(ctx: Context): Promise<string> {
+async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('menu.spy'), {titlePrefix: EMOJI.search})
 
@@ -54,13 +54,13 @@ async function menuText(ctx: Context): Promise<string> {
 		text += '\n'
 	}
 
-	return text
+	return {text, parse_mode: 'Markdown'}
 }
 
-const menu = new TelegrafInlineMenu(async (ctx: any) => menuText(ctx))
+export const menu = new MenuTemplate(menuBody)
 
-menu.simpleButton((ctx: any) => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
-	doFunc: async (ctx: any) => {
+menu.interact(ctx => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
+	do: async ctx => {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
 
@@ -81,23 +81,27 @@ menu.simpleButton((ctx: any) => `${ctx.wd.r('action.espionage').label()}`, 'espi
 		message += ' '
 		message += pickedConstructionLevel
 
-		return ctx.answerCbQuery(message)
+		await ctx.answerCbQuery(message)
 	}
 })
 
-menu.button((ctx: any) => `${ctx.wd.r('action.change').label()}`, 'change', {
+menu.interact(ctx => `${ctx.wd.r('action.change').label()}`, 'change', {
 	joinLastRow: true,
-	doFunc: (ctx: any) => {
+	do: ctx => {
 		delete ctx.session.selectedSpy
 		delete ctx.session.selectedSpyEmoji
+		return '.'
 	}
 })
 
-menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r('menu.spy').label()}`, (ctx: any) => ctx.wd.r('menu.spy').url())
+menu.url(
+	ctx => `ℹ️ ${ctx.wd.reader('menu.wikidataItem').label()} ${ctx.wd.reader('menu.spy').label()}`,
+	ctx => ctx.wd.r('menu.spy').url()
+)
 
-menu.urlButton((ctx: any) => {
+menu.url(ctx => {
 	const spyReader = getSpy(ctx)
 	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`
-}, (ctx: any) => getSpy(ctx).url())
+}, ctx => getSpy(ctx).url())
 
-export default menu
+menu.manualRow(backButtons)
