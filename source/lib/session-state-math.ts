@@ -101,20 +101,24 @@ function calcCurrentResources(session: Session, now: number): void {
 
 		// Max negative gold should be recoverable in 12h realtime hours
 		const goldIncome24h = calcGoldIncome(constructions.townhall, constructions.houses) * 12 * 60 * GAME_SPEEDUP * foodPenalty(session)
-		session.resources.gold = Math.max(-goldIncome24h, session.resources.gold)
+
+		session.resources = {
+			...session.resources,
+			gold: Math.max(-goldIncome24h, session.resources.gold)
+		}
 
 		session.resourcesTimestamp = now
 	}
 }
 
-export function middleware(): (ctx: any, next?: () => void) => void {
-	return (ctx: {session: Session}, next) => {
+export function middleware(): (ctx: any, next: () => Promise<void>) => Promise<void> {
+	return async (ctx: {session: Session}, next) => {
 		const now = Date.now() / 1000
 
 		initWhenMissing(ctx.session, now)
 		calcCurrentResources(ctx.session, now)
 		calcCurrentPeople(ctx.session, now)
 
-		return next && next()
+		return next()
 	}
 }

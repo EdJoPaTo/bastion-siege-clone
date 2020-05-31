@@ -1,6 +1,8 @@
 import {Constructions, Resources} from 'bastion-siege-logic'
 import randomItem from 'random-item'
 
+import {PeopleInConstructions} from '../types'
+
 /* eslint @typescript-eslint/no-var-requires: warn */
 /* eslint @typescript-eslint/no-require-imports: warn */
 const LocalSession = require('telegraf-session-local')
@@ -15,11 +17,7 @@ export interface Session {
 		first: string;
 		last: string;
 	};
-	people: {
-		houses: number;
-		barracks: number;
-		wall: number;
-	};
+	people: PeopleInConstructions;
 	peopleTimestamp: number;
 	selectedSpy: string;
 	selectedSpyEmoji: string;
@@ -35,8 +33,8 @@ const localSession = new LocalSession({
 	database: 'persist/sessions.json',
 	// Format of storage/database (default: JSON.stringify / JSON.parse)
 	format: {
-		serialize: (obj: any) => JSON.stringify(obj, null, '\t') + '\n',
-		deserialize: (str: string) => JSON.parse(str)
+		serialize: (object: any) => JSON.stringify(object, null, '\t') + '\n',
+		deserialize: (string: string) => JSON.parse(string)
 	},
 	getSessionKey: (ctx: any) => `${ctx.from.id}`
 })
@@ -50,18 +48,18 @@ export function getRaw(): ReadonlyArray<SessionRawEntry> {
 		})
 }
 
-export function getUser(userId: number): any {
+export function getUser(userId: number): Session | undefined {
 	return localSession.DB
 		.get('sessions')
 		.getById(`${userId}`)
 		.get('data')
-		.value() || {}
+		.value()
 }
 
 export function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): SessionRawEntry {
-	const rawArr = getRaw()
+	const rawArray = getRaw()
 		.filter(filter)
-	return randomItem(rawArr)
+	return randomItem(rawArray)
 }
 
 export function middleware(): (ctx: any, next: any) => void {

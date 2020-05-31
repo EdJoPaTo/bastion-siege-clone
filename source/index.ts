@@ -43,9 +43,9 @@ wdEntityStore.addResourceKeyYaml(wikidataResourceKeyYaml)
 wdSets.build(wdEntityStore)
 	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-sets'))
 
-bot.use((ctx: any, next) => {
+bot.use(async (ctx: any, next) => {
 	delete ctx.session.blocked
-	return next && next()
+	return next()
 })
 
 attackingMystics.start(bot.telegram, wdEntityStore)
@@ -60,3 +60,15 @@ bot.catch((error: any) => {
 })
 
 bot.startPolling()
+
+async function startup(): Promise<void> {
+	await bot.telegram.setMyCommands([
+		{command: 'start', description: 'show the menu'}
+	])
+
+	await bot.launch()
+	console.log(new Date(), 'Bot started as', bot.options.username)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+startup()

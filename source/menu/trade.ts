@@ -12,7 +12,7 @@ import {resources} from '../lib/interface/resource'
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
 function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
-	const result: Resources = {...currentResources}
+	const result = {...currentResources}
 	result.gold -= amount * 2
 	result[resource] += amount
 	return result
@@ -55,7 +55,7 @@ function tradeResourceMenuText(ctx: any): string {
 const resourceMenu = new TelegrafInlineMenu(tradeResourceMenuText)
 
 menu.selectSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	textFunc: (ctx: any, key) => `${EMOJI[key]} ${ctx.wd.r(`resource.${key}`).label()}`
+	textFunc: (ctx: any, key) => `${EMOJI[key as ResourceName]} ${ctx.wd.r(`resource.${key}`).label()}`
 })
 
 function buyOptions(ctx: any): string[] {

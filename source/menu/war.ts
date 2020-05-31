@@ -72,7 +72,8 @@ function menuText(ctx: any): string {
 
 	text += '\n'
 
-	if (attackTarget) {
+	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+	if (attackTarget && attackTarget.name) {
 		const {name, constructions} = attackTarget
 		text += ctx.wd.r('battle.target').label()
 		text += '\n'
@@ -96,9 +97,9 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 		const attackerPeople = attacker.people as PeopleInConstructions
 
 		const targetId = ctx.session.attackTarget
-		const target = userSessions.getUser(targetId)
-		const targetConstructions = target.constructions as Constructions
-		const targetPeople = target.people as PeopleInConstructions
+		const target = userSessions.getUser(targetId)!
+		const targetConstructions = target.constructions
+		const targetPeople = target.people
 
 		const attackerWinChance = getAttackerWinChance(attackerConstructions, attackerPeople)
 		const targetWinChance = getDefenderWinChance(targetConstructions)
@@ -128,8 +129,15 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 		const attackerLoot = attackerWins ? possibleLootFromTarget : 0
 		const targetLoot = attackerWins ? 0 : possibleLootFromAttacker
 
-		ctx.session.resources.gold += attackerLoot
-		target.resources.gold += targetLoot
+		ctx.session.resources = {
+			...ctx.session.resources,
+			gold: (ctx.session.resources.gold as number) + attackerLoot
+		}
+
+		target.resources = {
+			...target.resources,
+			gold: target.resources.gold + targetLoot
+		}
 
 		if (attackerWins) {
 			targetPeople.houses = 0
@@ -140,7 +148,7 @@ menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, '
 
 		const extra = Extra.markdown()
 
-		await ctx.reply(afterBattleMessageText(true, attackerWins, target.name, attackerLoot), extra)
+		await ctx.reply(afterBattleMessageText(true, attackerWins, target.name!, attackerLoot), extra)
 
 		if (!target.blocked) {
 			try {

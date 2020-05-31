@@ -15,7 +15,7 @@ let currentGoldStored = 0
 
 let wdEntityStore: WikidataEntityStore
 
-export function start(telegram: Telegram, entityStore: WikidataEntityStore): void {
+export function start(telegram: Readonly<Telegram>, entityStore: WikidataEntityStore): void {
 	wdEntityStore = entityStore
 
 	setInterval(tryAttack, ATTACK_INTERVAL, telegram)
@@ -57,7 +57,7 @@ export function calcBallistaDamage(constructions: Constructions): number {
 	return attackStrength
 }
 
-async function tryAttack(telegram: Telegram): Promise<void> {
+async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 	const {user, data: session} = userSessions.getRandomUser(o => Boolean(o.data.name && !o.data.blocked))
 
 	try {
@@ -129,10 +129,16 @@ function calcBattle(mystic: string, session: userSessions.Session): BattleResult
 
 	const {townhall} = constructions
 	const townhallChange = calcTownhallChange(mystic, won)
-	session.constructions.townhall = Math.max(1, townhall + townhallChange)
+	session.constructions = {
+		...session.constructions,
+		townhall: Math.max(1, townhall + townhallChange)
+	}
 
 	if (won) {
-		session.resources.gold += currentGoldStored
+		session.resources = {
+			...session.resources,
+			gold: session.resources.gold + currentGoldStored
+		}
 	} else {
 		const income = calcGoldIncome(constructions.townhall, constructions.houses)
 		currentGoldStored += income * 60 * 6 // 6 hours of income

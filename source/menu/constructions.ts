@@ -21,7 +21,7 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]): string {
+function constructionMenuText(ctx: any, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): string {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources as Resources
 	const constructions = ctx.session.constructions as Constructions
@@ -40,7 +40,7 @@ function constructionMenuText(ctx: any, key: string, entries: ConstructionName[]
 
 function constructionButtonTextFunc(ctx: any, key: string): string {
 	const wdKey = `construction.${key}`
-	return `${EMOJI[key]} ${ctx.wd.r(wdKey).label()}`
+	return `${EMOJI[key as ConstructionName]} ${ctx.wd.r(wdKey).label()}`
 }
 
 export const buildingsMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'buildings', BUILDINGS))

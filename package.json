@@ -7,17 +7,16 @@
 	"author": {
 		"name": "Edgar Toll",
 		"email": "EdJoPaTo@gmail.com",
-		"url": "EdJoPaTo.de"
+		"url": "https://EdJoPaTo.de"
 	},
 	"engines": {
-		"node": ">=12"
+		"node": ">=14"
 	},
 	"scripts": {
 		"build": "del dist && tsc",
 		"prepack": "npm run build",
 		"start": "ts-node source/index.ts",
-		"pretest": "tsc",
-		"test": "xo"
+		"test": "tsc --sourceMap && xo"
 	},
 	"main": "dist",
 	"types": "dist",
@@ -31,40 +30,33 @@
 		"locale-emoji": "^0.3.0",
 		"random-item": "^3.0.0",
 		"source-map-support": "^0.5.12",
-		"telegraf": "^3.28.0",
+		"telegraf": "^3.38.0",
 		"telegraf-i18n": "^6.5.0",
-		"telegraf-inline-menu": "^3.5.2",
+		"telegraf-inline-menu": "^4.0.1",
 		"telegraf-session-local": "^1.0.2",
-		"telegraf-wikibase": "^0.2.0",
-		"wikidata-entity-reader": "^1.1.0",
-		"wikidata-entity-store": "^1.1.0",
-		"wikidata-sdk": "^6.3.0",
-		"wikidata-sdk-got": "^1.1.0"
+		"telegraf-wikibase": "^0.4.0",
+		"wikidata-entity-reader": "^2.0.0",
+		"wikidata-entity-store": "^3.0.0",
+		"wikidata-sdk": "^7.4.3",
+		"wikidata-sdk-got": "^2.0.1"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^0.4.0",
-		"@types/node": "^12.0.2",
-		"@typescript-eslint/eslint-plugin": "^1.10.2",
-		"@typescript-eslint/parser": "^1.10.2",
-		"del-cli": "^2.0.0",
-		"eslint-config-xo-typescript": "^0.15.0",
+		"@sindresorhus/tsconfig": "^0.7.0",
+		"@types/node": "^14.0.5",
+		"del-cli": "^3.0.1",
 		"ts-node": "^8.0.3",
 		"typescript": "^3.4.3",
-		"xo": "^0.24.0"
+		"xo": "^0.30.0"
 	},
 	"xo": {
-		"extends": "xo-typescript",
 		"semicolon": false,
-		"extensions": [
-			"ts"
-		],
 		"rules": {
 			"import/named": "warn",
+			"unicorn/no-fn-reference-in-iterator": "off",
 			"@typescript-eslint/array-type": "off",
-			"@typescript-eslint/semi": [
-				"error",
-				"never"
-			]
+			"@typescript-eslint/no-floating-promises": "warn",
+			"@typescript-eslint/prefer-readonly-parameter-types": "off",
+			"@typescript-eslint/restrict-template-expressions": "off"
 		}
 	}
 }
