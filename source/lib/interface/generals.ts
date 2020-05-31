@@ -1,6 +1,6 @@
 import WikidataEntityReader from 'wikidata-entity-reader'
 
-export const outEmoji: {[key: string]: string} = {
+export const outEmoji = {
 	activeUser: '💙',
 	chat: '💭',
 	fire: '🔥',

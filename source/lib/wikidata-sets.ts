@@ -2,9 +2,9 @@ import randomItem from 'random-item'
 import WikidataEntityStore from 'wikidata-entity-store'
 import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 
-type Dictionary<T> = {[key: string]: T}
+export type Query = 'mystics' | 'spies'
 
-const queries: Dictionary<string> = {
+const queries: Record<Query, string> = {
 	mystics: `SELECT DISTINCT ?item WHERE {
 ?item wdt:P31*/wdt:P279* wd:Q2239243.
 ?item rdfs:label ?label.
@@ -17,13 +17,16 @@ FILTER(LANG(?label) = "en")
 }`
 }
 
-const entities: Dictionary<string[]> = {}
+const entities: Record<Query, string[]> = {
+	mystics: [],
+	spies: []
+}
 
 export async function build(store: WikidataEntityStore): Promise<void> {
 	console.time('wikidata-sets')
 	await Promise.all(
 		Object.keys(queries)
-			.map(async key => loadQNumbersOfKey(key))
+			.map(async key => loadQNumbersOfKey(key as Query))
 	)
 
 	const qNumbers = Object.values(entities).flat()
@@ -32,7 +35,7 @@ export async function build(store: WikidataEntityStore): Promise<void> {
 	console.timeEnd('wikidata-sets')
 }
 
-async function loadQNumbersOfKey(key: string): Promise<void> {
+async function loadQNumbersOfKey(key: Query): Promise<void> {
 	try {
 		const results = await sparqlQuerySimplifiedMinified(queries[key])
 		const qNumbers = results as string[]
@@ -42,10 +45,10 @@ async function loadQNumbersOfKey(key: string): Promise<void> {
 	}
 }
 
-export function get(key: string): readonly string[] {
+export function get(key: Query): readonly string[] {
 	return entities[key] || []
 }
 
-export function getRandom(key: string): string {
+export function getRandom(key: Query): string {
 	return randomItem(get(key))
 }
