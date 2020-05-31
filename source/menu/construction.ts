@@ -8,28 +8,27 @@ import {
 	Resources
 } from 'bastion-siege-logic'
 
-import {PeopleInConstructions} from '../types'
+import {Context} from '../lib/context'
 
 import {infoHeader, constructionPropertyString} from '../lib/interface/construction'
 import {constructionResources} from '../lib/interface/resource'
 
-const menu = new TelegrafInlineMenu(constructionText)
+const menu = new TelegrafInlineMenu((ctx: any) => constructionText(ctx))
 
-function constructionFromCtx(ctx: any): {construction: ConstructionName; level: number} {
-	const construction: ConstructionName = ctx.match[1]
-	const constructions = ctx.session.constructions as Constructions
+function constructionFromCtx(ctx: Context): {construction: ConstructionName; level: number} {
+	const construction = ctx.match![1] as ConstructionName
+	const {constructions} = ctx.session
 	const level = constructions[construction]
 
 	return {construction, level}
 }
 
-function constructionText(ctx: any): string {
-	const constructions = ctx.session.constructions as Constructions
-	const people = ctx.session.people as PeopleInConstructions
+function constructionText(ctx: Context): string {
+	const {constructions, people} = ctx.session
 	const {construction, level} = constructionFromCtx(ctx)
 
 	const requiredResources = calcBuildingCost(construction, level)
-	const currentResources = ctx.session.resources as Resources
+	const currentResources = ctx.session.resources
 
 	const textParts = []
 	textParts.push(infoHeader(ctx, construction, level))

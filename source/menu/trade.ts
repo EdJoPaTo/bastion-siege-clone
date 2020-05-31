@@ -1,11 +1,12 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 import {
 	calcStorageCapacity,
-	Constructions,
 	EMOJI,
 	ResourceName,
 	Resources
 } from 'bastion-siege-logic'
+
+import {Context} from '../lib/context'
 
 import {formatNumberShort} from '../lib/interface/format-number'
 import {resources} from '../lib/interface/resource'
@@ -18,26 +19,24 @@ function buy(currentResources: Resources, resource: ResourceName, amount: number
 	return result
 }
 
-function tradeMenuText(ctx: any): string {
-	const currentResources = ctx.session.resources as Resources
-
+function tradeMenuText(ctx: Context): string {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('action.buy'), {titlePrefix: EMOJI.trade})
 	text += '\n\n'
-	text += resources(ctx, currentResources)
+	text += resources(ctx, ctx.session.resources)
 	return text
 }
 
-const menu = new TelegrafInlineMenu(tradeMenuText)
+const menu = new TelegrafInlineMenu((ctx: any) => tradeMenuText(ctx))
 
-function resourceFromCtx(ctx: any): ResourceName {
-	return ctx.match[1]
+function resourceFromCtx(ctx: Context): ResourceName {
+	return ctx.match![1] as ResourceName
 }
 
-function tradeResourceMenuText(ctx: any): string {
+function tradeResourceMenuText(ctx: Context): string {
 	const resource = resourceFromCtx(ctx)
-	const currentResources = ctx.session.resources as Resources
-	const constructions = ctx.session.constructions as Constructions
+	const currentResources = ctx.session.resources
+	const {constructions} = ctx.session
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
 	let text = ''
@@ -52,16 +51,16 @@ function tradeResourceMenuText(ctx: any): string {
 	return text
 }
 
-const resourceMenu = new TelegrafInlineMenu(tradeResourceMenuText)
+const resourceMenu = new TelegrafInlineMenu((ctx: any) => tradeResourceMenuText(ctx))
 
 menu.selectSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
 	textFunc: (ctx: any, key) => `${EMOJI[key as ResourceName]} ${ctx.wd.r(`resource.${key}`).label()}`
 })
 
-function buyOptions(ctx: any): string[] {
+function buyOptions(ctx: Context): string[] {
 	const resource = resourceFromCtx(ctx)
-	const currentResources = ctx.session.resources as Resources
-	const constructions = ctx.session.constructions as Constructions
+	const currentResources = ctx.session.resources
+	const {constructions} = ctx.session
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
 	const upperLimitResource = storageCapacity - currentResources[resource]
@@ -80,7 +79,7 @@ function buyOptions(ctx: any): string[] {
 		.map(o => String(o))
 }
 
-resourceMenu.select('buy', buyOptions, {
+resourceMenu.select('buy', (ctx: any) => buyOptions(ctx), {
 	columns: 3,
 	textFunc: (ctx: any, key: string) => {
 		const resource = resourceFromCtx(ctx)

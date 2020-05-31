@@ -1,12 +1,12 @@
 import {EMOJI} from 'bastion-siege-logic'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
-import WikidataEntityReader from 'wikidata-entity-reader'
 
+import {Context} from '../lib/context'
 import {formatNumberShort} from '../lib/interface/format-number'
 import {getCurrentMystical} from '../mystics-attacking'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-function menuText(ctx: any): string {
+function menuText(ctx: Context): string {
 	const {qNumber, current, max, gold} = getCurrentMystical()
 
 	let text = ''
@@ -28,15 +28,15 @@ function menuText(ctx: any): string {
 	return text
 }
 
-function menuPhoto(ctx: any): string | undefined {
+function menuPhoto(ctx: Context): string | undefined {
 	const {qNumber} = getCurrentMystical()
-	const reader = ctx.wd.r(qNumber) as WikidataEntityReader
+	const reader = ctx.wd.r(qNumber)
 	const images = reader.images(800)
 	return images[0]
 }
 
-const menu = new TelegrafInlineMenu(menuText, {
-	photo: menuPhoto
+const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx), {
+	photo: (ctx: any) => menuPhoto(ctx)
 })
 
 menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r('menu.mystical').label()}`, (ctx: any) => ctx.wd.r('menu.mystical').url())

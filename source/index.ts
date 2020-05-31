@@ -5,6 +5,7 @@ import TelegrafI18n from 'telegraf-i18n'
 import TelegrafWikibase from 'telegraf-wikibase'
 import WikidataEntityStore from 'wikidata-entity-store'
 
+import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
@@ -13,7 +14,7 @@ import menu from './menu'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
-const bot = new Telegraf(token)
+const bot = new Telegraf<Context>(token)
 
 bot.use(userSessions.middleware())
 bot.use(ensureSessionContent.middleware())
@@ -43,7 +44,7 @@ wdEntityStore.addResourceKeyYaml(wikidataResourceKeyYaml)
 wdSets.build(wdEntityStore)
 	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-sets'))
 
-bot.use(async (ctx: any, next) => {
+bot.use(async (ctx, next) => {
 	delete ctx.session.blocked
 	return next()
 })

@@ -1,12 +1,14 @@
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Context} from '../lib/context'
+
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
 /* eslint @typescript-eslint/no-var-requires: warn */
 /* eslint @typescript-eslint/no-require-imports: warn */
 const localeEmoji = require('locale-emoji')
 
-const menu = new TelegrafInlineMenu(ctx => languageMenuText(ctx))
+const menu = new TelegrafInlineMenu((ctx: any) => languageMenuText(ctx))
 
 function flagString(languageCode: string, useFallbackFlag = false): string {
 	const flag = localeEmoji(languageCode)
@@ -17,7 +19,7 @@ function flagString(languageCode: string, useFallbackFlag = false): string {
 	return flag
 }
 
-function languageMenuText(ctx: any): string {
+function languageMenuText(ctx: Context): string {
 	const flag = flagString(ctx.wd.locale(), true)
 	const text = wikidataInfoHeader(ctx.wd.r('menu.language'), {titlePrefix: flag})
 	return text

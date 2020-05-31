@@ -12,9 +12,10 @@ import {PeopleInConstructions} from '../types'
 
 import * as userSessions from '../lib/user-sessions'
 
+import {Context, Name} from '../lib/context'
 import {formatNumberShort} from '../lib/interface/format-number'
-import {peopleString} from '../lib/interface/construction'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+import {peopleString} from '../lib/interface/construction'
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60
@@ -37,7 +38,7 @@ function getDefenderWinChance(constructions: Constructions): number {
 	return chance
 }
 
-function afterBattleMessageText(attack: boolean, win: boolean, name: {first: string; last: string}, loot: number): string {
+function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot: number): string {
 	const lines = []
 
 	let headline = ''
@@ -56,10 +57,9 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: {first: str
 	return lines.join('\n')
 }
 
-function menuText(ctx: any): string {
-	const constructions = ctx.session.constructions as Constructions
-	const people = ctx.session.people as PeopleInConstructions
-	const attackTargetId = ctx.session.attackTarget as number
+function menuText(ctx: Context): string {
+	const {constructions, people} = ctx.session
+	const attackTargetId = ctx.session.attackTarget
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
 	let text = ''
@@ -85,7 +85,7 @@ function menuText(ctx: any): string {
 	return text
 }
 
-const menu = new TelegrafInlineMenu(menuText)
+const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
 
 menu.button((ctx: any) => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attack', {
 	hide: (ctx: any) => !ctx.session.attackTarget,

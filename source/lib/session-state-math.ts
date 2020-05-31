@@ -9,7 +9,7 @@ import {
 
 import {PeopleInConstructions} from '../types'
 
-import {Session} from './user-sessions'
+import {Context, Session} from './context'
 
 const GAME_SPEEDUP = 30
 
@@ -111,8 +111,8 @@ function calcCurrentResources(session: Session, now: number): void {
 	}
 }
 
-export function middleware(): (ctx: any, next: () => Promise<void>) => Promise<void> {
-	return async (ctx: {session: Session}, next) => {
+export function middleware(): (ctx: Context, next: () => Promise<void>) => Promise<void> {
+	return async (ctx, next) => {
 		const now = Date.now() / 1000
 
 		initWhenMissing(ctx.session, now)

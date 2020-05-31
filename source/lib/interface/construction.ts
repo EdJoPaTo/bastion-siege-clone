@@ -16,11 +16,12 @@ import {
 } from 'bastion-siege-logic'
 
 import {PeopleInConstructions} from '../../types'
+import {Context} from '../context'
 
 import {formatNumberShort} from './format-number'
 import {possibleEmoji, wikidataInfoHeader} from './generals'
 
-export function constructionLine(ctx: any, construction: ConstructionName, level: number, canUpgrade: boolean): string {
+export function constructionLine(ctx: Context, construction: ConstructionName, level: number, canUpgrade: boolean): string {
 	const parts: string[] = []
 
 	parts.push(possibleEmoji(canUpgrade))
@@ -33,7 +34,7 @@ export function constructionLine(ctx: any, construction: ConstructionName, level
 	return parts.join(' ')
 }
 
-export function infoHeader(ctx: any, construction: ConstructionName, currentLevel: number): string {
+export function infoHeader(ctx: Context, construction: ConstructionName, currentLevel: number): string {
 	const wdKey = `construction.${construction}`
 	return wikidataInfoHeader(ctx.wd.r(wdKey), {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
 }
@@ -42,11 +43,11 @@ function simpleLineString(...args: (string | number)[]): string {
 	return args.join(' ')
 }
 
-function incomeString(ctx: any, income: number | string, unit: string): string {
+function incomeString(ctx: Context, income: number | string, unit: string): string {
 	return simpleLineString(ctx.wd.r('other.income').label(), income, `${unit} / ${ctx.wd.r('bs.day').label()}`)
 }
 
-function storageCapacityString(ctx: any, capacity: number, unit: ResourceName): string {
+function storageCapacityString(ctx: Context, capacity: number, unit: ResourceName): string {
 	return simpleLineString(ctx.wd.r('bs.storageCapacity').label(), formatNumberShort(capacity, true), EMOJI[unit])
 }
 
@@ -54,7 +55,7 @@ export function peopleString(label: string, available: number, capacity: number,
 	return simpleLineString(label, formatNumberShort(available, true) + unit, '/', formatNumberShort(capacity, true) + unit)
 }
 
-export function constructionPropertyString(ctx: any, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): string | undefined {
+export function constructionPropertyString(ctx: Context, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): string | undefined {
 	if (construction === 'townhall') {
 		const lines = []
 		lines.push(storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))

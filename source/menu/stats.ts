@@ -4,11 +4,12 @@ import {
 	EMOJI
 } from 'bastion-siege-logic'
 
+import {Context, Session} from '../lib/context'
 import * as userSessions from '../lib/user-sessions'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-function menuText(ctx: any): string {
+function menuText(ctx: Context): string {
 	const allSessions = userSessions.getRaw()
 	const allSessionData = allSessions.map(o => o.data)
 
@@ -28,11 +29,11 @@ function menuText(ctx: any): string {
 	return text
 }
 
-function maxConstructionLevelLine(ctx: any, sessions: ReadonlyArray<userSessions.Session>, construction: ConstructionName): string {
+function maxConstructionLevelLine(ctx: Context, sessions: ReadonlyArray<Session>, construction: ConstructionName): string {
 	return `${EMOJI[construction]} ≤${Math.max(...sessions.map(o => o.constructions[construction]))} ${ctx.wd.r(`construction.${construction}`).label()}`
 }
 
-const menu = new TelegrafInlineMenu(menuText)
+const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
 
 menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, (ctx: any) => ctx.wd.r('menu.statistics').url())
 

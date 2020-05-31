@@ -4,6 +4,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import WikidataEntityStore from 'wikidata-entity-store'
 
 import {formatNumberShort} from './lib/interface/format-number'
+import {Session} from './lib/context'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
@@ -119,7 +120,7 @@ interface BattleResult {
 	townhall: number;
 }
 
-function calcBattle(mystic: string, session: userSessions.Session): BattleResult {
+function calcBattle(mystic: string, session: Session): BattleResult {
 	const {constructions} = session
 
 	const attackStrength = calcBallistaDamage(constructions)

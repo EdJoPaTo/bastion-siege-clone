@@ -2,6 +2,8 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 import {EMOJI} from 'bastion-siege-logic'
 
+import {Context} from '../lib/context'
+
 import {resources} from '../lib/interface/resource'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
@@ -14,7 +16,7 @@ import statsMenu from './stats'
 import tradeMenu from './trade'
 import warMenu from './war'
 
-function menuText(ctx: any): string {
+function menuText(ctx: Context): string {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('menu.menu'))
 	text += '\n\n'
@@ -33,15 +35,15 @@ function menuText(ctx: any): string {
 	return text
 }
 
-const menu = new TelegrafInlineMenu(menuText)
+const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
 menu.setCommand('start')
 
-function buttonText(emoji: string, resourceKey: string): (ctx: any) => string {
-	return (ctx: any) => `${emoji} ${ctx.wd.r(resourceKey).label()}`
+function buttonText(emoji: string, resourceKey: string): (ctx: Context) => string {
+	return ctx => `${emoji} ${ctx.wd.reader(resourceKey).label()}`
 }
 
 menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu.menu, {
-	hide: ctx => !nameMenu.nameNeeded(ctx)
+	hide: (ctx: any) => !nameMenu.nameNeeded(ctx)
 })
 
 menu.submenu(buttonText(EMOJI.buildings, 'bs.buildings'), 'b', buildingsMenu)

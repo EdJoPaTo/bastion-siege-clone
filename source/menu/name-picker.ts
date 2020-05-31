@@ -1,14 +1,15 @@
 import randomItem from 'random-item'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
+import {Context} from '../lib/context'
 import {getGivenNames, getFamilyNames} from '../lib/name-options'
 import {outEmoji} from '../lib/interface/generals'
 
-export function nameNeeded(ctx: any): boolean {
+export function nameNeeded(ctx: Context): boolean {
 	return !ctx.session.name
 }
 
-function menuText(ctx: any): string {
+function menuText(ctx: Context): string {
 	let text = ''
 
 	text += outEmoji.name
@@ -20,7 +21,7 @@ function menuText(ctx: any): string {
 	return text
 }
 
-export const menu = new TelegrafInlineMenu(menuText)
+export const menu = new TelegrafInlineMenu((ctx: any) => menuText(ctx))
 
 menu.button((ctx: any) => ctx.session.createFirst || outEmoji.nameFallback, 'first', {
 	doFunc: (ctx: any) => {

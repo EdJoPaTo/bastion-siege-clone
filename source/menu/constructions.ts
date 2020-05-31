@@ -10,6 +10,8 @@ import {
 	WORKSHOP
 } from 'bastion-siege-logic'
 
+import {Context} from '../lib/context'
+
 import {constructionLine} from '../lib/interface/construction'
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
@@ -21,10 +23,10 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-function constructionMenuText(ctx: any, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): string {
+function constructionMenuText(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): string {
 	const wdKey = `bs.${key}`
-	const currentResources = ctx.session.resources as Resources
-	const constructions = ctx.session.constructions as Constructions
+	const currentResources = ctx.session.resources
+	const {constructions} = ctx.session
 
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r(wdKey), {titlePrefix: EMOJI[key]})
@@ -38,21 +40,21 @@ function constructionMenuText(ctx: any, key: 'buildings' | 'workshop', entries: 
 	return text
 }
 
-function constructionButtonTextFunc(ctx: any, key: string): string {
+function constructionButtonTextFunc(ctx: Context, key: string): string {
 	const wdKey = `construction.${key}`
 	return `${EMOJI[key as ConstructionName]} ${ctx.wd.r(wdKey).label()}`
 }
 
-export const buildingsMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'buildings', BUILDINGS))
+export const buildingsMenu = new TelegrafInlineMenu((ctx: any) => constructionMenuText(ctx, 'buildings', BUILDINGS))
 
 buildingsMenu.selectSubmenu('', BUILDINGS, entryMenu, {
 	columns: 2,
-	textFunc: constructionButtonTextFunc
+	textFunc: (ctx: any, key) => constructionButtonTextFunc(ctx, key)
 })
 
-export const workshopMenu = new TelegrafInlineMenu(ctx => constructionMenuText(ctx, 'workshop', WORKSHOP))
+export const workshopMenu = new TelegrafInlineMenu((ctx: any) => constructionMenuText(ctx, 'workshop', WORKSHOP))
 
 workshopMenu.selectSubmenu('', WORKSHOP, entryMenu, {
 	columns: 2,
-	textFunc: constructionButtonTextFunc
+	textFunc: (ctx: any, key) => constructionButtonTextFunc(ctx, key)
 })

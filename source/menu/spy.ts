@@ -8,17 +8,18 @@ import {
 	EMOJI
 } from 'bastion-siege-logic'
 
+import {Context, Name} from '../lib/context'
 import * as userSessions from '../lib/user-sessions'
 import * as wdSets from '../lib/wikidata-sets'
 
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
-function getSpy(ctx: any): WikidataEntityReader {
+function getSpy(ctx: Context): WikidataEntityReader {
 	if (!ctx.session.selectedSpy) {
 		ctx.session.selectedSpy = wdSets.getRandom('spies')
 	}
 
-	const reader = ctx.wd.r(ctx.session.selectedSpy) as WikidataEntityReader
+	const reader = ctx.wd.reader(ctx.session.selectedSpy)
 
 	if (!ctx.session.selectedSpyEmoji) {
 		const spymojis = reader.unicodeChars()
@@ -39,7 +40,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 	return possibleConstructions
 }
 
-async function menuText(ctx: any): Promise<string> {
+async function menuText(ctx: Context): Promise<string> {
 	let text = ''
 	text += wikidataInfoHeader(ctx.wd.r('menu.spy'), {titlePrefix: EMOJI.search})
 
@@ -56,7 +57,7 @@ async function menuText(ctx: any): Promise<string> {
 	return text
 }
 
-const menu = new TelegrafInlineMenu(menuText)
+const menu = new TelegrafInlineMenu(async (ctx: any) => menuText(ctx))
 
 menu.simpleButton((ctx: any) => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
 	doFunc: async (ctx: any) => {
@@ -64,7 +65,7 @@ menu.simpleButton((ctx: any) => `${ctx.wd.r('action.espionage').label()}`, 'espi
 			.filter(o => o.data.name)
 
 		const session = randomItem(possibleSessions).data
-		const name = session.name as {first: string; last: string}
+		const name = session.name as Name
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
 		const pickedConstructionKey = randomItem(spyableConstructions)
@@ -97,6 +98,6 @@ menu.urlButton((ctx: any) => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${
 menu.urlButton((ctx: any) => {
 	const spyReader = getSpy(ctx)
 	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`
-}, ctx => getSpy(ctx).url())
+}, (ctx: any) => getSpy(ctx).url())
 
 export default menu
