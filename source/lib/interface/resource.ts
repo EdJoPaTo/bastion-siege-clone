@@ -12,31 +12,36 @@ import {Context} from '../context'
 import {formatNumberShort} from './format-number'
 import {possibleEmoji} from './generals'
 
-export function resourceLine(ctx: Context, resource: ResourceName, amount: number): string {
+export async function resourceLine(ctx: Context, resource: ResourceName, amount: number): Promise<string> {
+	const reader = await ctx.wd.reader(`resource.${resource}`)
 	const parts: string[] = []
 
 	parts.push(EMOJI[resource])
 	parts.push(
-		`*${ctx.wd.r(`resource.${resource}`).label()}*`
+		`*${reader.label()}*`
 	)
 	parts.push(formatNumberShort(amount, true))
 
 	return parts.join(' ')
 }
 
-export function constructionResourceLine(ctx: Context, resource: ResourceName, amount: number, possible: boolean): string {
-	return `${possibleEmoji(possible)} ${resourceLine(ctx, resource, amount)}`
+export async function constructionResourceLine(ctx: Context, resource: ResourceName, amount: number, possible: boolean): Promise<string> {
+	return `${possibleEmoji(possible)} ${await resourceLine(ctx, resource, amount)}`
 }
 
-export function resources(ctx: Context, resources: Resources): string {
-	return RESOURCES
-		.map(o => resourceLine(ctx, o, resources[o]))
-		.join('\n')
+export async function resources(ctx: Context, resources: Resources): Promise<string> {
+	const lines = await Promise.all(RESOURCES
+		.map(async o => resourceLine(ctx, o, resources[o]))
+	)
+
+	return lines.join('\n')
 }
 
-export function constructionResources(ctx: Context, required: ConstructionResources, available: Resources): string {
-	return CONSTRUCTION_RESOURCES
+export async function constructionResources(ctx: Context, required: ConstructionResources, available: Resources): Promise<string> {
+	const lines = await Promise.all(CONSTRUCTION_RESOURCES
 		.filter(o => required[o])
-		.map(o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o]))
-		.join('\n')
+		.map(async o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o]))
+	)
+
+	return lines.join('\n')
 }

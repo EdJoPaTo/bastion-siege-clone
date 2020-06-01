@@ -39,7 +39,7 @@ function getDefenderWinChance(constructions: Constructions): number {
 }
 
 function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot: number): string {
-	const lines = []
+	const lines: string[] = []
 
 	let headline = ''
 	headline += attack ? EMOJI.attack : EMOJI.defence
@@ -57,17 +57,19 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot:
 	return lines.join('\n')
 }
 
-function menuBody(ctx: Context): Body {
+async function menuBody(ctx: Context): Promise<Body> {
 	const {constructions, people} = ctx.session
 	const attackTargetId = ctx.session.attackTarget
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
+	await ctx.wd.preload(['bs.war', 'bs.army', 'bs.people', 'battle.target', 'action.attack', 'action.search'])
+
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r('bs.war'), {titlePrefix: EMOJI.war})
+	text += wikidataInfoHeader(await ctx.wd.reader('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
-	text += peopleString(ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += peopleString((await ctx.wd.reader('bs.army')).label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	text += '\n'
-	text += peopleString(ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
 	text += '\n'
 
 	text += '\n'
@@ -75,7 +77,7 @@ function menuBody(ctx: Context): Body {
 	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 	if (attackTarget && attackTarget.name) {
 		const {name, constructions} = attackTarget
-		text += ctx.wd.r('battle.target').label()
+		text += (await ctx.wd.reader('battle.target')).label()
 		text += '\n'
 		text += `${name.first} ${name.last}\n`
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
@@ -87,7 +89,7 @@ function menuBody(ctx: Context): Body {
 
 export const menu = new MenuTemplate(menuBody)
 
-menu.interact(ctx => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attack', {
+menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')).label()}`, 'attack', {
 	hide: ctx => !ctx.session.attackTarget,
 	do: async ctx => {
 		const now = Date.now() / 1000
@@ -125,7 +127,7 @@ menu.interact(ctx => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attac
 			}
 
 			await ctx.replyWithMarkdown(
-				wikidataInfoHeader(ctx.wd.r('battle.suicide'), {titlePrefix: outEmoji.suicide})
+				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {titlePrefix: outEmoji.suicide})
 			)
 			return '.'
 		}
@@ -165,7 +167,7 @@ menu.interact(ctx => `${EMOJI.war} ${ctx.wd.r('action.attack').label()}`, 'attac
 	}
 })
 
-menu.interact(ctx => `${EMOJI.search} ${ctx.wd.r('action.search').label()}`, 'search', {
+menu.interact(async ctx => `${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`, 'search', {
 	do: ctx => {
 		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user

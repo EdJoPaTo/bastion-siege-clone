@@ -1,10 +1,9 @@
 import {existsSync, readFileSync} from 'fs'
 
 import {MenuMiddleware} from 'telegraf-inline-menu'
-import Telegraf from 'telegraf'
+import {Telegraf} from 'telegraf'
+import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
 import TelegrafI18n from 'telegraf-i18n'
-import TelegrafWikibase from 'telegraf-wikibase'
-import WikidataEntityStore from 'wikidata-entity-store'
 
 import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'
@@ -29,28 +28,21 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware())
 
-console.time('preload wikidata entity store')
-const wdEntityStore = new WikidataEntityStore({
-	properties: ['labels', 'descriptions', 'claims']
+const twb = new TelegrafWikibase(new Map(), {
+	contextKey: 'wd'
 })
 
-bot.use(new TelegrafWikibase(wdEntityStore, {
-	contextKey: 'wd'
-}).middleware())
-
 const wikidataResourceKeyYaml = readFileSync('wikidata-items.yaml', 'utf8')
-wdEntityStore.addResourceKeyYaml(wikidataResourceKeyYaml)
-	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-middleware'))
+twb.addResourceKeys(resourceKeysFromYaml(wikidataResourceKeyYaml))
 
-wdSets.build(wdEntityStore)
-	.then(() => console.timeLog('preload wikidata entity store', 'wikidata-sets'))
+bot.use(twb.middleware())
 
 bot.use(async (ctx, next) => {
 	delete ctx.session.blocked
 	return next()
 })
 
-attackingMystics.start(bot.telegram, wdEntityStore)
+attackingMystics.start(bot.telegram, twb)
 
 const menuMiddleware = new MenuMiddleware('/', menu)
 bot.command('start', async ctx => menuMiddleware.replyToContext(ctx))
@@ -63,6 +55,10 @@ bot.catch((error: any) => {
 bot.startPolling()
 
 async function startup(): Promise<void> {
+	console.time('preload wdSets')
+	await wdSets.build()
+	console.timeEnd('preload wdSets')
+
 	await bot.telegram.setMyCommands([
 		{command: 'start', description: 'show the menu'}
 	])

@@ -16,9 +16,9 @@ import {menu as statsMenu} from './stats'
 import {menu as tradeMenu} from './trade'
 import {menu as warMenu} from './war'
 
-function menuBody(ctx: Context): Body {
+async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r('menu.menu'))
+	text += wikidataInfoHeader(await ctx.wd.reader('menu.menu'))
 	text += '\n\n'
 
 	if (ctx.session.name) {
@@ -27,7 +27,7 @@ function menuBody(ctx: Context): Body {
 		text += '\n\n'
 	}
 
-	text += resources(ctx, ctx.session.resources)
+	text += await resources(ctx, ctx.session.resources)
 
 	text += '\n\n'
 	text += ctx.i18n.t('disclaimer')
@@ -37,8 +37,8 @@ function menuBody(ctx: Context): Body {
 
 export const menu = new MenuTemplate(menuBody)
 
-function buttonText(emoji: string, resourceKey: string): (ctx: Context) => string {
-	return ctx => `${emoji} ${ctx.wd.reader(resourceKey).label()}`
+function buttonText(emoji: string, resourceKey: string): (ctx: Context) => Promise<string> {
+	return async ctx => `${emoji} ${(await ctx.wd.reader(resourceKey)).label()}`
 }
 
 menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu.menu, {

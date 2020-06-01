@@ -6,13 +6,13 @@ import {formatNumberShort} from '../lib/interface/format-number'
 import {getCurrentMystical} from '../mystics-attacking'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-function menuBody(ctx: Context): Body {
+async function menuBody(ctx: Context): Promise<Body> {
 	const {qNumber, current, max, gold} = getCurrentMystical()
-	const reader = ctx.wd.r(qNumber)
+	const reader = await ctx.wd.reader(qNumber)
 	const images = reader.images(800)
 
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r('menu.mystical'), {titlePrefix: EMOJI.dragon})
+	text += wikidataInfoHeader(await ctx.wd.reader('menu.mystical'), {titlePrefix: EMOJI.dragon})
 	text += '\n\n'
 	text += wikidataInfoHeader(reader)
 	text += '\n\n'
@@ -32,14 +32,17 @@ function menuBody(ctx: Context): Body {
 
 export const menu = new MenuTemplate(menuBody)
 
-menu.url(ctx => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r('menu.mystical').label()}`, ctx => ctx.wd.r('menu.mystical').url())
+menu.url(
+	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${(await ctx.wd.reader('menu.mystical')).label()}`,
+	async ctx => (await ctx.wd.reader('menu.mystical')).url()
+)
 
-menu.url(ctx => {
+menu.url(async ctx => {
 	const {qNumber} = getCurrentMystical()
-	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.wd.r(qNumber).label()}`
-}, ctx => {
+	return `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${(await ctx.wd.reader(qNumber)).label()}`
+}, async ctx => {
 	const {qNumber} = getCurrentMystical()
-	return ctx.wd.r(qNumber).url()
+	return (await ctx.wd.reader(qNumber)).url()
 })
 
 menu.manualRow(backButtons)

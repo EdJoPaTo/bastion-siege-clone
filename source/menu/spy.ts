@@ -14,12 +14,12 @@ import * as wdSets from '../lib/wikidata-sets'
 
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
-function getSpy(ctx: Context): WikidataEntityReader {
+async function getSpy(ctx: Context): Promise<WikidataEntityReader> {
 	if (!ctx.session.selectedSpy) {
 		ctx.session.selectedSpy = wdSets.getRandom('spies')
 	}
 
-	const reader = ctx.wd.reader(ctx.session.selectedSpy)
+	const reader = await ctx.wd.reader(ctx.session.selectedSpy)
 
 	if (!ctx.session.selectedSpyEmoji) {
 		const spymojis = reader.unicodeChars()
@@ -42,9 +42,9 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 
 async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r('menu.spy'), {titlePrefix: EMOJI.search})
+	text += wikidataInfoHeader(await ctx.wd.reader('menu.spy'), {titlePrefix: EMOJI.search})
 
-	const spyReader = getSpy(ctx)
+	const spyReader = await getSpy(ctx)
 	const description = spyReader.description()
 
 	text += '\n\n'
@@ -59,7 +59,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 
 export const menu = new MenuTemplate(menuBody)
 
-menu.interact(ctx => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
+menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`, 'espionage', {
 	do: async ctx => {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
@@ -77,7 +77,7 @@ menu.interact(ctx => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
 		message += `${name.first} ${name.last}`
 		message += ' '
 		message += EMOJI[pickedConstructionKey]
-		message += ctx.wd.r(`construction.${pickedConstructionKey}`).label()
+		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`)).label()
 		message += ' '
 		message += pickedConstructionLevel
 
@@ -85,7 +85,7 @@ menu.interact(ctx => `${ctx.wd.r('action.espionage').label()}`, 'espionage', {
 	}
 })
 
-menu.interact(ctx => `${ctx.wd.r('action.change').label()}`, 'change', {
+menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 'change', {
 	joinLastRow: true,
 	do: ctx => {
 		delete ctx.session.selectedSpy
@@ -95,13 +95,13 @@ menu.interact(ctx => `${ctx.wd.r('action.change').label()}`, 'change', {
 })
 
 menu.url(
-	ctx => `ℹ️ ${ctx.wd.reader('menu.wikidataItem').label()} ${ctx.wd.reader('menu.spy').label()}`,
-	ctx => ctx.wd.r('menu.spy').url()
+	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${(await ctx.wd.reader('menu.spy')).label()}`,
+	async ctx => (await ctx.wd.reader('menu.spy')).url()
 )
 
-menu.url(ctx => {
-	const spyReader = getSpy(ctx)
-	return `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`
-}, ctx => getSpy(ctx).url())
+menu.url(async ctx => {
+	const spyReader = await getSpy(ctx)
+	return `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`
+}, async ctx => (await getSpy(ctx)).url())
 
 menu.manualRow(backButtons)

@@ -19,13 +19,13 @@ function flagString(languageCode: string, useFallbackFlag = false): string {
 	return flag
 }
 
-function languageMenuBody(ctx: Context): Body {
+async function languageMenuBody(ctx: Context): Promise<Body> {
 	const flag = flagString(ctx.wd.locale(), true)
-	const text = wikidataInfoHeader(ctx.wd.r('menu.language'), {titlePrefix: flag})
+	const text = wikidataInfoHeader(await ctx.wd.reader('menu.language'), {titlePrefix: flag})
 	return {text, parse_mode: 'Markdown'}
 }
 
-menu.select('lang', ctx => ctx.wd.availableLocales(), {
+menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	columns: 3,
 	buttonText: (_, key) => {
 		const flag = flagString(key)

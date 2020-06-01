@@ -23,42 +23,45 @@ function canUpgrade(constructions: Constructions, construction: ConstructionName
 	return minutesNeeded === 0
 }
 
-function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): Body {
+async function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): Promise<Body> {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
 
+	await ctx.wd.preload([wdKey, ...entries.map(o => `construction.${o}`)])
+
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r(wdKey), {titlePrefix: EMOJI[key]})
+	text += wikidataInfoHeader(await ctx.wd.reader(wdKey), {titlePrefix: EMOJI[key]})
 
 	text += '\n\n'
 
-	text += entries
-		.map(o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
-		.join('\n')
+	const constructionLines = await Promise.all(entries
+		.map(async o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
+	)
+	text += constructionLines.join('\n')
 
 	return {text, parse_mode: 'Markdown'}
 }
 
-function constructionButtonTextFunc(ctx: Context, key: string): string {
+async function constructionButtonTextFunc(ctx: Context, key: string): Promise<string> {
 	const wdKey = `construction.${key}`
-	return `${EMOJI[key as ConstructionName]} ${ctx.wd.r(wdKey).label()}`
+	return `${EMOJI[key as ConstructionName]} ${(await ctx.wd.reader(wdKey)).label()}`
 }
 
-export const buildingsMenu = new MenuTemplate<Context>(ctx => constructionMenuBody(ctx, 'buildings', BUILDINGS))
+export const buildingsMenu = new MenuTemplate<Context>(async ctx => constructionMenuBody(ctx, 'buildings', BUILDINGS))
 
 buildingsMenu.chooseIntoSubmenu('', BUILDINGS, entryMenu, {
 	columns: 2,
-	buttonText: (ctx, key) => constructionButtonTextFunc(ctx, key)
+	buttonText: constructionButtonTextFunc
 })
 
 buildingsMenu.manualRow(backButtons)
 
-export const workshopMenu = new MenuTemplate<Context>(ctx => constructionMenuBody(ctx, 'workshop', WORKSHOP))
+export const workshopMenu = new MenuTemplate<Context>(async ctx => constructionMenuBody(ctx, 'workshop', WORKSHOP))
 
 workshopMenu.chooseIntoSubmenu('', WORKSHOP, entryMenu, {
 	columns: 2,
-	buttonText: (ctx, key) => constructionButtonTextFunc(ctx, key)
+	buttonText: constructionButtonTextFunc
 })
 
 workshopMenu.manualRow(backButtons)

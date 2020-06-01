@@ -1,10 +1,9 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
 import {Extra, Telegram} from 'telegraf'
-import WikidataEntityReader from 'wikidata-entity-reader'
-import WikidataEntityStore from 'wikidata-entity-store'
 
 import {formatNumberShort} from './lib/interface/format-number'
 import {Session} from './lib/context'
+import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
@@ -14,10 +13,10 @@ let currentMysticQNumber: string | undefined
 let currentHealth = 0
 let currentGoldStored = 0
 
-let wdEntityStore: WikidataEntityStore
+let twb: TelegrafWikibase
 
-export function start(telegram: Readonly<Telegram>, entityStore: WikidataEntityStore): void {
-	wdEntityStore = entityStore
+export function start(telegram: Readonly<Telegram>, telegrafWikibase: TelegrafWikibase): void {
+	twb = telegrafWikibase
 
 	setInterval(tryAttack, ATTACK_INTERVAL, telegram)
 }
@@ -64,7 +63,7 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 	try {
 		const {qNumber, max} = getCurrentMystical()
 
-		const languageCode = session.wikidataLanguageCode || 'en'
+		const languageCode = session.__wikibase_language_code ?? 'en'
 
 		const battleResult = calcBattle(qNumber, session)
 		if (process.env.NODE_ENV !== 'production') {
@@ -74,12 +73,12 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 		const {won, gold, townhall} = battleResult
 
 		let text = ''
-		text += wikidataInfoHeader(new WikidataEntityReader(wdEntityStore.entity('construction.ballista'), languageCode), {
+		text += wikidataInfoHeader(await twb.reader('construction.ballista', languageCode), {
 			titlePrefix: won ? outEmoji.win : outEmoji.lose
 		})
 
 		text += '\n\n'
-		text += wikidataInfoHeader(new WikidataEntityReader(wdEntityStore.entity(qNumber), languageCode), {
+		text += wikidataInfoHeader(await twb.reader(qNumber, languageCode), {
 			titlePrefix: won ? outEmoji.lose : outEmoji.win
 		})
 		text += '\n'
@@ -104,7 +103,7 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 
 			text += townhall
 			text += ' '
-			text += new WikidataEntityReader(wdEntityStore.entity('construction.townhall'), languageCode).label()
+			text += (await twb.reader('construction.townhall', languageCode)).label()
 		}
 
 		await telegram.sendMessage(user, text, Extra.markdown() as any)

@@ -19,11 +19,11 @@ function buy(currentResources: Resources, resource: ResourceName, amount: number
 	return result
 }
 
-function tradeMenuBody(ctx: Context): Body {
+async function tradeMenuBody(ctx: Context): Promise<Body> {
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r('action.buy'), {titlePrefix: EMOJI.trade})
+	text += wikidataInfoHeader(await ctx.wd.reader('action.buy'), {titlePrefix: EMOJI.trade})
 	text += '\n\n'
-	text += resources(ctx, ctx.session.resources)
+	text += await resources(ctx, ctx.session.resources)
 	return {text, parse_mode: 'Markdown'}
 }
 
@@ -33,19 +33,21 @@ function resourceFromCtx(ctx: Context): ResourceName {
 	return ctx.match![1] as ResourceName
 }
 
-function tradeResourceMenuBody(ctx: Context): Body {
+async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 	const resource = resourceFromCtx(ctx)
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
+	await ctx.wd.preload(['resource.gold', 'resource.wood', 'resource.stone', 'resource.food', 'bs.storageCapacity'])
+
 	let text = ''
-	text += wikidataInfoHeader(ctx.wd.r(`resource.${resource}`), {titlePrefix: EMOJI[resource]})
+	text += wikidataInfoHeader(await ctx.wd.reader(`resource.${resource}`), {titlePrefix: EMOJI[resource]})
 
 	text += '\n\n'
-	text += `${EMOJI.gold} ${ctx.wd.r('resource.gold').label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
-	text += `${EMOJI[resource]} ${ctx.wd.r(`resource.${resource}`).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
-	text += `${ctx.wd.r('bs.storageCapacity').label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
+	text += `${EMOJI.gold} ${(await ctx.wd.reader('resource.gold')).label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`
+	text += `${EMOJI[resource]} ${(await ctx.wd.reader(`resource.${resource}`)).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`
+	text += `${(await ctx.wd.reader('bs.storageCapacity')).label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`
 	text += '\n'
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`
 	return {text, parse_mode: 'Markdown'}
@@ -54,7 +56,7 @@ function tradeResourceMenuBody(ctx: Context): Body {
 const resourceMenu = new MenuTemplate(tradeResourceMenuBody)
 
 menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	buttonText: (ctx, key) => `${EMOJI[key as ResourceName]} ${ctx.wd.r(`resource.${key}`).label()}`
+	buttonText: async (ctx, key) => `${EMOJI[key as ResourceName]} ${(await ctx.wd.reader(`resource.${key}`)).label()}`
 })
 
 menu.manualRow(backButtons)
@@ -96,10 +98,11 @@ resourceMenu.choose('buy', buyOptions, {
 	}
 })
 
-resourceMenu.url(ctx => `ℹ️ ${ctx.wd.r('menu.wikidataItem').label()}`, ctx => {
+resourceMenu.url(async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`, async ctx => {
 	const resource = resourceFromCtx(ctx)
 	const wdKey = `resource.${resource}`
-	return ctx.wd.r(wdKey).url()
+	const reader = await ctx.wd.reader(wdKey)
+	return reader.url()
 })
 
 resourceMenu.manualRow(backButtons)

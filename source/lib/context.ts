@@ -12,6 +12,7 @@ export interface Name {
 }
 
 export interface Session {
+	__wikibase_language_code?: string;
 	attackTarget?: number;
 	blocked?: boolean;
 	constructions: Constructions;
@@ -25,7 +26,6 @@ export interface Session {
 	resourcesTimestamp: number;
 	selectedSpy: string;
 	selectedSpyEmoji: string;
-	wikidataLanguageCode: string;
 }
 
 export interface Context extends TelegrafContext {
@@ -34,4 +34,7 @@ export interface Context extends TelegrafContext {
 	wd: MiddlewareProperty;
 }
 
-export const backButtons = createBackMainMenuButtons<Context>(ctx => `🔙 ${ctx.i18n.t('menu.back')}`, ctx => `🔝 ${ctx.wd.r('menu.menu').label()}`)
+export const backButtons = createBackMainMenuButtons<Context>(
+	ctx => `🔙 ${ctx.i18n.t('menu.back')}`,
+	async ctx => `🔝 ${(await ctx.wd.reader('menu.menu')).label()}`
+)

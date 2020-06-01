@@ -21,62 +21,68 @@ import {Context} from '../context'
 import {formatNumberShort} from './format-number'
 import {possibleEmoji, wikidataInfoHeader} from './generals'
 
-export function constructionLine(ctx: Context, construction: ConstructionName, level: number, canUpgrade: boolean): string {
+export async function constructionLine(ctx: Context, construction: ConstructionName, level: number, canUpgrade: boolean): Promise<string> {
+	const reader = await ctx.wd.reader(`construction.${construction}`)
 	const parts: string[] = []
 
 	parts.push(possibleEmoji(canUpgrade))
 	parts.push(EMOJI[construction])
 	parts.push(String(level))
 	parts.push(
-		`*${ctx.wd.r(`construction.${construction}`).label()}*`
+		`*${reader.label()}*`
 	)
 
 	return parts.join(' ')
 }
 
-export function infoHeader(ctx: Context, construction: ConstructionName, currentLevel: number): string {
+export async function infoHeader(ctx: Context, construction: ConstructionName, currentLevel: number): Promise<string> {
 	const wdKey = `construction.${construction}`
-	return wikidataInfoHeader(ctx.wd.r(wdKey), {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
+	return wikidataInfoHeader(await ctx.wd.reader(wdKey), {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
 }
 
 function simpleLineString(...args: (string | number)[]): string {
 	return args.join(' ')
 }
 
-function incomeString(ctx: Context, income: number | string, unit: string): string {
-	return simpleLineString(ctx.wd.r('other.income').label(), income, `${unit} / ${ctx.wd.r('bs.day').label()}`)
+async function incomeString(ctx: Context, income: number | string, unit: string): Promise<string> {
+	const readerLabel = await ctx.wd.reader('other.income')
+	const readerDay = await ctx.wd.reader('bs.day')
+	return simpleLineString(readerLabel.label(), income, `${unit} / ${readerDay.label()}`)
 }
 
-function storageCapacityString(ctx: Context, capacity: number, unit: ResourceName): string {
-	return simpleLineString(ctx.wd.r('bs.storageCapacity').label(), formatNumberShort(capacity, true), EMOJI[unit])
+async function storageCapacityString(ctx: Context, capacity: number, unit: ResourceName): Promise<string> {
+	const readerCapacity = await ctx.wd.reader('bs.storageCapacity')
+	return simpleLineString(readerCapacity.label(), formatNumberShort(capacity, true), EMOJI[unit])
 }
 
 export function peopleString(label: string, available: number, capacity: number, unit: string): string {
 	return simpleLineString(label, formatNumberShort(available, true) + unit, '/', formatNumberShort(capacity, true) + unit)
 }
 
-export function constructionPropertyString(ctx: Context, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): string | undefined {
+export async function constructionPropertyString(ctx: Context, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): Promise<string | undefined> {
 	if (construction === 'townhall') {
-		const lines = []
-		lines.push(storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))
-		lines.push(incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${ctx.wd.r('bs.inhabitant').label()}`))
-		lines.push(incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold))
+		const lines: string[] = []
+		lines.push(await storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))
+		lines.push(await incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${(await ctx.wd.reader('bs.inhabitant')).label()}`))
+		lines.push(await incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold))
 
 		return lines.join('\n')
 	}
 
 	if (construction === 'storage') {
 		const units: ResourceName[] = ['wood', 'stone', 'food']
-		return units
-			.map(o => storageCapacityString(ctx, calcStorageCapacity(constructions.storage), o))
-			.join('\n')
+		const lines = await Promise.all(units
+			.map(async o => storageCapacityString(ctx, calcStorageCapacity(constructions.storage), o))
+		)
+
+		return lines.join('\n')
 	}
 
 	if (construction === 'houses') {
-		const lines = []
-		lines.push(peopleString(ctx.wd.r('bs.people').label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
-		lines.push(incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people))
-		lines.push(incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food))
+		const lines: string[] = []
+		lines.push(peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
+		lines.push(await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people))
+		lines.push(await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food))
 
 		return lines.join('\n')
 	}
@@ -94,11 +100,11 @@ export function constructionPropertyString(ctx: Context, constructions: Construc
 	}
 
 	if (construction === 'barracks') {
-		return peopleString(ctx.wd.r('bs.army').label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+		return peopleString((await ctx.wd.reader('bs.army')).label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
 	}
 
 	if (construction === 'wall') {
-		return peopleString(ctx.wd.r('bs.archer').label(), people.wall, calcWallArcherCapacity(constructions.wall), EMOJI.archer)
+		return peopleString((await ctx.wd.reader('bs.archer')).label(), people.wall, calcWallArcherCapacity(constructions.wall), EMOJI.archer)
 	}
 
 	return undefined

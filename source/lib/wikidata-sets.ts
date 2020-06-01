@@ -1,5 +1,4 @@
 import randomItem from 'random-item'
-import WikidataEntityStore from 'wikidata-entity-store'
 import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 
 export type Query = 'mystics' | 'spies'
@@ -22,7 +21,7 @@ const entities: Record<Query, string[]> = {
 	spies: []
 }
 
-export async function build(store: WikidataEntityStore): Promise<void> {
+export async function build(): Promise<void> {
 	console.time('wikidata-sets')
 	await Promise.all(
 		Object.keys(queries)
@@ -31,7 +30,6 @@ export async function build(store: WikidataEntityStore): Promise<void> {
 
 	const qNumbers = Object.values(entities).flat()
 	console.timeLog('wikidata-sets', 'preloadQNumbers', qNumbers.length)
-	await store.preloadQNumbers(...qNumbers)
 	console.timeEnd('wikidata-sets')
 }
 
