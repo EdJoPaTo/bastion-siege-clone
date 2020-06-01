@@ -5,11 +5,13 @@ import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
 import TelegrafI18n from 'telegraf-i18n'
 
+import {buildCache as buildNameCache} from './lib/name-options'
 import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
+
 import {menu} from './menu'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
@@ -58,6 +60,8 @@ async function startup(): Promise<void> {
 	console.time('preload wdSets')
 	await wdSets.build()
 	console.timeEnd('preload wdSets')
+
+	await buildNameCache()
 
 	await bot.telegram.setMyCommands([
 		{command: 'start', description: 'show the menu'}

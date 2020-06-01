@@ -5,10 +5,7 @@ const cache = new Map()
 const givenNames: string[] = []
 const familyNames: string[] = []
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-buildCache()
-
-async function buildCache(): Promise<void> {
+export async function buildCache(): Promise<void> {
 	try {
 		console.time('build name cache')
 		const [first, second] = await Promise.all([
