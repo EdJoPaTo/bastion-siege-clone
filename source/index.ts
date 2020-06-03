@@ -54,8 +54,6 @@ bot.catch((error: any) => {
 	console.error('telegraf error occured', error)
 })
 
-bot.startPolling()
-
 async function startup(): Promise<void> {
 	console.time('preload wdSets')
 	await wdSets.build()
