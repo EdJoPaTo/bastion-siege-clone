@@ -52,10 +52,10 @@ async function instancesOfLabels(category: string): Promise<string[]> {
 	return sorted
 }
 
-export function getGivenNames(): ReadonlyArray<string> {
+export function getGivenNames(): readonly string[] {
 	return givenNames
 }
 
-export function getFamilyNames(): ReadonlyArray<string> {
+export function getFamilyNames(): readonly string[] {
 	return familyNames
 }

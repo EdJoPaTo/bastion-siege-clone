@@ -40,7 +40,7 @@ export async function infoHeader(ctx: Context, construction: ConstructionName, c
 	return wikidataInfoHeader(await ctx.wd.reader(wdKey), {titlePrefix: EMOJI[construction], titleSuffix: String(currentLevel)})
 }
 
-function simpleLineString(...args: (string | number)[]): string {
+function simpleLineString(...args: ReadonlyArray<string | number>): string {
 	return args.join(' ')
 }
 

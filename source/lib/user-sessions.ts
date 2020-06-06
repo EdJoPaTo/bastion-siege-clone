@@ -19,7 +19,7 @@ const localSession = new LocalSession<Session>({
 	getSessionKey: ctx => `${ctx.from!.id}`
 })
 
-export function getRaw(): ReadonlyArray<SessionRawEntry> {
+export function getRaw(): readonly SessionRawEntry[] {
 	return (localSession.DB as any)
 		.get('sessions').value()
 		.map((o: {id: string; data: Session}) => {

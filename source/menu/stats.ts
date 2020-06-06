@@ -29,7 +29,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	return {text, parse_mode: 'Markdown'}
 }
 
-async function maxConstructionLevelLine(ctx: Context, sessions: ReadonlyArray<Session>, construction: ConstructionName): Promise<string> {
+async function maxConstructionLevelLine(ctx: Context, sessions: readonly Session[], construction: ConstructionName): Promise<string> {
 	return `${EMOJI[construction]} ≤${Math.max(...sessions.map(o => o.constructions[construction]))} ${(await ctx.wd.reader(`construction.${construction}`)).label()}`
 }
 
