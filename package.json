@@ -32,7 +32,7 @@
 		"source-map-support": "^0.5.12",
 		"telegraf": "^3.38.0",
 		"telegraf-i18n": "^6.5.0",
-		"telegraf-inline-menu": "^5.0.0-beta.4",
+		"telegraf-inline-menu": "5.0.0-beta.5",
 		"telegraf-session-local": "^1.0.3",
 		"telegraf-wikibase": "^0.5.0",
 		"wikidata-entity-reader": "^2.0.0",
@@ -45,17 +45,15 @@
 		"del-cli": "^3.0.1",
 		"ts-node": "^8.0.3",
 		"typescript": "^3.4.3",
-		"xo": "^0.30.0"
+		"xo": "^0.32.0"
 	},
 	"xo": {
 		"semicolon": false,
 		"rules": {
-			"import/named": "warn",
+			"unicorn/no-reduce": "off",
 			"unicorn/no-fn-reference-in-iterator": "off",
 			"@typescript-eslint/array-type": "off",
-			"@typescript-eslint/no-floating-promises": "warn",
-			"@typescript-eslint/prefer-readonly-parameter-types": "off",
-			"@typescript-eslint/restrict-template-expressions": "off"
+			"@typescript-eslint/restrict-template-expressions": "warn"
 		}
 	}
 }
