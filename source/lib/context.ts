@@ -6,9 +6,13 @@ import {MiddlewareProperty} from 'telegraf-wikibase'
 
 import {PeopleInConstructions} from '../types'
 
+type UnixSeconds = number
+
 export interface Name {
 	readonly first: string;
 	readonly last?: string;
+	readonly lastChangeFirst?: UnixSeconds;
+	readonly lastChangeLast?: UnixSeconds;
 }
 
 export interface Session {

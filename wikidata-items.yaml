@@ -44,5 +44,11 @@ action:
 battle:
   suicide: Q10737
   target: P533
+name:
+  loseLastName: Q308859
+  change: Q2343619
+unit:
+  minute: Q7727
+  second: Q11574
 other:
   income: Q1527264
