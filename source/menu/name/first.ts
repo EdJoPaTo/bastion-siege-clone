@@ -10,7 +10,7 @@ import {outEmoji} from '../../lib/interface/generals'
 const CHANGE_EACH_SECONDS = DAY * 7
 
 function getNextChange(name: Name | undefined): number {
-	const lastChange = name?.lastChangeLast ?? 0
+	const lastChange = name?.lastChangeFirst ?? 0
 	return lastChange + CHANGE_EACH_SECONDS
 }
 
