@@ -29,9 +29,9 @@ export interface Session {
 }
 
 export interface Context extends TelegrafContext {
-	i18n: I18n;
-	session: Session;
-	wd: MiddlewareProperty;
+	readonly i18n: I18n;
+	readonly session: Session;
+	readonly wd: MiddlewareProperty;
 }
 
 export const backButtons = createBackMainMenuButtons<Context>(
