@@ -1,3 +1,4 @@
+import randomItem from 'random-item'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
 export const outEmoji = {
@@ -16,8 +17,14 @@ export const outEmoji = {
 	win: '🎉'
 }
 
+export const FAMILY_EMOJIS: readonly string[] = ['👨‍👩‍👧‍👦', '👨‍👩‍👦‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👦', '👩‍👩‍👦‍👦', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👦', '👨‍👨‍👦‍👦', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👨‍👩‍👧', '👨‍👨‍👦', '👨‍👨‍👧', '👩‍👩‍👦', '👩‍👩‍👧', '👩‍👦', '👩‍👧', '👩‍👧‍👦', '👩‍👦‍👦', '👩‍👧‍👧', '👨‍👦', '👨‍👧', '👨‍👧‍👦', '👨‍👦‍👦', '👨‍👧‍👧']
+
 export function possibleEmoji(condition: boolean): string {
 	return condition ? outEmoji.possibleYes : outEmoji.possibleNo
+}
+
+export function randomFamilyEmoji(): string {
+	return randomItem(FAMILY_EMOJIS)
 }
 
 interface InfoHeaderOptions {

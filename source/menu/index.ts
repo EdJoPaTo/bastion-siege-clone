@@ -5,10 +5,11 @@ import {EMOJI} from 'bastion-siege-logic'
 import {Context} from '../lib/context'
 
 import {formatNamePlain} from '../lib/interface/name'
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader, randomFamilyEmoji} from '../lib/interface/generals'
 import {resources} from '../lib/interface/resource'
 
 import {buildingsMenu, workshopMenu} from './constructions'
+import {menu as familyMenu} from './family'
 import {menu as languageMenu} from './languages'
 import {menu as mysticsMenu} from './mystic'
 import {menu as nameMenu} from './name'
@@ -47,6 +48,11 @@ menu.submenu(buttonText(EMOJI.workshop, 'bs.workshop'), 'w', workshopMenu, {
 })
 
 menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu)
+
+menu.submenu(buttonText(randomFamilyEmoji(), 'menu.family'), 'family', familyMenu, {
+	joinLastRow: true,
+	hide: ctx => !ctx.session.name?.last
+})
 
 menu.submenu(buttonText(EMOJI.war, 'bs.war'), 'war', warMenu, {
 	hide: ctx => !ctx.session.name || ctx.session.constructions.barracks === 0
