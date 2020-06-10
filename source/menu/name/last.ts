@@ -2,7 +2,7 @@ import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import randomItem from 'random-item'
 
-import {Context} from '../../lib/context'
+import {Context, Name} from '../../lib/context'
 import {formatNamePlain} from '../../lib/interface/name'
 import {getFamilyNames} from '../../lib/name-options'
 import {getRaw} from '../../lib/user-sessions'
@@ -11,36 +11,18 @@ import {outEmoji} from '../../lib/interface/generals'
 
 const CHANGE_EACH_SECONDS = HOUR * 22
 
-function getNextChange(ctx: Context): number {
-	const lastChange = ctx.session.name?.lastChangeLast ?? 0
+function getNextChange(name: Name | undefined): number {
+	const lastChange = name?.lastChangeLast ?? 0
 	return lastChange + CHANGE_EACH_SECONDS
 }
 
-function canGetNewLastName(ctx: Context): boolean {
-	if (!ctx.session.name) {
-		return false
-	}
-
-	if (ctx.session.name.last) {
+function canChangeLastName(name: Name | undefined): name is Name {
+	if (!name) {
 		return false
 	}
 
 	const now = Date.now() / 1000
-	const nextChange = getNextChange(ctx)
-	if (nextChange > now) {
-		return false
-	}
-
-	return true
-}
-
-function canRemoveLastName(ctx: Context): boolean {
-	if (!ctx.session.name?.last) {
-		return false
-	}
-
-	const now = Date.now() / 1000
-	const nextChange = getNextChange(ctx)
+	const nextChange = getNextChange(name)
 	if (nextChange > now) {
 		return false
 	}
@@ -68,7 +50,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	const now = Date.now() / 1000
-	const nextChange = getNextChange(ctx)
+	const nextChange = getNextChange(ctx.session.name)
 	if (nextChange > now) {
 		const remainingSeconds = nextChange - now
 		const remainingMinutes = remainingSeconds / MINUTE
@@ -79,11 +61,17 @@ async function menuBody(ctx: Context): Promise<Body> {
 		text += remainingMinutes.toFixed(0)
 		text += ' '
 		text += await ctx.wd.reader('unit.minute').then(r => r.label())
-	} else if (ctx.session.createLast) {
+	} else if (ctx.session.createLast !== undefined) {
 		text += '\n\n'
 		text += ctx.i18n.t('name.new.last')
 		text += ': '
-		text += ctx.session.createLast
+		if (ctx.session.createLast) {
+			text += ctx.session.createLast
+		} else {
+			text += outEmoji.withoutLastName
+			text += ' '
+			text += await ctx.wd.reader('name.loseLastName').then(r => r.label())
+		}
 	}
 
 	return {text, parse_mode: 'Markdown'}
@@ -92,7 +80,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 export const menu = new MenuTemplate<Context>(menuBody)
 
 menu.interact(outEmoji.nameFallback, 'random', {
-	hide: ctx => !canGetNewLastName(ctx),
+	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	do: ctx => {
 		ctx.session.createLast = randomItem(getFamilyNames())
 		return '.'
@@ -102,7 +90,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 menu.choose('existing', getExistingFamilies, {
 	columns: 2,
 	maxRows: 3,
-	hide: ctx => !canGetNewLastName(ctx),
+	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	getCurrentPage: ctx => ctx.session.page,
 	setPage: (ctx, page) => {
 		ctx.session.page = page
@@ -113,29 +101,24 @@ menu.choose('existing', getExistingFamilies, {
 	}
 })
 
-menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
-	hide: ctx => !ctx.session.createLast || !canGetNewLastName(ctx),
+menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('name.loseLastName').then(r => r.label())}`, 'looseLastName', {
+	hide: ctx => !canChangeLastName(ctx.session.name) || !ctx.session.name.last,
 	do: ctx => {
-		const now = Date.now() / 1000
-		ctx.session.name = {
-			...ctx.session.name!,
-			last: ctx.session.createLast!,
-			lastChangeLast: now
-		}
-
-		delete ctx.session.createLast
-		return '..'
+		ctx.session.createLast = false
+		return '.'
 	}
 })
 
-menu.interact(async ctx => `🎭 ${await ctx.wd.reader('name.loseLastName').then(r => r.label())}`, 'looseLastName', {
-	joinLastRow: true,
-	hide: ctx => !canRemoveLastName(ctx),
+menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
+	hide: ctx => ctx.session.createLast === undefined || !canChangeLastName(ctx.session.name),
 	do: ctx => {
 		const now = Date.now() / 1000
+		const {createLast} = ctx.session
+		const nextLast = createLast ? createLast : undefined
+
 		ctx.session.name = {
 			...ctx.session.name!,
-			last: undefined,
+			last: nextLast,
 			lastChangeLast: now
 		}
 

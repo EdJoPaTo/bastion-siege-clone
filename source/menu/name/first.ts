@@ -1,7 +1,7 @@
 import randomItem from 'random-item'
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 
-import {Context} from '../../lib/context'
+import {Context, Name} from '../../lib/context'
 import {DAY, MINUTE} from '../../lib/unix-time'
 import {formatNamePlain} from '../../lib/interface/name'
 import {getGivenNames} from '../../lib/name-options'
@@ -9,14 +9,14 @@ import {outEmoji} from '../../lib/interface/generals'
 
 const CHANGE_EACH_SECONDS = DAY * 7
 
-function getNextChange(ctx: Context): number {
-	const lastChange = ctx.session.name?.lastChangeFirst ?? 0
+function getNextChange(name: Name | undefined): number {
+	const lastChange = name?.lastChangeLast ?? 0
 	return lastChange + CHANGE_EACH_SECONDS
 }
 
-function canChangeFirstName(ctx: Context): boolean {
+function canChangeFirstName(name: Name | undefined): boolean {
 	const now = Date.now() / 1000
-	const nextChange = getNextChange(ctx)
+	const nextChange = getNextChange(name)
 	return now > nextChange
 }
 
@@ -40,7 +40,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	const now = Date.now() / 1000
-	const nextChange = getNextChange(ctx)
+	const nextChange = getNextChange(ctx.session.name)
 	if (nextChange > now) {
 		const remainingSeconds = nextChange - now
 		const remainingMinutes = remainingSeconds / MINUTE
@@ -64,7 +64,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 export const menu = new MenuTemplate<Context>(menuBody)
 
 menu.interact(outEmoji.nameFallback, 'random', {
-	hide: ctx => !canChangeFirstName(ctx),
+	hide: ctx => !canChangeFirstName(ctx.session.name),
 	do: ctx => {
 		ctx.session.createFirst = randomItem(getGivenNames())
 		return '.'
@@ -72,7 +72,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 })
 
 menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
-	hide: ctx => !ctx.session.createFirst || !canChangeFirstName(ctx),
+	hide: ctx => !ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
 	do: ctx => {
 		const now = Date.now() / 1000
 		ctx.session.name = {

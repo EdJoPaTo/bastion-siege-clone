@@ -23,7 +23,7 @@ export interface Session {
 	name?: Name;
 	page?: number;
 	createFirst?: string;
-	createLast?: string;
+	createLast?: string | false;
 	people: PeopleInConstructions;
 	peopleTimestamp: number;
 	resources: Resources;
