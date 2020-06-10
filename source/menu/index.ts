@@ -4,8 +4,9 @@ import {EMOJI} from 'bastion-siege-logic'
 
 import {Context} from '../lib/context'
 
-import {resources} from '../lib/interface/resource'
+import {formatNamePlain} from '../lib/interface/name'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+import {resources} from '../lib/interface/resource'
 
 import {buildingsMenu, workshopMenu} from './constructions'
 import * as nameMenu from './name-picker'
@@ -22,8 +23,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += '\n\n'
 
 	if (ctx.session.name) {
-		const {first, last} = ctx.session.name
-		text += `${outEmoji.name} ${first} ${last}`
+		text += `${outEmoji.name} ${formatNamePlain(ctx.session.name)}`
 		text += '\n\n'
 	}
 

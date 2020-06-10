@@ -13,6 +13,7 @@ import {PeopleInConstructions} from '../types'
 import * as userSessions from '../lib/user-sessions'
 
 import {Context, Name, backButtons} from '../lib/context'
+import {formatNamePlain} from '../lib/interface/name'
 import {formatNumberShort} from '../lib/interface/format-number'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 import {peopleString} from '../lib/interface/construction'
@@ -46,7 +47,7 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot:
 	headline += win ? outEmoji.win : outEmoji.lose
 	headline += ' '
 	headline += '*'
-	headline += `${name.first} ${name.last}`
+	headline += formatNamePlain(name)
 	headline += '*'
 	lines.push(headline)
 
@@ -79,7 +80,8 @@ async function menuBody(ctx: Context): Promise<Body> {
 		const {name, constructions} = attackTarget
 		text += (await ctx.wd.reader('battle.target')).label()
 		text += '\n'
-		text += `${name.first} ${name.last}\n`
+		text += formatNamePlain(name)
+		text += '\n'
 		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`
 		text += '\n\n'
 	}

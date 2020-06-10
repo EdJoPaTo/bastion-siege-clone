@@ -8,7 +8,7 @@ import {PeopleInConstructions} from '../types'
 
 export interface Name {
 	readonly first: string;
-	readonly last: string;
+	readonly last?: string;
 }
 
 export interface Session {

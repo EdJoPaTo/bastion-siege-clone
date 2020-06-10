@@ -8,10 +8,11 @@ import {
 	EMOJI
 } from 'bastion-siege-logic'
 
-import {Context, Name, backButtons} from '../lib/context'
+import {Context, backButtons} from '../lib/context'
 import * as userSessions from '../lib/user-sessions'
 import * as wdSets from '../lib/wikidata-sets'
 
+import {formatNamePlain} from '../lib/interface/name'
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
 async function getSpy(ctx: Context): Promise<WikidataEntityReader> {
@@ -65,7 +66,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 			.filter(o => o.data.name)
 
 		const session = randomItem(possibleSessions).data
-		const name = session.name as Name
+		const name = session.name!
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
 		const pickedConstructionKey = randomItem(spyableConstructions)
@@ -74,7 +75,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 		let message = ''
 		message += ctx.session.selectedSpyEmoji
 		message += ' '
-		message += `${name.first} ${name.last}`
+		message += formatNamePlain(name)
 		message += ' '
 		message += EMOJI[pickedConstructionKey]
 		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`)).label()
