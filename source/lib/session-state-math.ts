@@ -57,17 +57,6 @@ function initWhenMissing(session: Session, now: number): void {
 	}
 }
 
-function assignPeopleToConstruction(people: PeopleInConstructions, construction: keyof PeopleInConstructions, totalCapacity: number, peopleAvailable: number): number {
-	const freePlaces = totalCapacity - people[construction]
-	if (freePlaces > 0) {
-		const addPeople = Math.min(freePlaces, peopleAvailable)
-		people[construction] += addPeople
-		return addPeople
-	}
-
-	return 0
-}
-
 function calcCurrentPeople(session: Session, now: number): void {
 	const {constructions, people, peopleTimestamp} = session
 
@@ -79,15 +68,25 @@ function calcCurrentPeople(session: Session, now: number): void {
 		return
 	}
 
-	session.peopleTimestamp = now
+	const freePlacesBarracks = calcBarracksCapacity(constructions.barracks) - session.people.barracks
+	const freePlacesWall = calcWallArcherCapacity(constructions.wall) - session.people.wall
 
 	let peopleAvailable = totalPoepleIncome + people.houses
-	people.houses = 0
 
-	peopleAvailable -= assignPeopleToConstruction(people, 'barracks', calcBarracksCapacity(constructions.barracks), peopleAvailable)
-	peopleAvailable -= assignPeopleToConstruction(people, 'wall', calcWallArcherCapacity(constructions.wall), peopleAvailable)
+	const addToWall = Math.min(freePlacesWall, Math.max(0, peopleAvailable))
+	peopleAvailable -= addToWall
 
-	people.houses = Math.min(peopleAvailable, calcHousesCapacity(constructions.houses))
+	const addToBarracks = Math.min(freePlacesBarracks, Math.max(0, peopleAvailable))
+	peopleAvailable -= addToBarracks
+
+	const housesPeople = Math.max(0, Math.min(peopleAvailable, calcHousesCapacity(constructions.houses)))
+
+	session.peopleTimestamp = now
+	session.people = {
+		barracks: session.people.barracks + addToBarracks,
+		houses: housesPeople,
+		wall: session.people.wall + addToWall
+	}
 }
 
 function calcCurrentResources(session: Session, now: number): void {

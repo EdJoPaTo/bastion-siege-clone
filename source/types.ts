@@ -1,5 +1,5 @@
 export interface PeopleInConstructions {
-	houses: number;
-	barracks: number;
-	wall: number;
+	readonly houses: number;
+	readonly barracks: number;
+	readonly wall: number;
 }

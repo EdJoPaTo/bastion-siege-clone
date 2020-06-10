@@ -97,28 +97,30 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		const now = Date.now() / 1000
 
 		const attacker = ctx.session
-		const attackerConstructions = attacker.constructions
-		const attackerPeople = attacker.people
 
 		const targetId = ctx.session.attackTarget!
 		const target = userSessions.getUser(targetId)!
-		const targetConstructions = target.constructions
-		const targetPeople = target.people
 
-		const attackerWinChance = getAttackerWinChance(attackerConstructions, attackerPeople)
-		const targetWinChance = getDefenderWinChance(targetConstructions)
+		const attackerWinChance = getAttackerWinChance(attacker.constructions, attacker.people)
+		const targetWinChance = getDefenderWinChance(target.constructions)
 
-		const possibleLootFromAttacker = getLoot(attackerConstructions)
-		const possibleLootFromTarget = getLoot(targetConstructions)
+		const possibleLootFromAttacker = getLoot(attacker.constructions)
+		const possibleLootFromTarget = getLoot(target.constructions)
 
 		const attackerWins = attackerWinChance > targetWinChance
 
 		delete ctx.session.attackTarget
-		ctx.session.people.barracks = 0
+		ctx.session.people = {
+			...ctx.session.people,
+			barracks: 0
+		}
 
 		if (targetId === ctx.from!.id) {
-			ctx.session.people.houses = 0
-			ctx.session.people.wall = 0
+			ctx.session.people = {
+				barracks: 0,
+				houses: 0,
+				wall: 0
+			}
 
 			// Easter egg: attack yourself duplicates gold
 			if (ctx.session.resources.gold > 0) {
@@ -148,9 +150,11 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		}
 
 		if (attackerWins) {
-			targetPeople.houses = 0
-			targetPeople.barracks = 0
-			targetPeople.wall = 0
+			target.people = {
+				barracks: 0,
+				houses: 0,
+				wall: 0
+			}
 			target.peopleTimestamp = now
 		}
 
