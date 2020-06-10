@@ -43,6 +43,7 @@ action:
   search: Q36963
   upgrade: Q920419
 battle:
+  betrayal: Q2166722
   suicide: Q10737
   target: P533
 name:

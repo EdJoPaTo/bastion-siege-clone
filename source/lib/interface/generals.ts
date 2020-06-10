@@ -3,6 +3,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 
 export const outEmoji = {
 	activeUser: '💙',
+	betrayal: '😈',
 	chat: '💭',
 	fire: '🔥',
 	health: '❤️',

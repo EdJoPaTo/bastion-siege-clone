@@ -160,6 +160,19 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 
 		await ctx.replyWithMarkdown(afterBattleMessageText(true, attackerWins, target.name!, attackerLoot))
 
+		const isBetrayal = attacker.name?.last && attacker.name.last === target.name?.last
+		if (isBetrayal) {
+			attacker.name = {
+				...attacker.name!,
+				last: undefined,
+				lastChangeLast: now
+			}
+
+			await ctx.replyWithMarkdown(
+				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {titlePrefix: outEmoji.betrayal})
+			)
+		}
+
 		if (!target.blocked) {
 			try {
 				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), Extra.markdown() as any)
