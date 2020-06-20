@@ -28,8 +28,6 @@ async function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop',
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
 
-	await ctx.wd.preload([wdKey, ...entries.map(o => `construction.${o}`)])
-
 	let text = ''
 	text += wikidataInfoHeader(await ctx.wd.reader(wdKey), {titlePrefix: EMOJI[key]})
 

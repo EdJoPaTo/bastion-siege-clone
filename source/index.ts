@@ -30,8 +30,9 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware())
 
-const twb = new TelegrafWikibase(new Map(), {
-	contextKey: 'wd'
+const twb = new TelegrafWikibase({
+	contextKey: 'wd',
+	userAgent: 'EdJoPaTo/bastion-siege-clone'
 })
 
 const wikidataResourceKeyYaml = readFileSync('wikidata-items.yaml', 'utf8')

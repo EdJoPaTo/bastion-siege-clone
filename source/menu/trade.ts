@@ -39,8 +39,6 @@ async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 	const {constructions} = ctx.session
 	const storageCapacity = calcStorageCapacity(constructions.storage)
 
-	await ctx.wd.preload(['resource.gold', 'resource.wood', 'resource.stone', 'resource.food', 'bs.storageCapacity'])
-
 	let text = ''
 	text += wikidataInfoHeader(await ctx.wd.reader(`resource.${resource}`), {titlePrefix: EMOJI[resource]})
 

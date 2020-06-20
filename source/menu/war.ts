@@ -63,8 +63,6 @@ async function menuBody(ctx: Context): Promise<Body> {
 	const attackTargetId = ctx.session.attackTarget
 	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
 
-	await ctx.wd.preload(['bs.war', 'bs.army', 'bs.people', 'battle.target', 'action.attack', 'action.search'])
-
 	let text = ''
 	text += wikidataInfoHeader(await ctx.wd.reader('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
