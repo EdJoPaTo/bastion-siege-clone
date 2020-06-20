@@ -1,5 +1,6 @@
 import {existsSync, readFileSync} from 'fs'
 
+import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'
 import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
@@ -18,6 +19,10 @@ const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' 
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf<Context>(token)
 
+if (process.env.NODE_ENV !== 'production') {
+	bot.use(generateUpdateMiddleware())
+}
+
 bot.use(userSessions.middleware())
 bot.use(ensureSessionContent.middleware())
 
@@ -32,6 +37,7 @@ bot.use(i18n.middleware())
 
 const twb = new TelegrafWikibase({
 	contextKey: 'wd',
+	logQueriedEntityIds: process.env.NODE_ENV !== 'production',
 	userAgent: 'EdJoPaTo/bastion-siege-clone'
 })
 
