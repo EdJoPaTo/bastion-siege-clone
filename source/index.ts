@@ -62,15 +62,19 @@ bot.catch((error: any) => {
 })
 
 async function startup(): Promise<void> {
+	await bot.telegram.setMyCommands([
+		{command: 'start', description: 'show the menu'}
+	])
+
 	console.time('preload wdSets')
 	await wdSets.build()
 	console.timeEnd('preload wdSets')
 
 	await buildNameCache()
 
-	await bot.telegram.setMyCommands([
-		{command: 'start', description: 'show the menu'}
-	])
+	await twb.startRegularResourceKeyUpdate(error => {
+		console.error('TelegrafWikibase', 'regular update failed', error)
+	})
 
 	await bot.launch()
 	console.log(new Date(), 'Bot started as', bot.options.username)
