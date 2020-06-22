@@ -6,7 +6,6 @@ import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
 import TelegrafI18n from 'telegraf-i18n'
 
-import {buildCache as buildNameCache} from './lib/name-options'
 import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
@@ -69,8 +68,6 @@ async function startup(): Promise<void> {
 	console.time('preload wdSets')
 	await wdSets.build()
 	console.timeEnd('preload wdSets')
-
-	await buildNameCache()
 
 	await twb.startRegularResourceKeyUpdate(error => {
 		console.error('TelegrafWikibase', 'regular update failed', error)

@@ -1,10 +1,10 @@
+import {FAMILY} from 'wikidata-person-names'
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import randomItem from 'random-item'
 
 import {Context, Name} from '../../lib/context'
 import {formatNamePlain} from '../../lib/interface/name'
-import {getFamilyNames} from '../../lib/name-options'
 import {getRaw} from '../../lib/user-sessions'
 import {HOUR, MINUTE} from '../../lib/unix-time'
 import {outEmoji} from '../../lib/interface/generals'
@@ -82,7 +82,7 @@ export const menu = new MenuTemplate<Context>(menuBody)
 menu.interact(outEmoji.nameFallback, 'random', {
 	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	do: ctx => {
-		ctx.session.createLast = randomItem(getFamilyNames())
+		ctx.session.createLast = randomItem(FAMILY)
 		return '.'
 	}
 })

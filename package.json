@@ -37,6 +37,7 @@
 		"telegraf-session-local": "^1.0.3",
 		"telegraf-wikibase": "^0.8.0",
 		"wikidata-entity-reader": "^2.0.0",
+		"wikidata-person-names": "^1.0.0",
 		"wikidata-sdk": "^7.4.3",
 		"wikidata-sdk-got": "^2.0.1"
 	},

@@ -1,10 +1,10 @@
-import randomItem from 'random-item'
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {UNISEX} from 'wikidata-person-names'
+import randomItem from 'random-item'
 
 import {Context, Name} from '../../lib/context'
 import {DAY, MINUTE} from '../../lib/unix-time'
 import {formatNamePlain} from '../../lib/interface/name'
-import {getGivenNames} from '../../lib/name-options'
 import {outEmoji} from '../../lib/interface/generals'
 
 const CHANGE_EACH_SECONDS = DAY * 7
@@ -66,7 +66,7 @@ export const menu = new MenuTemplate<Context>(menuBody)
 menu.interact(outEmoji.nameFallback, 'random', {
 	hide: ctx => !canChangeFirstName(ctx.session.name),
 	do: ctx => {
-		ctx.session.createFirst = randomItem(getGivenNames())
+		ctx.session.createFirst = randomItem(UNISEX)
 		return '.'
 	}
 })
