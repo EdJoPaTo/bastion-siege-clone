@@ -83,13 +83,16 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 		message += pickedConstructionLevel
 
 		await ctx.answerCbQuery(message)
+		return false
 	}
 })
 
 menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 'change', {
 	joinLastRow: true,
 	do: ctx => {
+		// @ts-expect-error
 		delete ctx.session.selectedSpy
+		// @ts-expect-error
 		delete ctx.session.selectedSpyEmoji
 		return '.'
 	}

@@ -35,6 +35,7 @@ menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	set: (ctx, key) => {
 		ctx.i18n.locale(key)
 		ctx.wd.locale(key)
+		return true
 	},
 	getCurrentPage: ctx => ctx.session.page,
 	setPage: (ctx, page) => {
