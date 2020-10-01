@@ -4,8 +4,7 @@ import {Context, backButtons} from '../lib/context'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
 
-/* eslint @typescript-eslint/no-var-requires: warn */
-/* eslint @typescript-eslint/no-require-imports: warn */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const localeEmoji = require('locale-emoji')
 
 export const menu = new MenuTemplate<Context>(languageMenuBody)
