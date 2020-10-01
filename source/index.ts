@@ -12,6 +12,8 @@ import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
 
+process.title = 'bs-clone-tgbot'
+
 import {menu} from './menu'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
