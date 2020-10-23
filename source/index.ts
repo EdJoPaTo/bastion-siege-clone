@@ -4,7 +4,7 @@ import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'
 import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
-import TelegrafI18n from 'telegraf-i18n'
+import {I18n as TelegrafI18n} from '@edjopato/telegraf-i18n'
 
 import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'

@@ -108,9 +108,9 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 		}
 
 		await telegram.sendMessage(user, text, Extra.markdown() as any)
-	} catch (error) {
+	} catch (error: unknown) {
 		session.blocked = true
-		console.log('mystics attack error', user, error.message)
+		console.log('mystics attack error', user, error instanceof Error ? error.message : error)
 	}
 }
 

@@ -174,8 +174,8 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		if (!target.blocked) {
 			try {
 				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), Extra.markdown() as any)
-			} catch (error) {
-				console.error('send defender battlereport failed', targetId, error.message)
+			} catch (error: unknown) {
+				console.error('send defender battlereport failed', targetId, error instanceof Error ? error.message : error)
 				target.blocked = true
 			}
 		}
