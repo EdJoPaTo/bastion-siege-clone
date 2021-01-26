@@ -1,5 +1,4 @@
 # Bastion Siege Clone
-[![Build Status](https://travis-ci.com/EdJoPaTo/bastion-siege-clone.svg?branch=master)](https://travis-ci.com/EdJoPaTo/bastion-siege-clone)
 
 This is a project trying to clone [Bastion Siege](https://t.me/BastionSiegeBot).
 
