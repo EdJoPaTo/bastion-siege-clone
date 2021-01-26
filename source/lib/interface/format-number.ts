@@ -13,7 +13,7 @@ export function formatNumberShort(value: number, isInteger = false): string {
 	const exponent = value === 0 ? 0 : Math.floor(Math.log10(value))
 	const engineerExponentLevel = Math.max(0, Math.floor(exponent / 3))
 	const engineerExponent = engineerExponentLevel * 3
-	const letter = allLetters[engineerExponentLevel]
+	const letter = allLetters[engineerExponentLevel]!
 	const exploded = 10 ** engineerExponent
 	const shortValue = value / exploded
 

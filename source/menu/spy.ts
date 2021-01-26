@@ -36,7 +36,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 		.split('')
 		.map(o => Number(o))
 		.filter(arrayFilterUnique())
-		.map(o => CONSTRUCTIONS[o])
+		.map(o => CONSTRUCTIONS[o]!)
 
 	return possibleConstructions
 }

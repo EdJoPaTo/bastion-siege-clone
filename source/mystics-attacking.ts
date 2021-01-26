@@ -1,5 +1,5 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
-import {Extra, Telegram} from 'telegraf'
+import {Telegraf} from 'telegraf'
 
 import {formatNumberShort} from './lib/interface/format-number'
 import {Session} from './lib/context'
@@ -7,6 +7,8 @@ import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
+
+type Telegram = Telegraf['telegram']
 
 const ATTACK_INTERVAL = 1000 * 60 * 30 // 30 Minutes
 let currentMysticQNumber: string | undefined
@@ -27,7 +29,7 @@ function calcMysticStrenght(mystic: string): number {
 		.slice(1)
 		.map(o => Number(o))
 
-	// eslint-disable-next-line unicorn/no-reduce
+	// eslint-disable-next-line unicorn/no-array-reduce
 	const baseStrength = numbersOfQNumber.reduce((a, b) => a + b, 0)
 	return baseStrength
 }
@@ -107,7 +109,7 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 			text += (await twb.reader('construction.townhall', languageCode)).label()
 		}
 
-		await telegram.sendMessage(user, text, Extra.markdown() as any)
+		await telegram.sendMessage(user, text, {parse_mode: 'Markdown'})
 	} catch (error: unknown) {
 		session.blocked = true
 		console.log('mystics attack error', user, error instanceof Error ? error.message : error)

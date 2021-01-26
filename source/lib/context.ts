@@ -34,6 +34,7 @@ export interface Session {
 
 export interface Context extends TelegrafContext {
 	readonly i18n: I18nContext;
+	readonly match: RegExpExecArray | undefined;
 	readonly session: Session;
 	readonly wd: MiddlewareProperty;
 }

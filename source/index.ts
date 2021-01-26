@@ -16,8 +16,13 @@ process.title = 'bs-clone-tgbot'
 
 import {menu} from './menu'
 
-const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
-const token = readFileSync(tokenFilePath, 'utf8').trim()
+const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/secrets/bot-token.txt', 'utf8').trim()) ||
+	(existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim()) ||
+	process.env.BOT_TOKEN
+if (!token) {
+	throw new Error('You have to provide the bot-token from @BotFather via file (bot-token.txt) or environment variable (BOT_TOKEN)')
+}
+
 const bot = new Telegraf<Context>(token)
 
 if (process.env.NODE_ENV !== 'production') {
@@ -76,7 +81,7 @@ async function startup(): Promise<void> {
 	})
 
 	await bot.launch()
-	console.log(new Date(), 'Bot started as', bot.options.username)
+	console.log(new Date(), 'Bot started as', bot.botInfo?.username)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

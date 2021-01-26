@@ -1,4 +1,3 @@
-import {Extra} from 'telegraf'
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	calcBarracksCapacity,
@@ -173,7 +172,7 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 
 		if (!target.blocked) {
 			try {
-				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), Extra.markdown() as any)
+				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), {parse_mode: 'Markdown'})
 			} catch (error: unknown) {
 				console.error('send defender battlereport failed', targetId, error instanceof Error ? error.message : error)
 				target.blocked = true
