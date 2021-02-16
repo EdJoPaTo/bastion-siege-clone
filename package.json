@@ -13,17 +13,10 @@
 		"node": ">=14"
 	},
 	"scripts": {
-		"build": "del dist && tsc",
-		"prepack": "npm run build",
+		"build": "del-cli dist && tsc",
 		"start": "ts-node source/index.ts",
 		"test": "tsc --sourceMap && xo"
 	},
-	"main": "dist",
-	"types": "dist",
-	"files": [
-		"dist",
-		"!*.test.*"
-	],
 	"dependencies": {
 		"@edjopato/telegraf-i18n": "^0.2.0",
 		"array-filter-unique": "^2.1.0",

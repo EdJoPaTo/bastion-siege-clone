@@ -1,4 +1,4 @@
-import randomItem from 'random-item'
+import * as randomItem from 'random-item'
 import WikidataEntityReader from 'wikidata-entity-reader'
 
 export const outEmoji = {

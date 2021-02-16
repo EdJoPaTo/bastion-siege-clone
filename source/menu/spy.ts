@@ -1,6 +1,6 @@
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
-import randomItem from 'random-item'
+import * as randomItem from 'random-item'
 import WikidataEntityReader from 'wikidata-entity-reader'
 import {
 	ConstructionName,

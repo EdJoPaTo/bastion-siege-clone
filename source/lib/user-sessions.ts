@@ -1,5 +1,5 @@
-import randomItem from 'random-item'
-import LocalSession from 'telegraf-session-local'
+import * as randomItem from 'random-item'
+import * as LocalSession from 'telegraf-session-local'
 
 import {Context, Session} from './context'
 

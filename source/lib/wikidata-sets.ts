@@ -1,4 +1,4 @@
-import randomItem from 'random-item'
+import * as randomItem from 'random-item'
 import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 
 export type Query = 'mystics' | 'spies'

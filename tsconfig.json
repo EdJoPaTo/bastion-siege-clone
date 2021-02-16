@@ -4,10 +4,9 @@
 		"source"
 	],
 	"compilerOptions": {
-		"lib": [
-			"esnext"
-		],
-		"esModuleInterop": true,
+		"declaration": false,
+		"sourceMap": true,
+		"target": "ES2020",
 		"outDir": "dist"
 	}
 }
