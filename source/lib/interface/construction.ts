@@ -23,14 +23,12 @@ import {possibleEmoji, wikidataInfoHeader} from './generals'
 
 export async function constructionLine(ctx: Context, construction: ConstructionName, level: number, canUpgrade: boolean): Promise<string> {
 	const reader = await ctx.wd.reader(`construction.${construction}`)
-	const parts: string[] = []
-
-	parts.push(possibleEmoji(canUpgrade))
-	parts.push(EMOJI[construction])
-	parts.push(String(level))
-	parts.push(
+	const parts: string[] = [
+		possibleEmoji(canUpgrade),
+		EMOJI[construction],
+		String(level),
 		`*${reader.label()}*`
-	)
+	]
 
 	return parts.join(' ')
 }
@@ -61,10 +59,11 @@ export function peopleString(label: string, available: number, capacity: number,
 
 export async function constructionPropertyString(ctx: Context, constructions: Constructions, people: PeopleInConstructions, construction: ConstructionName): Promise<string | undefined> {
 	if (construction === 'townhall') {
-		const lines: string[] = []
-		lines.push(await storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'))
-		lines.push(await incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${(await ctx.wd.reader('bs.inhabitant')).label()}`))
-		lines.push(await incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold))
+		const lines: string[] = [
+			await storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'),
+			await incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${(await ctx.wd.reader('bs.inhabitant')).label()}`),
+			await incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold)
+		]
 
 		return lines.join('\n')
 	}
@@ -79,10 +78,11 @@ export async function constructionPropertyString(ctx: Context, constructions: Co
 	}
 
 	if (construction === 'houses') {
-		const lines: string[] = []
-		lines.push(peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people))
-		lines.push(await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people))
-		lines.push(await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food))
+		const lines: string[] = [
+			peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people),
+			await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people),
+			await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food)
+		]
 
 		return lines.join('\n')
 	}

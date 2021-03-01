@@ -17,12 +17,12 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += wikidataInfoHeader(await ctx.wd.reader('menu.statistics'), {titlePrefix: outEmoji.statistics})
 	text += '\n\n'
 
-	const statLines: string[] = []
+	const statLines: string[] = [
+		`${allSessions.length} ${EMOJI.people} (${allSessionData.filter(o => !o.blocked && o.name).length} ${outEmoji.activeUser})`,
 
-	statLines.push(`${allSessions.length} ${EMOJI.people} (${allSessionData.filter(o => !o.blocked && o.name).length} ${outEmoji.activeUser})`)
-
-	statLines.push(await maxConstructionLevelLine(ctx, allSessionData, 'townhall'))
-	statLines.push(await maxConstructionLevelLine(ctx, allSessionData, 'barracks'))
+		await maxConstructionLevelLine(ctx, allSessionData, 'townhall'),
+		await maxConstructionLevelLine(ctx, allSessionData, 'barracks')
+	]
 
 	text += statLines.join('\n')
 

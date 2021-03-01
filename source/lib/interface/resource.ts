@@ -14,13 +14,11 @@ import {possibleEmoji} from './generals'
 
 export async function resourceLine(ctx: Context, resource: ResourceName, amount: number): Promise<string> {
 	const reader = await ctx.wd.reader(`resource.${resource}`)
-	const parts: string[] = []
-
-	parts.push(EMOJI[resource])
-	parts.push(
-		`*${reader.label()}*`
-	)
-	parts.push(formatNumberShort(amount, true))
+	const parts: string[] = [
+		EMOJI[resource],
+		`*${reader.label()}*`,
+		formatNumberShort(amount, true)
+	]
 
 	return parts.join(' ')
 }
