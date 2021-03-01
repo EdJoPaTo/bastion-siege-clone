@@ -1,5 +1,5 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
-import {Telegraf} from 'telegraf'
+import {Telegram} from 'telegraf'
 
 import {formatNumberShort} from './lib/interface/format-number'
 import {Session} from './lib/context'
@@ -7,8 +7,6 @@ import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
-
-type Telegram = Telegraf['telegram']
 
 const ATTACK_INTERVAL = 1000 * 60 * 30 // 30 Minutes
 let currentMysticQNumber: string | undefined
