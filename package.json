@@ -14,6 +14,7 @@
 		"start": "ts-node source/index.ts",
 		"test": "tsc --sourceMap && xo"
 	},
+	"type": "commonjs",
 	"engines": {
 		"node": ">=14"
 	},
@@ -35,7 +36,7 @@
 		"wikidata-sdk-got": "^2.0.1"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^0.8.0",
+		"@sindresorhus/tsconfig": "^1.0.1",
 		"@types/node": "^15.0.1",
 		"del-cli": "^3.0.1",
 		"ts-node": "^9.0.0",

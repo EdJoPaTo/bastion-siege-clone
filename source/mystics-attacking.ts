@@ -67,7 +67,8 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 		const languageCode = session.__wikibase_language_code ?? 'en'
 
 		const battleResult = calcBattle(qNumber, session)
-		if (process.env.NODE_ENV !== 'production') {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		if (process.env['NODE_ENV'] !== 'production') {
 			console.log('after mystics battle', user, max, currentHealth, calcBallistaDamage(session.constructions))
 		}
 
