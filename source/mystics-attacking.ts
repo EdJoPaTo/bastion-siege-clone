@@ -1,9 +1,9 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
+import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
 import {Telegram} from 'telegraf'
 
 import {formatNumberShort} from './lib/interface/format-number'
 import {Session} from './lib/context'
-import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
 import {wikidataInfoHeader, outEmoji} from './lib/interface/generals'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
@@ -67,7 +67,6 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 		const languageCode = session.__wikibase_language_code ?? 'en'
 
 		const battleResult = calcBattle(qNumber, session)
-		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (process.env['NODE_ENV'] !== 'production') {
 			console.log('after mystics battle', user, max, currentHealth, calcBallistaDamage(session.constructions))
 		}
