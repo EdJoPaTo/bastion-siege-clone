@@ -23,7 +23,7 @@
 		"array-filter-unique": "^2.1.0",
 		"bastion-siege-logic": "^2.0.0",
 		"locale-emoji": "^0.3.0",
-		"random-item": "^3.0.0",
+		"random-item": "^4.0.1",
 		"source-map-support": "^0.5.12",
 		"telegraf": "^4.1.1",
 		"telegraf-inline-menu": "^6.0.0",
