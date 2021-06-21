@@ -1,7 +1,7 @@
 {
 	"name": "bastion-siege-clone",
 	"private": true,
-	"version": "2.1.8",
+	"version": "2.1.9",
 	"license": "MIT",
 	"repository": "EdJoPaTo/bastion-siege-clone",
 	"author": {
@@ -50,7 +50,7 @@
 			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/no-unsafe-assignment": "off",
 			"@typescript-eslint/no-unsafe-call": "off",
-			"@typescript-eslint/no-unsafe-member-access":"off",
+			"@typescript-eslint/no-unsafe-member-access": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
 			"unicorn/prefer-module": "off",
 			"unicorn/prefer-node-protocol": "off"
