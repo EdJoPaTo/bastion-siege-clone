@@ -7,7 +7,7 @@ import {
 	Constructions,
 	EMOJI,
 	Resources,
-	WORKSHOP
+	WORKSHOP,
 } from 'bastion-siege-logic'
 
 import {Context, backButtons} from '../lib/context'
@@ -34,7 +34,7 @@ async function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop',
 	text += '\n\n'
 
 	const constructionLines = await Promise.all(entries
-		.map(async o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources)))
+		.map(async o => constructionLine(ctx, o, constructions[o], canUpgrade(constructions, o, currentResources))),
 	)
 	text += constructionLines.join('\n')
 
@@ -50,7 +50,7 @@ export const buildingsMenu = new MenuTemplate<Context>(async ctx => construction
 
 buildingsMenu.chooseIntoSubmenu('', BUILDINGS, entryMenu, {
 	columns: 2,
-	buttonText: constructionButtonTextFunc
+	buttonText: constructionButtonTextFunc,
 })
 
 buildingsMenu.manualRow(backButtons)
@@ -59,7 +59,7 @@ export const workshopMenu = new MenuTemplate<Context>(async ctx => constructionM
 
 workshopMenu.chooseIntoSubmenu('', WORKSHOP, entryMenu, {
 	columns: 2,
-	buttonText: constructionButtonTextFunc
+	buttonText: constructionButtonTextFunc,
 })
 
 workshopMenu.manualRow(backButtons)

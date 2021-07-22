@@ -13,19 +13,19 @@ FILTER(LANG(?label) = "en")
 	spies: `SELECT DISTINCT ?item WHERE {
 ?item wdt:P279+ wd:Q729.
 ?item wdt:P487 ?emoji.
-}`
+}`,
 }
 
 const entities: Record<Query, string[]> = {
 	mystics: [],
-	spies: []
+	spies: [],
 }
 
 export async function build(): Promise<void> {
 	console.time('wikidata-sets')
 	await Promise.all(
 		Object.keys(queries)
-			.map(async key => loadQNumbersOfKey(key as Query))
+			.map(async key => loadQNumbersOfKey(key as Query)),
 	)
 
 	const qNumbers = Object.values(entities).flat()

@@ -4,7 +4,7 @@ import {
 	EMOJI,
 	ResourceName,
 	RESOURCES,
-	Resources
+	Resources,
 } from 'bastion-siege-logic'
 
 import {Context} from '../context'
@@ -17,7 +17,7 @@ export async function resourceLine(ctx: Context, resource: ResourceName, amount:
 	const parts: string[] = [
 		EMOJI[resource],
 		`*${reader.label()}*`,
-		formatNumberShort(amount, true)
+		formatNumberShort(amount, true),
 	]
 
 	return parts.join(' ')
@@ -29,7 +29,7 @@ export async function constructionResourceLine(ctx: Context, resource: ResourceN
 
 export async function resources(ctx: Context, resources: Resources): Promise<string> {
 	const lines = await Promise.all(RESOURCES
-		.map(async o => resourceLine(ctx, o, resources[o]))
+		.map(async o => resourceLine(ctx, o, resources[o])),
 	)
 
 	return lines.join('\n')
@@ -38,7 +38,7 @@ export async function resources(ctx: Context, resources: Resources): Promise<str
 export async function constructionResources(ctx: Context, required: ConstructionResources, available: Resources): Promise<string> {
 	const lines = await Promise.all(CONSTRUCTION_RESOURCES
 		.filter(o => required[o])
-		.map(async o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o]))
+		.map(async o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o])),
 	)
 
 	return lines.join('\n')

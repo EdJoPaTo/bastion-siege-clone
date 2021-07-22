@@ -16,9 +16,9 @@ import {menu} from './menu'
 
 process.title = 'bs-clone-tgbot'
 
-const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/secrets/bot-token.txt', 'utf8').trim()) ||
-	(existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim()) ||
-	process.env['BOT_TOKEN']
+const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/secrets/bot-token.txt', 'utf8').trim())
+	|| (existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim())
+	|| process.env['BOT_TOKEN']
 if (!token) {
 	throw new Error('You have to provide the bot-token from @BotFather via file (bot-token.txt) or environment variable (BOT_TOKEN)')
 }
@@ -36,7 +36,7 @@ const i18n = new TelegrafI18n({
 	directory: 'locales',
 	defaultLanguage: 'en',
 	defaultLanguageOnMissing: true,
-	useSession: true
+	useSession: true,
 })
 
 bot.use(i18n.middleware())
@@ -44,7 +44,7 @@ bot.use(i18n.middleware())
 const twb = new TelegrafWikibase({
 	contextKey: 'wd',
 	logQueriedEntityIds: process.env['NODE_ENV'] !== 'production',
-	userAgent: 'EdJoPaTo/bastion-siege-clone'
+	userAgent: 'EdJoPaTo/bastion-siege-clone',
 })
 
 const wikidataResourceKeyYaml = readFileSync('wikidata-items.yaml', 'utf8')
@@ -69,7 +69,7 @@ bot.catch((error: any) => {
 
 async function startup(): Promise<void> {
 	await bot.telegram.setMyCommands([
-		{command: 'start', description: 'show the menu'}
+		{command: 'start', description: 'show the menu'},
 	])
 
 	console.time('preload wdSets')

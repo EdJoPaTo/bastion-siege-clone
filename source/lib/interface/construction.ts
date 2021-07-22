@@ -12,7 +12,7 @@ import {
 	ConstructionName,
 	Constructions,
 	EMOJI,
-	ResourceName
+	ResourceName,
 } from 'bastion-siege-logic'
 
 import {PeopleInConstructions} from '../../types'
@@ -27,7 +27,7 @@ export async function constructionLine(ctx: Context, construction: ConstructionN
 		possibleEmoji(canUpgrade),
 		EMOJI[construction],
 		String(level),
-		`*${reader.label()}*`
+		`*${reader.label()}*`,
 	]
 
 	return parts.join(' ')
@@ -62,7 +62,7 @@ export async function constructionPropertyString(ctx: Context, constructions: Co
 		const lines: string[] = [
 			await storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), 'gold'),
 			await incomeString(ctx, calcGoldIncomePerPerson(constructions.townhall).toFixed(1), `${EMOJI.gold} / ${(await ctx.wd.reader('bs.inhabitant')).label()}`),
-			await incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold)
+			await incomeString(ctx, calcGoldIncome(constructions.townhall, constructions.houses), EMOJI.gold),
 		]
 
 		return lines.join('\n')
@@ -71,7 +71,7 @@ export async function constructionPropertyString(ctx: Context, constructions: Co
 	if (construction === 'storage') {
 		const units: ResourceName[] = ['wood', 'stone', 'food']
 		const lines = await Promise.all(units
-			.map(async o => storageCapacityString(ctx, calcStorageCapacity(constructions.storage), o))
+			.map(async o => storageCapacityString(ctx, calcStorageCapacity(constructions.storage), o)),
 		)
 
 		return lines.join('\n')
@@ -81,7 +81,7 @@ export async function constructionPropertyString(ctx: Context, constructions: Co
 		const lines: string[] = [
 			peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people),
 			await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people),
-			await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food)
+			await incomeString(ctx, calcProductionFood(constructions.farm, constructions.houses), EMOJI.food),
 		]
 
 		return lines.join('\n')

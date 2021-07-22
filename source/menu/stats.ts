@@ -1,7 +1,7 @@
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import {
 	ConstructionName,
-	EMOJI
+	EMOJI,
 } from 'bastion-siege-logic'
 
 import {Context, Session, backButtons} from '../lib/context'
@@ -21,7 +21,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 		`${allSessions.length} ${EMOJI.people} (${allSessionData.filter(o => !o.blocked && o.name).length} ${outEmoji.activeUser})`,
 
 		await maxConstructionLevelLine(ctx, allSessionData, 'townhall'),
-		await maxConstructionLevelLine(ctx, allSessionData, 'barracks')
+		await maxConstructionLevelLine(ctx, allSessionData, 'barracks'),
 	]
 
 	text += statLines.join('\n')
@@ -37,7 +37,7 @@ export const menu = new MenuTemplate(menuBody)
 
 menu.url(
 	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
-	async ctx => (await ctx.wd.reader('menu.statistics')).url()
+	async ctx => (await ctx.wd.reader('menu.statistics')).url(),
 )
 
 menu.manualRow(backButtons)

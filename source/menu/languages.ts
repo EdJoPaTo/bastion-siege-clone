@@ -39,7 +39,7 @@ menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	getCurrentPage: ctx => ctx.session.page,
 	setPage: (ctx, page) => {
 		ctx.session.page = page
-	}
+	},
 })
 
 menu.manualRow(backButtons)

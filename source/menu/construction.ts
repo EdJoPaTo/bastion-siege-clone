@@ -3,7 +3,7 @@ import {
 	calcBuildingCost,
 	calcMinutesNeeded,
 	calcResourcesAfterConstruction,
-	ConstructionName
+	ConstructionName,
 } from 'bastion-siege-logic'
 
 import {Context, backButtons} from '../lib/context'
@@ -63,7 +63,7 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 		ctx.session.constructions = constructions
 
 		return '.'
-	}
+	},
 })
 
 menu.url(async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`, async ctx => {

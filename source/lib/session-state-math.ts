@@ -4,7 +4,7 @@ import {
 	calcHousesCapacity,
 	calcHousesPeopleIncome,
 	calcWallArcherCapacity,
-	estimateResourcesAfter
+	estimateResourcesAfter,
 } from 'bastion-siege-logic'
 
 import {PeopleInConstructions} from '../types'
@@ -30,7 +30,7 @@ function initWhenMissing(session: Session, now: number): void {
 			barracks: 0,
 			wall: 0,
 			trebuchet: 0,
-			ballista: 0
+			ballista: 0,
 		}
 	}
 
@@ -41,7 +41,7 @@ function initWhenMissing(session: Session, now: number): void {
 			gold: 500,
 			wood: 0,
 			stone: 0,
-			food: 200
+			food: 200,
 		}
 	}
 
@@ -51,7 +51,7 @@ function initWhenMissing(session: Session, now: number): void {
 		const people: PeopleInConstructions = {
 			houses: 0,
 			barracks: 0,
-			wall: 0
+			wall: 0,
 		}
 		session.people = people
 	}
@@ -85,7 +85,7 @@ function calcCurrentPeople(session: Session, now: number): void {
 	session.people = {
 		barracks: session.people.barracks + addToBarracks,
 		houses: housesPeople,
-		wall: session.people.wall + addToWall
+		wall: session.people.wall + addToWall,
 	}
 }
 
@@ -103,7 +103,7 @@ function calcCurrentResources(session: Session, now: number): void {
 
 		session.resources = {
 			...session.resources,
-			gold: Math.max(-goldIncome24h, session.resources.gold)
+			gold: Math.max(-goldIncome24h, session.resources.gold),
 		}
 
 		session.resourcesTimestamp = now

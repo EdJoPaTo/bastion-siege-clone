@@ -84,7 +84,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 	do: ctx => {
 		ctx.session.createLast = randomItem(FAMILY)
 		return '.'
-	}
+	},
 })
 
 menu.choose('existing', getExistingFamilies, {
@@ -98,7 +98,7 @@ menu.choose('existing', getExistingFamilies, {
 	do: (ctx, key) => {
 		ctx.session.createLast = key
 		return '.'
-	}
+	},
 })
 
 menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('name.loseLastName').then(r => r.label())}`, 'looseLastName', {
@@ -106,7 +106,7 @@ menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('n
 	do: ctx => {
 		ctx.session.createLast = false
 		return '.'
-	}
+	},
 })
 
 menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
@@ -119,12 +119,12 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 		ctx.session.name = {
 			...ctx.session.name!,
 			last: nextLast,
-			lastChangeLast: now
+			lastChangeLast: now,
 		}
 
 		delete ctx.session.createLast
 		return '..'
-	}
+	},
 })
 
 menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
@@ -132,7 +132,7 @@ menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
 	do: ctx => {
 		delete ctx.session.createLast
 		return '..'
-	}
+	},
 })
 
 function getExistingFamilies(ctx: Context): string[] {

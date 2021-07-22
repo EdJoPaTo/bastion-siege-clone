@@ -5,7 +5,7 @@ import WikidataEntityReader from 'wikidata-entity-reader'
 import {
 	ConstructionName,
 	CONSTRUCTIONS,
-	EMOJI
+	EMOJI,
 } from 'bastion-siege-logic'
 
 import {Context, backButtons} from '../lib/context'
@@ -84,7 +84,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 
 		await ctx.answerCbQuery(message)
 		return false
-	}
+	},
 })
 
 menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 'change', {
@@ -95,12 +95,12 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 
 		// @ts-expect-error
 		delete ctx.session.selectedSpyEmoji
 		return '.'
-	}
+	},
 })
 
 menu.url(
 	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${(await ctx.wd.reader('menu.spy')).label()}`,
-	async ctx => (await ctx.wd.reader('menu.spy')).url()
+	async ctx => (await ctx.wd.reader('menu.spy')).url(),
 )
 
 menu.url(async ctx => {

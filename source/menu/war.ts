@@ -4,7 +4,7 @@ import {
 	calcHousesCapacity,
 	calcGoldIncome,
 	Constructions,
-	EMOJI
+	EMOJI,
 } from 'bastion-siege-logic'
 
 import {PeopleInConstructions} from '../types'
@@ -109,26 +109,26 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		delete ctx.session.attackTarget
 		ctx.session.people = {
 			...ctx.session.people,
-			barracks: 0
+			barracks: 0,
 		}
 
 		if (targetId === ctx.from!.id) {
 			ctx.session.people = {
 				barracks: 0,
 				houses: 0,
-				wall: 0
+				wall: 0,
 			}
 
 			// Easter egg: attack yourself duplicates gold
 			if (ctx.session.resources.gold > 0) {
 				ctx.session.resources = {
 					...ctx.session.resources,
-					gold: ctx.session.resources.gold * 2
+					gold: ctx.session.resources.gold * 2,
 				}
 			}
 
 			await ctx.replyWithMarkdown(
-				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {titlePrefix: outEmoji.suicide})
+				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {titlePrefix: outEmoji.suicide}),
 			)
 			return '.'
 		}
@@ -138,19 +138,19 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 
 		ctx.session.resources = {
 			...ctx.session.resources,
-			gold: ctx.session.resources.gold + attackerLoot
+			gold: ctx.session.resources.gold + attackerLoot,
 		}
 
 		target.resources = {
 			...target.resources,
-			gold: target.resources.gold + targetLoot
+			gold: target.resources.gold + targetLoot,
 		}
 
 		if (attackerWins) {
 			target.people = {
 				barracks: 0,
 				houses: 0,
-				wall: 0
+				wall: 0,
 			}
 			target.peopleTimestamp = now
 		}
@@ -162,11 +162,11 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			attacker.name = {
 				...attacker.name!,
 				last: undefined,
-				lastChangeLast: now
+				lastChangeLast: now,
 			}
 
 			await ctx.replyWithMarkdown(
-				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {titlePrefix: outEmoji.betrayal})
+				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {titlePrefix: outEmoji.betrayal}),
 			)
 		}
 
@@ -180,7 +180,7 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		}
 
 		return '.'
-	}
+	},
 })
 
 menu.interact(async ctx => `${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`, 'search', {
@@ -188,7 +188,7 @@ menu.interact(async ctx => `${EMOJI.search} ${(await ctx.wd.reader('action.searc
 		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user
 		return '.'
-	}
+	},
 })
 
 menu.manualRow(backButtons)

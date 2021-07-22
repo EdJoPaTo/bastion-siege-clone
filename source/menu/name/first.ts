@@ -68,7 +68,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 	do: ctx => {
 		ctx.session.createFirst = randomItem(UNISEX)
 		return '.'
-	}
+	},
 })
 
 menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
@@ -78,12 +78,12 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 		ctx.session.name = {
 			...(ctx.session.name ?? {}),
 			first: ctx.session.createFirst!,
-			lastChangeFirst: now
+			lastChangeFirst: now,
 		}
 
 		delete ctx.session.createFirst
 		return '..'
-	}
+	},
 })
 
 menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
@@ -92,5 +92,5 @@ menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
 	do: ctx => {
 		delete ctx.session.createLast
 		return '..'
-	}
+	},
 })

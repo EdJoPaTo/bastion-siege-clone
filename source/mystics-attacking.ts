@@ -48,7 +48,7 @@ export function getCurrentMystical(): {qNumber: string; current: number; max: nu
 		qNumber: currentMysticQNumber,
 		current: Math.round(currentHealth),
 		max: calcMysticStrenght(currentMysticQNumber),
-		gold: currentGoldStored
+		gold: currentGoldStored,
 	}
 }
 
@@ -75,12 +75,12 @@ async function tryAttack(telegram: Readonly<Telegram>): Promise<void> {
 
 		let text = ''
 		text += wikidataInfoHeader(await twb.reader('construction.ballista', languageCode), {
-			titlePrefix: won ? outEmoji.win : outEmoji.lose
+			titlePrefix: won ? outEmoji.win : outEmoji.lose,
 		})
 
 		text += '\n\n'
 		text += wikidataInfoHeader(await twb.reader(qNumber, languageCode), {
-			titlePrefix: won ? outEmoji.lose : outEmoji.win
+			titlePrefix: won ? outEmoji.lose : outEmoji.win,
 		})
 		text += '\n'
 
@@ -132,13 +132,13 @@ function calcBattle(mystic: string, session: Session): BattleResult {
 	const townhallChange = calcTownhallChange(mystic, won)
 	session.constructions = {
 		...session.constructions,
-		townhall: Math.max(1, townhall + townhallChange)
+		townhall: Math.max(1, townhall + townhallChange),
 	}
 
 	if (won) {
 		session.resources = {
 			...session.resources,
-			gold: session.resources.gold + currentGoldStored
+			gold: session.resources.gold + currentGoldStored,
 		}
 	} else {
 		const income = calcGoldIncome(constructions.townhall, constructions.houses)
@@ -148,7 +148,7 @@ function calcBattle(mystic: string, session: Session): BattleResult {
 			gold: 0,
 			wood: 0,
 			stone: 0,
-			food: 0
+			food: 0,
 		}
 	}
 
@@ -157,7 +157,7 @@ function calcBattle(mystic: string, session: Session): BattleResult {
 	return {
 		won,
 		gold: won ? currentGoldStored : 0,
-		townhall: townhallChange
+		townhall: townhallChange,
 	}
 }
 

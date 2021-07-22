@@ -3,7 +3,7 @@ import {
 	calcStorageCapacity,
 	EMOJI,
 	ResourceName,
-	Resources
+	Resources,
 } from 'bastion-siege-logic'
 
 import {Context, backButtons} from '../lib/context'
@@ -54,7 +54,7 @@ async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 const resourceMenu = new MenuTemplate(tradeResourceMenuBody)
 
 menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	buttonText: async (ctx, key) => `${EMOJI[key as ResourceName]} ${(await ctx.wd.reader(`resource.${key}`)).label()}`
+	buttonText: async (ctx, key) => `${EMOJI[key as ResourceName]} ${(await ctx.wd.reader(`resource.${key}`)).label()}`,
 })
 
 menu.manualRow(backButtons)
@@ -93,7 +93,7 @@ resourceMenu.choose('buy', buyOptions, {
 		const currentResources = ctx.session.resources
 		ctx.session.resources = buy(currentResources, resource, Number(key))
 		return '.'
-	}
+	},
 })
 
 resourceMenu.url(async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`, async ctx => {

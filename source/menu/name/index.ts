@@ -35,7 +35,7 @@ menu.submenu(ctx => ctx.session.name?.first ?? outEmoji.nameFallback, 'first', f
 
 menu.submenu(ctx => ctx.session.name?.last ?? outEmoji.nameFallback, 'last', lastMenu, {
 	joinLastRow: true,
-	hide: ctx => !ctx.session.name
+	hide: ctx => !ctx.session.name,
 })
 
 menu.manualRow(backButtons)

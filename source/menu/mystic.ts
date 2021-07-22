@@ -34,7 +34,7 @@ export const menu = new MenuTemplate(menuBody)
 
 menu.url(
 	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()} ${(await ctx.wd.reader('menu.mystical')).label()}`,
-	async ctx => (await ctx.wd.reader('menu.mystical')).url()
+	async ctx => (await ctx.wd.reader('menu.mystical')).url(),
 )
 
 menu.url(async ctx => {
