@@ -19,7 +19,7 @@
 		"node": ">=14"
 	},
 	"dependencies": {
-		"@edjopato/telegraf-i18n": "^0.2.0",
+		"@grammyjs/i18n": "^0.3.0",
 		"array-filter-unique": "^2.1.0",
 		"bastion-siege-logic": "^2.0.0",
 		"locale-emoji": "^0.3.0",
@@ -29,8 +29,8 @@
 		"telegraf-inline-menu": "^6.0.0",
 		"telegraf-middleware-console-time": "^2.0.0",
 		"telegraf-session-local": "^2.0.0",
-		"telegraf-wikibase": "^0.10.1",
-		"wikidata-entity-reader": "^2.0.0",
+		"telegraf-wikibase": "^0.11.0",
+		"wikidata-entity-reader": "^3.0.0",
 		"wikidata-person-names": "^1.0.0",
 		"wikidata-sdk": "^7.4.3",
 		"wikidata-sdk-got": "^2.0.1"
@@ -41,7 +41,7 @@
 		"del-cli": "^4.0.0",
 		"ts-node": "^10.0.0",
 		"typescript": "^4.2.2",
-		"xo": "^0.42.0"
+		"xo": "^0.43.0"
 	},
 	"xo": {
 		"semicolon": false,
@@ -51,6 +51,7 @@
 			"@typescript-eslint/no-unsafe-call": "off",
 			"@typescript-eslint/no-unsafe-member-access": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
+			"node/prefer-global/process": "off",
 			"unicorn/prefer-module": "off",
 			"unicorn/prefer-node-protocol": "off"
 		}

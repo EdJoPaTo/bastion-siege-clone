@@ -4,7 +4,7 @@ import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'
 import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
-import {I18n as TelegrafI18n} from '@edjopato/telegraf-i18n'
+import {I18n} from '@grammyjs/i18n'
 
 import {Context} from './lib/context'
 import * as attackingMystics from './mystics-attacking'
@@ -32,7 +32,7 @@ if (process.env['NODE_ENV'] !== 'production') {
 bot.use(userSessions.middleware())
 bot.use(ensureSessionContent.middleware())
 
-const i18n = new TelegrafI18n({
+const i18n = new I18n({
 	directory: 'locales',
 	defaultLanguage: 'en',
 	defaultLanguageOnMissing: true,

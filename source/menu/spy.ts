@@ -1,7 +1,7 @@
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import * as randomItem from 'random-item'
-import WikidataEntityReader from 'wikidata-entity-reader'
+import {WikibaseEntityReader} from 'wikidata-entity-reader'
 import {
 	ConstructionName,
 	CONSTRUCTIONS,
@@ -15,7 +15,7 @@ import * as wdSets from '../lib/wikidata-sets'
 import {formatNamePlain} from '../lib/interface/name'
 import {wikidataInfoHeader} from '../lib/interface/generals'
 
-async function getSpy(ctx: Context): Promise<WikidataEntityReader> {
+async function getSpy(ctx: Context): Promise<WikibaseEntityReader> {
 	if (!ctx.session.selectedSpy) {
 		ctx.session.selectedSpy = wdSets.getRandom('spies')
 	}
