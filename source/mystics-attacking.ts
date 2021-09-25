@@ -27,7 +27,6 @@ function calcMysticStrenght(mystic: string): number {
 		.slice(1)
 		.map(o => Number(o))
 
-	// eslint-disable-next-line unicorn/no-array-reduce
 	const baseStrength = numbersOfQNumber.reduce((a, b) => a + b, 0)
 	return baseStrength
 }

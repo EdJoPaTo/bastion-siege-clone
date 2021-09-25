@@ -90,9 +90,9 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 'change', {
 	joinLastRow: true,
 	do: ctx => {
-		// @ts-expect-error
+		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpy
-		// @ts-expect-error
+		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpyEmoji
 		return '.'
 	},
