@@ -19,7 +19,7 @@
 		"node": ">=14"
 	},
 	"dependencies": {
-		"@grammyjs/i18n": "^0.3.0",
+		"@grammyjs/i18n": "^0.5.0",
 		"array-filter-unique": "^2.1.0",
 		"bastion-siege-logic": "^2.0.0",
 		"locale-emoji": "^0.3.0",
