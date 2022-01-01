@@ -1,5 +1,5 @@
 import {Constructions, calcGoldIncome, EMOJI} from 'bastion-siege-logic'
-import {TelegrafWikibase} from 'telegraf-wikibase/dist/source'
+import {TelegrafWikibase} from 'telegraf-wikibase'
 import {Telegram} from 'telegraf'
 
 import {formatNumberShort} from './lib/interface/format-number'
