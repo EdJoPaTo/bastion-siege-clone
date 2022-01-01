@@ -76,7 +76,7 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	do: ctx => {
 		const now = Date.now() / 1000
 		ctx.session.name = {
-			...(ctx.session.name ?? {}),
+			...ctx.session.name,
 			first: ctx.session.createFirst!,
 			lastChangeFirst: now,
 		}

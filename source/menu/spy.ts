@@ -31,9 +31,8 @@ async function getSpy(ctx: Context): Promise<WikibaseEntityReader> {
 }
 
 function getSpyableConstructions(qNumber: string): ConstructionName[] {
-	const possibleConstructions = qNumber
+	const possibleConstructions = [...qNumber]
 		.slice(1)
-		.split('')
 		.map(o => Number(o))
 		.filter(arrayFilterUnique())
 		.map(o => CONSTRUCTIONS[o]!)

@@ -22,8 +22,7 @@ export function start(telegram: Readonly<Telegram>, telegrafWikibase: TelegrafWi
 }
 
 function calcMysticStrenght(mystic: string): number {
-	const numbersOfQNumber = mystic
-		.split('')
+	const numbersOfQNumber = [...mystic]
 		.slice(1)
 		.map(o => Number(o))
 
