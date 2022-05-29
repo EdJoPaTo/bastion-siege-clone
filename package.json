@@ -11,7 +11,7 @@
 	},
 	"scripts": {
 		"build": "del-cli dist && tsc",
-		"start": "ts-node source/index.ts",
+		"start": "tsc --sourceMap && node --enable-source-maps dist/index.js",
 		"test": "tsc --sourceMap && xo"
 	},
 	"type": "commonjs",
@@ -24,7 +24,6 @@
 		"bastion-siege-logic": "^2.0.0",
 		"locale-emoji": "^0.3.0",
 		"random-item": "^3.0.0",
-		"source-map-support": "^0.5.12",
 		"telegraf": "^4.1.1",
 		"telegraf-inline-menu": "^6.0.0",
 		"telegraf-middleware-console-time": "^2.0.0",
@@ -32,16 +31,15 @@
 		"telegraf-wikibase": "^0.11.0",
 		"wikidata-entity-reader": "^3.0.0",
 		"wikidata-person-names": "^1.0.0",
-		"wikidata-sdk": "^7.4.3",
+		"wikidata-sdk": "^8.0.0",
 		"wikidata-sdk-got": "^2.0.1"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^2.0.0",
 		"@types/node": "^16.11.6",
 		"del-cli": "^4.0.0",
-		"ts-node": "^10.0.0",
 		"typescript": "^4.2.2",
-		"xo": "^0.47.0"
+		"xo": "^0.49.0"
 	},
 	"xo": {
 		"semicolon": false,
@@ -52,10 +50,10 @@
 			"@typescript-eslint/no-unsafe-call": "off",
 			"@typescript-eslint/no-unsafe-member-access": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/restrict-plus-operands": "off",
 			"node/prefer-global/process": "off",
 			"unicorn/no-await-expression-member": "off",
 			"unicorn/prefer-module": "off",
-			"unicorn/prefer-node-protocol": "off",
 			"import/extensions": [
 				"error",
 				"never"

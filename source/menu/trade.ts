@@ -78,17 +78,17 @@ function buyOptions(ctx: Context): string[] {
 		.map(o => o * magnitude)
 		.filter(o => !(o < 100 || o > upperLimitExact))
 		.slice(-6)
-		.map(o => String(o))
+		.map(String)
 }
 
 resourceMenu.choose('buy', buyOptions, {
 	columns: 3,
-	buttonText: (ctx, key) => {
+	buttonText(ctx, key) {
 		const resource = resourceFromCtx(ctx)
 		const numberText = formatNumberShort(Number(key), true)
 		return `${numberText}${EMOJI[resource]}`
 	},
-	do: (ctx, key) => {
+	do(ctx, key) {
 		const resource = resourceFromCtx(ctx)
 		const currentResources = ctx.session.resources
 		ctx.session.resources = buy(currentResources, resource, Number(key))

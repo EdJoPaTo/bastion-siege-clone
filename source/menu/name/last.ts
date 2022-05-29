@@ -81,7 +81,7 @@ export const menu = new MenuTemplate<Context>(menuBody)
 
 menu.interact(outEmoji.nameFallback, 'random', {
 	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
-	do: ctx => {
+	do(ctx) {
 		ctx.session.createLast = randomItem(FAMILY)
 		return '.'
 	},
@@ -92,10 +92,10 @@ menu.choose('existing', getExistingFamilies, {
 	maxRows: 3,
 	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	getCurrentPage: ctx => ctx.session.page,
-	setPage: (ctx, page) => {
+	setPage(ctx, page) {
 		ctx.session.page = page
 	},
-	do: (ctx, key) => {
+	do(ctx, key) {
 		ctx.session.createLast = key
 		return '.'
 	},
@@ -103,7 +103,7 @@ menu.choose('existing', getExistingFamilies, {
 
 menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('name.loseLastName').then(r => r.label())}`, 'looseLastName', {
 	hide: ctx => !canChangeLastName(ctx.session.name) || !ctx.session.name.last,
-	do: ctx => {
+	do(ctx) {
 		ctx.session.createLast = false
 		return '.'
 	},
@@ -111,7 +111,7 @@ menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('n
 
 menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	hide: ctx => ctx.session.createLast === undefined || !canChangeLastName(ctx.session.name),
-	do: ctx => {
+	do(ctx) {
 		const now = Date.now() / 1000
 		const {createLast} = ctx.session
 		const nextLast = createLast ? createLast : undefined
@@ -129,7 +129,7 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 
 menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
 	joinLastRow: true,
-	do: ctx => {
+	do(ctx) {
 		delete ctx.session.createLast
 		return '..'
 	},

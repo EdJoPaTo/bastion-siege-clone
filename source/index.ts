@@ -1,4 +1,4 @@
-import {existsSync, readFileSync} from 'fs'
+import {existsSync, readFileSync} from 'node:fs'
 
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'

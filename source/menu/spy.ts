@@ -33,7 +33,7 @@ async function getSpy(ctx: Context): Promise<WikibaseEntityReader> {
 function getSpyableConstructions(qNumber: string): ConstructionName[] {
 	const possibleConstructions = [...qNumber]
 		.slice(1)
-		.map(o => Number(o))
+		.map(Number)
 		.filter(arrayFilterUnique())
 		.map(o => CONSTRUCTIONS[o]!)
 
@@ -60,7 +60,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 export const menu = new MenuTemplate(menuBody)
 
 menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`, 'espionage', {
-	do: async ctx => {
+	async do(ctx) {
 		const possibleSessions = userSessions.getRaw()
 			.filter(o => o.data.name)
 
@@ -88,7 +88,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 
 menu.interact(async ctx => `${(await ctx.wd.reader('action.change')).label()}`, 'change', {
 	joinLastRow: true,
-	do: ctx => {
+	do(ctx) {
 		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpy
 		// @ts-expect-error delete non optional. It gets set automatically by middleware

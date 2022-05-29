@@ -26,18 +26,18 @@ async function languageMenuBody(ctx: Context): Promise<Body> {
 
 menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	columns: 3,
-	buttonText: (_, key) => {
+	buttonText(_, key) {
 		const flag = flagString(key)
 		return `${flag} ${key}`
 	},
 	isSet: (ctx, key) => key === ctx.wd.locale(),
-	set: (ctx, key) => {
+	set(ctx, key) {
 		ctx.i18n.locale(key)
 		ctx.wd.locale(key)
 		return true
 	},
 	getCurrentPage: ctx => ctx.session.page,
-	setPage: (ctx, page) => {
+	setPage(ctx, page) {
 		ctx.session.page = page
 	},
 })

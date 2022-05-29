@@ -43,7 +43,7 @@ async function constructionBody(ctx: Context): Promise<Body> {
 }
 
 menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).label()}`, 'upgrade', {
-	hide: ctx => {
+	hide(ctx) {
 		const {constructions} = ctx.session
 		const {construction, level} = constructionFromCtx(ctx)
 		const requiredResources = calcBuildingCost(construction, level)
@@ -52,7 +52,7 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 		const minutes = calcMinutesNeeded(requiredResources, constructions, currentResources)
 		return minutes > 0
 	},
-	do: ctx => {
+	do(ctx) {
 		const {construction, level} = constructionFromCtx(ctx)
 		const requiredResources = calcBuildingCost(construction, level)
 		const currentResources = ctx.session.resources

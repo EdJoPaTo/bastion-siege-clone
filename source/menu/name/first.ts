@@ -65,7 +65,7 @@ export const menu = new MenuTemplate<Context>(menuBody)
 
 menu.interact(outEmoji.nameFallback, 'random', {
 	hide: ctx => !canChangeFirstName(ctx.session.name),
-	do: ctx => {
+	do(ctx) {
 		ctx.session.createFirst = randomItem(UNISEX)
 		return '.'
 	},
@@ -73,7 +73,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 
 menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	hide: ctx => !ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
-	do: ctx => {
+	do(ctx) {
 		const now = Date.now() / 1000
 		ctx.session.name = {
 			...ctx.session.name,
@@ -89,7 +89,7 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
 	joinLastRow: true,
 	hide: ctx => !ctx.session.name,
-	do: ctx => {
+	do(ctx) {
 		delete ctx.session.createLast
 		return '..'
 	},

@@ -9,5 +9,4 @@ node_modules
 test
 
 # botfiles
-bot-token.txt
 persist
