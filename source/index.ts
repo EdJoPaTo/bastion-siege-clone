@@ -7,7 +7,6 @@ import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
 import {I18n} from '@grammyjs/i18n'
 
 import {Context} from './lib/context'
-import * as attackingMystics from './mystics-attacking'
 import * as ensureSessionContent from './lib/session-state-math'
 import * as userSessions from './lib/user-sessions'
 import * as wdSets from './lib/wikidata-sets'
@@ -56,8 +55,6 @@ bot.use(async (ctx, next) => {
 	delete ctx.session.blocked
 	return next()
 })
-
-attackingMystics.start(bot.telegram, twb)
 
 const menuMiddleware = new MenuMiddleware('/', menu)
 bot.command('start', async ctx => menuMiddleware.replyToContext(ctx))

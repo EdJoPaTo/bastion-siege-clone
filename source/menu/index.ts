@@ -11,7 +11,6 @@ import {resources} from '../lib/interface/resource'
 import {buildingsMenu, workshopMenu} from './constructions'
 import {menu as familyMenu} from './family'
 import {menu as languageMenu} from './languages'
-import {menu as mysticsMenu} from './mystic'
 import {menu as nameMenu} from './name'
 import {menu as spyMenu} from './spy'
 import {menu as statsMenu} from './stats'
@@ -62,12 +61,7 @@ menu.submenu(buttonText(EMOJI.trade, 'bs.trade'), 'trade', tradeMenu, {
 	joinLastRow: true,
 })
 
-menu.submenu(buttonText(EMOJI.dragon, 'menu.mystical'), 'mystic', mysticsMenu, {
-	hide: ctx => !ctx.session.name,
-})
-
 menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
-	joinLastRow: true,
 	hide: ctx => !ctx.session.name,
 })
 

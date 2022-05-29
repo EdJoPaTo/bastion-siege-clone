@@ -1,15 +1,9 @@
 import * as randomItem from 'random-item'
 import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 
-export type Query = 'mystics' | 'spies'
+export type Query = 'spies'
 
 const queries: Record<Query, string> = {
-	mystics: `SELECT DISTINCT ?item WHERE {
-?item wdt:P31*/wdt:P279* wd:Q2239243.
-?item rdfs:label ?label.
-?item wdt:P18 ?image.
-FILTER(LANG(?label) = "en")
-}`,
 	spies: `SELECT DISTINCT ?item WHERE {
 ?item wdt:P279+ wd:Q729.
 ?item wdt:P487 ?emoji.
@@ -17,7 +11,6 @@ FILTER(LANG(?label) = "en")
 }
 
 const entities: Record<Query, string[]> = {
-	mystics: [],
 	spies: [],
 }
 
