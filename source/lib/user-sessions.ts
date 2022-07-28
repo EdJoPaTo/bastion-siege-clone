@@ -1,7 +1,7 @@
 import * as randomItem from 'random-item'
 import * as LocalSession from 'telegraf-session-local'
 
-import {Context, Session} from './context'
+import {Context, Session} from './context.js'
 
 interface SessionRawEntry {
 	readonly user: number;

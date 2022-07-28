@@ -1,11 +1,11 @@
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 
-import {Context, backButtons} from '../../lib/context'
-import {formatNamePlain} from '../../lib/interface/name'
-import {outEmoji} from '../../lib/interface/generals'
+import {Context, backButtons} from '../../lib/context.js'
+import {formatNamePlain} from '../../lib/interface/name.js'
+import {outEmoji} from '../../lib/interface/generals.js'
 
-import {menu as firstMenu} from './first'
-import {menu as lastMenu} from './last'
+import {menu as firstMenu} from './first.js'
+import {menu as lastMenu} from './last.js'
 
 async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''

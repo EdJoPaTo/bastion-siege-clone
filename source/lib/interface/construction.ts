@@ -15,11 +15,11 @@ import {
 	ResourceName,
 } from 'bastion-siege-logic'
 
-import {PeopleInConstructions} from '../../types'
-import {Context} from '../context'
+import {PeopleInConstructions} from '../../types.js'
+import {Context} from '../context.js'
 
-import {formatNumberShort} from './format-number'
-import {possibleEmoji, wikidataInfoHeader} from './generals'
+import {formatNumberShort} from './format-number.js'
+import {possibleEmoji, wikidataInfoHeader} from './generals.js'
 
 export async function constructionLine(ctx: Context, construction: ConstructionName, level: number, canUpgrade: boolean): Promise<string> {
 	const reader = await ctx.wd.reader(`construction.${construction}`)

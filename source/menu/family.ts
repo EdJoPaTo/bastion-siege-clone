@@ -1,9 +1,9 @@
 import {EMOJI} from 'bastion-siege-logic'
 import {MenuTemplate, Body} from 'telegraf-inline-menu'
 
-import {Context, backButtons, Session} from '../lib/context'
-import {randomFamilyEmoji} from '../lib/interface/generals'
-import {getRaw} from '../lib/user-sessions'
+import {Context, backButtons, Session} from '../lib/context.js'
+import {randomFamilyEmoji} from '../lib/interface/generals.js'
+import {getRaw} from '../lib/user-sessions.js'
 
 function getFamilyMembers(lastName: string): Session[] {
 	return getRaw()

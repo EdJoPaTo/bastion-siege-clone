@@ -7,10 +7,10 @@ import {
 	Resources,
 } from 'bastion-siege-logic'
 
-import {Context} from '../context'
+import {Context} from '../context.js'
 
-import {formatNumberShort} from './format-number'
-import {possibleEmoji} from './generals'
+import {formatNumberShort} from './format-number.js'
+import {possibleEmoji} from './generals.js'
 
 export async function resourceLine(ctx: Context, resource: ResourceName, amount: number): Promise<string> {
 	const reader = await ctx.wd.reader(`resource.${resource}`)

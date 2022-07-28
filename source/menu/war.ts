@@ -7,15 +7,15 @@ import {
 	EMOJI,
 } from 'bastion-siege-logic'
 
-import {PeopleInConstructions} from '../types'
+import {PeopleInConstructions} from '../types.js'
 
-import * as userSessions from '../lib/user-sessions'
+import * as userSessions from '../lib/user-sessions.js'
 
-import {Context, Name, backButtons} from '../lib/context'
-import {formatNamePlain} from '../lib/interface/name'
-import {formatNumberShort} from '../lib/interface/format-number'
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
-import {peopleString} from '../lib/interface/construction'
+import {Context, Name, backButtons} from '../lib/context.js'
+import {formatNamePlain} from '../lib/interface/name.js'
+import {formatNumberShort} from '../lib/interface/format-number.js'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
+import {peopleString} from '../lib/interface/construction.js'
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60

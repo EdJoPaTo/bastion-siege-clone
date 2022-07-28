@@ -4,10 +4,10 @@ import {
 	EMOJI,
 } from 'bastion-siege-logic'
 
-import {Context, Session, backButtons} from '../lib/context'
-import * as userSessions from '../lib/user-sessions'
+import {Context, Session, backButtons} from '../lib/context.js'
+import * as userSessions from '../lib/user-sessions.js'
 
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals'
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
 
 async function menuBody(ctx: Context): Promise<Body> {
 	const allSessions = userSessions.getRaw()

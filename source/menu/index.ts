@@ -2,20 +2,20 @@ import {MenuTemplate, Body} from 'telegraf-inline-menu'
 
 import {EMOJI} from 'bastion-siege-logic'
 
-import {Context} from '../lib/context'
+import {Context} from '../lib/context.js'
 
-import {formatNamePlain} from '../lib/interface/name'
-import {outEmoji, wikidataInfoHeader, randomFamilyEmoji} from '../lib/interface/generals'
-import {resources} from '../lib/interface/resource'
+import {formatNamePlain} from '../lib/interface/name.js'
+import {outEmoji, wikidataInfoHeader, randomFamilyEmoji} from '../lib/interface/generals.js'
+import {resources} from '../lib/interface/resource.js'
 
-import {buildingsMenu, workshopMenu} from './constructions'
-import {menu as familyMenu} from './family'
-import {menu as languageMenu} from './languages'
-import {menu as nameMenu} from './name'
-import {menu as spyMenu} from './spy'
-import {menu as statsMenu} from './stats'
-import {menu as tradeMenu} from './trade'
-import {menu as warMenu} from './war'
+import {buildingsMenu, workshopMenu} from './constructions.js'
+import {menu as familyMenu} from './family.js'
+import {menu as languageMenu} from './languages.js'
+import {menu as nameMenu} from './name/index.js'
+import {menu as spyMenu} from './spy.js'
+import {menu as statsMenu} from './stats.js'
+import {menu as tradeMenu} from './trade.js'
+import {menu as warMenu} from './war.js'
 
 async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''

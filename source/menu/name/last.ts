@@ -3,11 +3,11 @@ import {MenuTemplate, Body} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import * as randomItem from 'random-item'
 
-import {Context, Name} from '../../lib/context'
-import {formatNamePlain} from '../../lib/interface/name'
-import {getRaw} from '../../lib/user-sessions'
-import {HOUR, MINUTE} from '../../lib/unix-time'
-import {outEmoji} from '../../lib/interface/generals'
+import {Context, Name} from '../../lib/context.js'
+import {formatNamePlain} from '../../lib/interface/name.js'
+import {getRaw} from '../../lib/user-sessions.js'
+import {HOUR, MINUTE} from '../../lib/unix-time.js'
+import {outEmoji} from '../../lib/interface/generals.js'
 
 const CHANGE_EACH_SECONDS = HOUR * 22
 

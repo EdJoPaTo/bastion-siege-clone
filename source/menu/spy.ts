@@ -8,12 +8,12 @@ import {
 	EMOJI,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context'
-import * as userSessions from '../lib/user-sessions'
-import * as wdSets from '../lib/wikidata-sets'
+import {Context, backButtons} from '../lib/context.js'
+import * as userSessions from '../lib/user-sessions.js'
+import * as wdSets from '../lib/wikidata-sets.js'
 
-import {formatNamePlain} from '../lib/interface/name'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {formatNamePlain} from '../lib/interface/name.js'
+import {wikidataInfoHeader} from '../lib/interface/generals.js'
 
 async function getSpy(ctx: Context): Promise<WikibaseEntityReader> {
 	if (!ctx.session.selectedSpy) {
@@ -79,7 +79,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 		message += EMOJI[pickedConstructionKey]
 		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`)).label()
 		message += ' '
-		message += pickedConstructionLevel
+		message += pickedConstructionLevel.toFixed(0)
 
 		await ctx.answerCbQuery(message)
 		return false

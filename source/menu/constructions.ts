@@ -10,12 +10,12 @@ import {
 	WORKSHOP,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context'
+import {Context, backButtons} from '../lib/context.js'
 
-import {constructionLine} from '../lib/interface/construction'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {constructionLine} from '../lib/interface/construction.js'
+import {wikidataInfoHeader} from '../lib/interface/generals.js'
 
-import {menu as entryMenu} from './construction'
+import {menu as entryMenu} from './construction.js'
 
 function canUpgrade(constructions: Constructions, construction: ConstructionName, currentResources: Resources): boolean {
 	const cost = calcBuildingCost(construction, constructions[construction])

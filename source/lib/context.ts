@@ -4,7 +4,7 @@ import {createBackMainMenuButtons} from 'telegraf-inline-menu'
 import {I18nContext} from '@grammyjs/i18n'
 import {MiddlewareProperty} from 'telegraf-wikibase'
 
-import {PeopleInConstructions} from '../types'
+import {PeopleInConstructions} from '../types.js'
 
 type UnixSeconds = number
 

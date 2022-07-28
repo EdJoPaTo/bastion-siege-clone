@@ -6,10 +6,10 @@ import {
 	ConstructionName,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context'
+import {Context, backButtons} from '../lib/context.js'
 
-import {infoHeader, constructionPropertyString} from '../lib/interface/construction'
-import {constructionResources} from '../lib/interface/resource'
+import {infoHeader, constructionPropertyString} from '../lib/interface/construction.js'
+import {constructionResources} from '../lib/interface/resource.js'
 
 export const menu = new MenuTemplate<Context>(constructionBody)
 

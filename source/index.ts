@@ -1,4 +1,5 @@
 import {existsSync, readFileSync} from 'node:fs'
+import * as process from 'node:process'
 
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'
@@ -6,14 +7,14 @@ import {Telegraf} from 'telegraf'
 import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
 import {I18n} from '@grammyjs/i18n'
 
-import {Context} from './lib/context'
-import * as ensureSessionContent from './lib/session-state-math'
-import * as userSessions from './lib/user-sessions'
-import * as wdSets from './lib/wikidata-sets'
+import {Context} from './lib/context.js'
+import * as ensureSessionContent from './lib/session-state-math.js'
+import * as userSessions from './lib/user-sessions.js'
+import * as wdSets from './lib/wikidata-sets.js'
 
-import {menu} from './menu'
+import {menu} from './menu/index.js'
 
-process.title = 'bs-clone-tgbot'
+(process as any).title = 'bs-clone-tgbot'
 
 const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/secrets/bot-token.txt', 'utf8').trim())
 	|| (existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim())

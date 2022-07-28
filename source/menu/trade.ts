@@ -6,11 +6,11 @@ import {
 	Resources,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context'
+import {Context, backButtons} from '../lib/context.js'
 
-import {formatNumberShort} from '../lib/interface/format-number'
-import {resources} from '../lib/interface/resource'
-import {wikidataInfoHeader} from '../lib/interface/generals'
+import {formatNumberShort} from '../lib/interface/format-number.js'
+import {resources} from '../lib/interface/resource.js'
+import {wikidataInfoHeader} from '../lib/interface/generals.js'
 
 function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
 	const result = {...currentResources}
