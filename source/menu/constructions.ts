@@ -1,29 +1,37 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 import {
 	BUILDINGS,
 	calcBuildingCost,
 	calcMinutesNeeded,
-	ConstructionName,
-	Constructions,
+	type ConstructionName,
+	type Constructions,
 	EMOJI,
-	Resources,
+	type Resources,
 	WORKSHOP,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context.js'
+import {backButtons, type Context} from '../lib/context.js'
 
 import {constructionLine} from '../lib/interface/construction.js'
 import {wikidataInfoHeader} from '../lib/interface/generals.js'
 
 import {menu as entryMenu} from './construction.js'
 
-function canUpgrade(constructions: Constructions, construction: ConstructionName, currentResources: Resources): boolean {
+function canUpgrade(
+	constructions: Constructions,
+	construction: ConstructionName,
+	currentResources: Resources,
+): boolean {
 	const cost = calcBuildingCost(construction, constructions[construction])
 	const minutesNeeded = calcMinutesNeeded(cost, constructions, currentResources)
 	return minutesNeeded === 0
 }
 
-async function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop', entries: readonly ConstructionName[]): Promise<Body> {
+async function constructionMenuBody(
+	ctx: Context,
+	key: 'buildings' | 'workshop',
+	entries: readonly ConstructionName[],
+): Promise<Body> {
 	const wdKey = `bs.${key}`
 	const currentResources = ctx.session.resources
 	const {constructions} = ctx.session
@@ -41,7 +49,10 @@ async function constructionMenuBody(ctx: Context, key: 'buildings' | 'workshop',
 	return {text, parse_mode: 'Markdown'}
 }
 
-async function constructionButtonTextFunc(ctx: Context, key: string): Promise<string> {
+async function constructionButtonTextFunc(
+	ctx: Context,
+	key: string,
+): Promise<string> {
 	const wdKey = `construction.${key}`
 	return `${EMOJI[key as ConstructionName]} ${(await ctx.wd.reader(wdKey)).label()}`
 }

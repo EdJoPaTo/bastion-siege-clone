@@ -4,10 +4,10 @@ import * as process from 'node:process'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {MenuMiddleware} from 'telegraf-inline-menu'
 import {Telegraf} from 'telegraf'
-import {TelegrafWikibase, resourceKeysFromYaml} from 'telegraf-wikibase'
+import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
 import {I18n} from '@grammyjs/i18n'
 
-import {Context} from './lib/context.js'
+import {type Context} from './lib/context.js'
 import * as ensureSessionContent from './lib/session-state-math.js'
 import * as userSessions from './lib/user-sessions.js'
 import * as wdSets from './lib/wikidata-sets.js'
@@ -20,7 +20,9 @@ const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/se
 	|| (existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim())
 	|| process.env['BOT_TOKEN']
 if (!token) {
-	throw new Error('You have to provide the bot-token from @BotFather via file (bot-token.txt) or environment variable (BOT_TOKEN)')
+	throw new Error(
+		'You have to provide the bot-token from @BotFather via file (bot-token.txt) or environment variable (BOT_TOKEN)',
+	)
 }
 
 const bot = new Telegraf<Context>(token)

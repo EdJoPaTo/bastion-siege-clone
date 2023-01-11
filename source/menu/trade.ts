@@ -1,12 +1,7 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
-import {
-	calcStorageCapacity,
-	EMOJI,
-	ResourceName,
-	Resources,
-} from 'bastion-siege-logic'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {calcStorageCapacity, EMOJI, type ResourceName, type Resources} from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context.js'
+import {backButtons, type Context} from '../lib/context.js'
 
 import {formatNumberShort} from '../lib/interface/format-number.js'
 import {resources} from '../lib/interface/resource.js'

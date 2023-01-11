@@ -37,7 +37,7 @@
 		"@sindresorhus/tsconfig": "^3.0.1",
 		"@types/node": "^18.6.2",
 		"typescript": "^4.2.2",
-		"xo": "^0.51.0"
+		"xo": "^0.53.1"
 	},
 	"xo": {
 		"semicolon": false,
@@ -48,7 +48,8 @@
 			"@typescript-eslint/no-unsafe-call": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
 			"unicorn/no-await-expression-member": "off",
-			"unicorn/prefer-module": "off"
+			"unicorn/prefer-module": "off",
+			"unicorn/prefer-top-level-await": "off"
 		}
 	}
 }

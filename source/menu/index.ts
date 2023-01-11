@@ -1,11 +1,11 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 
 import {EMOJI} from 'bastion-siege-logic'
 
-import {Context} from '../lib/context.js'
+import {type Context} from '../lib/context.js'
 
 import {formatNamePlain} from '../lib/interface/name.js'
-import {outEmoji, wikidataInfoHeader, randomFamilyEmoji} from '../lib/interface/generals.js'
+import {outEmoji, randomFamilyEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
 import {resources} from '../lib/interface/resource.js'
 
 import {buildingsMenu, workshopMenu} from './constructions.js'
@@ -37,7 +37,10 @@ async function menuBody(ctx: Context): Promise<Body> {
 
 export const menu = new MenuTemplate(menuBody)
 
-function buttonText(emoji: string, resourceKey: string): (ctx: Context) => Promise<string> {
+function buttonText(
+	emoji: string,
+	resourceKey: string,
+): (ctx: Context) => Promise<string> {
 	return async ctx => `${emoji} ${(await ctx.wd.reader(resourceKey)).label()}`
 }
 

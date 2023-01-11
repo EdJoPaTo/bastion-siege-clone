@@ -1,5 +1,5 @@
 import * as randomItem from 'random-item'
-import {WikibaseEntityReader} from 'wikidata-entity-reader'
+import {type WikibaseEntityReader} from 'wikidata-entity-reader'
 
 export const outEmoji = {
 	activeUser: '💙',
@@ -29,12 +29,15 @@ export function randomFamilyEmoji(): string {
 	return randomItem(FAMILY_EMOJIS)
 }
 
-interface InfoHeaderOptions {
+type InfoHeaderOptions = {
 	titlePrefix?: string;
 	titleSuffix?: string;
 }
 
-export function wikidataInfoHeader(wdr: WikibaseEntityReader, options: InfoHeaderOptions = {}): string {
+export function wikidataInfoHeader(
+	wdr: WikibaseEntityReader,
+	options: InfoHeaderOptions = {},
+): string {
 	const {titlePrefix, titleSuffix} = options
 	const label = wdr.label()
 	const description = wdr.description()

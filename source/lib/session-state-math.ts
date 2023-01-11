@@ -7,9 +7,9 @@ import {
 	estimateResourcesAfter,
 } from 'bastion-siege-logic'
 
-import {PeopleInConstructions} from '../types.js'
+import {type PeopleInConstructions} from '../types.js'
 
-import {Context, Session} from './context.js'
+import {type Context, type Session} from './context.js'
 
 const GAME_SPEEDUP = 30
 

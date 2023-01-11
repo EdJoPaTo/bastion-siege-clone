@@ -1,19 +1,21 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 import {
 	calcBuildingCost,
 	calcMinutesNeeded,
 	calcResourcesAfterConstruction,
-	ConstructionName,
+	type ConstructionName,
 } from 'bastion-siege-logic'
 
-import {Context, backButtons} from '../lib/context.js'
+import {backButtons, type Context} from '../lib/context.js'
 
-import {infoHeader, constructionPropertyString} from '../lib/interface/construction.js'
+import {constructionPropertyString, infoHeader} from '../lib/interface/construction.js'
 import {constructionResources} from '../lib/interface/resource.js'
 
 export const menu = new MenuTemplate<Context>(constructionBody)
 
-function constructionFromCtx(ctx: Context): {construction: ConstructionName; level: number} {
+function constructionFromCtx(
+	ctx: Context,
+): {construction: ConstructionName; level: number} {
 	const construction = ctx.match![1] as ConstructionName
 	const {constructions} = ctx.session
 	const level = constructions[construction]
@@ -66,11 +68,14 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 	},
 })
 
-menu.url(async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`, async ctx => {
-	const {construction} = constructionFromCtx(ctx)
-	const wdKey = `construction.${construction}`
-	const reader = await ctx.wd.reader(wdKey)
-	return reader.url()
-})
+menu.url(
+	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
+	async ctx => {
+		const {construction} = constructionFromCtx(ctx)
+		const wdKey = `construction.${construction}`
+		const reader = await ctx.wd.reader(wdKey)
+		return reader.url()
+	},
+)
 
 menu.manualRow(backButtons)

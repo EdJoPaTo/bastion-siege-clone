@@ -1,10 +1,7 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
-import {
-	ConstructionName,
-	EMOJI,
-} from 'bastion-siege-logic'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type ConstructionName, EMOJI} from 'bastion-siege-logic'
 
-import {Context, Session, backButtons} from '../lib/context.js'
+import {backButtons, type Context, type Session} from '../lib/context.js'
 import * as userSessions from '../lib/user-sessions.js'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
@@ -29,7 +26,11 @@ async function menuBody(ctx: Context): Promise<Body> {
 	return {text, parse_mode: 'Markdown'}
 }
 
-async function maxConstructionLevelLine(ctx: Context, sessions: readonly Session[], construction: ConstructionName): Promise<string> {
+async function maxConstructionLevelLine(
+	ctx: Context,
+	sessions: readonly Session[],
+	construction: ConstructionName,
+): Promise<string> {
 	return `${EMOJI[construction]} ≤${Math.max(...sessions.map(o => o.constructions[construction]))} ${(await ctx.wd.reader(`construction.${construction}`)).label()}`
 }
 

@@ -1,17 +1,17 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 import {
 	calcBarracksCapacity,
-	calcHousesCapacity,
 	calcGoldIncome,
-	Constructions,
+	calcHousesCapacity,
+	type Constructions,
 	EMOJI,
 } from 'bastion-siege-logic'
 
-import {PeopleInConstructions} from '../types.js'
+import {type PeopleInConstructions} from '../types.js'
 
 import * as userSessions from '../lib/user-sessions.js'
 
-import {Context, Name, backButtons} from '../lib/context.js'
+import {backButtons, type Context, type Name} from '../lib/context.js'
 import {formatNamePlain} from '../lib/interface/name.js'
 import {formatNumberShort} from '../lib/interface/format-number.js'
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
@@ -65,9 +65,19 @@ async function menuBody(ctx: Context): Promise<Body> {
 	let text = ''
 	text += wikidataInfoHeader(await ctx.wd.reader('bs.war'), {titlePrefix: EMOJI.war})
 	text += '\n\n'
-	text += peopleString((await ctx.wd.reader('bs.army')).label(), people.barracks, calcBarracksCapacity(constructions.barracks), EMOJI.army)
+	text += peopleString(
+		(await ctx.wd.reader('bs.army')).label(),
+		people.barracks,
+		calcBarracksCapacity(constructions.barracks),
+		EMOJI.army,
+	)
 	text += '\n'
-	text += peopleString((await ctx.wd.reader('bs.people')).label(), people.houses, calcHousesCapacity(constructions.houses), EMOJI.people)
+	text += peopleString(
+		(await ctx.wd.reader('bs.people')).label(),
+		people.houses,
+		calcHousesCapacity(constructions.houses),
+		EMOJI.people,
+	)
 	text += '\n'
 
 	text += '\n'
@@ -172,7 +182,7 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 
 		if (!target.blocked) {
 			try {
-				await ctx.tg.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), {parse_mode: 'Markdown'})
+				await ctx.telegram.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), {parse_mode: 'Markdown'})
 			} catch (error: unknown) {
 				console.error('send defender battlereport failed', targetId, error instanceof Error ? error.message : error)
 				target.blocked = true

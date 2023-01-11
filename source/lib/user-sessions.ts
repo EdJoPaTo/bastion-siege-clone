@@ -1,9 +1,9 @@
 import * as randomItem from 'random-item'
 import * as LocalSession from 'telegraf-session-local'
 
-import {Context, Session} from './context.js'
+import {type Context, type Session} from './context.js'
 
-interface SessionRawEntry {
+type SessionRawEntry = {
 	readonly user: number;
 	readonly data: Session;
 }
@@ -36,7 +36,9 @@ export function getUser(userId: number): Session | undefined {
 		.value()
 }
 
-export function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): SessionRawEntry {
+export function getRandomUser(
+	filter: (o: SessionRawEntry) => boolean = () => true,
+): SessionRawEntry {
 	const rawArray = getRaw()
 		.filter(o => filter(o))
 	return randomItem(rawArray)

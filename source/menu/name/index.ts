@@ -1,6 +1,6 @@
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 
-import {Context, backButtons} from '../../lib/context.js'
+import {backButtons, type Context} from '../../lib/context.js'
 import {formatNamePlain} from '../../lib/interface/name.js'
 import {outEmoji} from '../../lib/interface/generals.js'
 

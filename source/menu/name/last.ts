@@ -1,9 +1,9 @@
 import {FAMILY} from 'wikidata-person-names'
-import {MenuTemplate, Body} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import * as randomItem from 'random-item'
 
-import {Context, Name} from '../../lib/context.js'
+import {type Context, type Name} from '../../lib/context.js'
 import {formatNamePlain} from '../../lib/interface/name.js'
 import {getRaw} from '../../lib/user-sessions.js'
 import {HOUR, MINUTE} from '../../lib/unix-time.js'
@@ -114,6 +114,7 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	do(ctx) {
 		const now = Date.now() / 1000
 		const {createLast} = ctx.session
+		// eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
 		const nextLast = createLast ? createLast : undefined
 
 		ctx.session.name = {

@@ -1,21 +1,21 @@
-import {Constructions, Resources} from 'bastion-siege-logic'
-import {Context as TelegrafContext} from 'telegraf'
+import {type Constructions, type Resources} from 'bastion-siege-logic'
+import {type Context as TelegrafContext} from 'telegraf'
 import {createBackMainMenuButtons} from 'telegraf-inline-menu'
-import {I18nContext} from '@grammyjs/i18n'
-import {MiddlewareProperty} from 'telegraf-wikibase'
+import {type I18nContext} from '@grammyjs/i18n'
+import {type MiddlewareProperty} from 'telegraf-wikibase'
 
-import {PeopleInConstructions} from '../types.js'
+import {type PeopleInConstructions} from '../types.js'
 
 type UnixSeconds = number
 
-export interface Name {
+export type Name = {
 	readonly first: string;
 	readonly last?: string;
 	readonly lastChangeFirst?: UnixSeconds;
 	readonly lastChangeLast?: UnixSeconds;
 }
 
-export interface Session {
+export type Session = {
 	__wikibase_language_code?: string;
 	attackTarget?: number;
 	blocked?: boolean;
@@ -32,7 +32,7 @@ export interface Session {
 	selectedSpyEmoji: string;
 }
 
-export interface Context extends TelegrafContext {
+export type Context = TelegrafContext & {
 	readonly i18n: I18nContext;
 	readonly match: RegExpExecArray | undefined;
 	readonly session: Session;
