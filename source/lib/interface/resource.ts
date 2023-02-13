@@ -7,7 +7,7 @@ import {
 	type Resources,
 } from 'bastion-siege-logic'
 
-import {type Context} from '../context.js'
+import type {Context} from '../context.js'
 
 import {formatNumberShort} from './format-number.js'
 import {possibleEmoji} from './generals.js'

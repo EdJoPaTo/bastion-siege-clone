@@ -2,7 +2,7 @@ import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 
 import {EMOJI} from 'bastion-siege-logic'
 
-import {type Context} from '../lib/context.js'
+import type {Context} from '../lib/context.js'
 
 import {formatNamePlain} from '../lib/interface/name.js'
 import {outEmoji, randomFamilyEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'

@@ -1,10 +1,10 @@
-import {type Constructions, type Resources} from 'bastion-siege-logic'
-import {type Context as TelegrafContext} from 'telegraf'
 import {createBackMainMenuButtons} from 'telegraf-inline-menu'
-import {type I18nContext} from '@grammyjs/i18n'
-import {type MiddlewareProperty} from 'telegraf-wikibase'
+import type {Constructions, Resources} from 'bastion-siege-logic'
+import type {Context as TelegrafContext} from 'telegraf'
+import type {I18nContext} from '@grammyjs/i18n'
+import type {MiddlewareProperty} from 'telegraf-wikibase'
 
-import {type PeopleInConstructions} from '../types.js'
+import type {PeopleInConstructions} from '../types.js'
 
 type UnixSeconds = number
 

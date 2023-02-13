@@ -7,7 +7,7 @@ import {
 	EMOJI,
 } from 'bastion-siege-logic'
 
-import {type PeopleInConstructions} from '../types.js'
+import type {PeopleInConstructions} from '../types.js'
 
 import * as userSessions from '../lib/user-sessions.js'
 

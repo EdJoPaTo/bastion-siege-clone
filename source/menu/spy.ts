@@ -1,8 +1,8 @@
 import {type Body, MenuTemplate} from 'telegraf-inline-menu'
-import arrayFilterUnique from 'array-filter-unique'
-import * as randomItem from 'random-item'
-import {type WikibaseEntityReader} from 'wikidata-entity-reader'
 import {type ConstructionName, CONSTRUCTIONS, EMOJI} from 'bastion-siege-logic'
+import * as randomItem from 'random-item'
+import arrayFilterUnique from 'array-filter-unique'
+import type {WikibaseEntityReader} from 'wikidata-entity-reader'
 
 import {backButtons, type Context} from '../lib/context.js'
 import * as userSessions from '../lib/user-sessions.js'

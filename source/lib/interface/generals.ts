@@ -1,5 +1,5 @@
 import * as randomItem from 'random-item'
-import {type WikibaseEntityReader} from 'wikidata-entity-reader'
+import type {WikibaseEntityReader} from 'wikidata-entity-reader'
 
 export const outEmoji = {
 	activeUser: '💙',

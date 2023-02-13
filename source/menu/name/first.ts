@@ -2,10 +2,10 @@ import {type Body, MenuTemplate} from 'telegraf-inline-menu'
 import {UNISEX} from 'wikidata-person-names'
 import * as randomItem from 'random-item'
 
-import {type Context, type Name} from '../../lib/context.js'
 import {DAY, MINUTE} from '../../lib/unix-time.js'
 import {formatNamePlain} from '../../lib/interface/name.js'
 import {outEmoji} from '../../lib/interface/generals.js'
+import type {Context, Name} from '../../lib/context.js'
 
 const CHANGE_EACH_SECONDS = DAY * 7
 

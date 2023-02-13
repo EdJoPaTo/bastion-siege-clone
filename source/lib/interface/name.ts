@@ -1,4 +1,4 @@
-import {type Name} from '../context.js'
+import type {Name} from '../context.js'
 
 export function formatNamePlain(name: Name): string {
 	let text = name.first

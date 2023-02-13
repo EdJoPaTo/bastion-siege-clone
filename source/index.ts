@@ -7,10 +7,10 @@ import {Telegraf} from 'telegraf'
 import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
 import {I18n} from '@grammyjs/i18n'
 
-import {type Context} from './lib/context.js'
 import * as ensureSessionContent from './lib/session-state-math.js'
 import * as userSessions from './lib/user-sessions.js'
 import * as wdSets from './lib/wikidata-sets.js'
+import type {Context} from './lib/context.js'
 
 import {menu} from './menu/index.js'
 
