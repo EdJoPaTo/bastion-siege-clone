@@ -1,4 +1,4 @@
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {calcStorageCapacity, EMOJI, type ResourceName, type Resources} from 'bastion-siege-logic'
 
 import {backButtons, type Context} from '../lib/context.js'

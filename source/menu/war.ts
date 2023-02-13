@@ -1,4 +1,4 @@
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {
 	calcBarracksCapacity,
 	calcGoldIncome,
@@ -60,7 +60,7 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot:
 async function menuBody(ctx: Context): Promise<Body> {
 	const {constructions, people} = ctx.session
 	const attackTargetId = ctx.session.attackTarget
-	const attackTarget = attackTargetId && userSessions.getUser(attackTargetId)
+	const attackTarget = attackTargetId && await userSessions.getUser(attackTargetId)
 
 	let text = ''
 	text += wikidataInfoHeader(await ctx.wd.reader('bs.war'), {titlePrefix: EMOJI.war})
@@ -106,7 +106,7 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		const attacker = ctx.session
 
 		const targetId = ctx.session.attackTarget!
-		const target = userSessions.getUser(targetId)!
+		const target = (await userSessions.getUser(targetId))!
 
 		const attackerWinChance = getAttackerWinChance(attacker.constructions, attacker.people)
 		const targetWinChance = getDefenderWinChance(target.constructions)
@@ -137,8 +137,9 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 				}
 			}
 
-			await ctx.replyWithMarkdown(
+			await ctx.reply(
 				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {titlePrefix: outEmoji.suicide}),
+				{parse_mode: 'Markdown'},
 			)
 			return '.'
 		}
@@ -165,7 +166,10 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			target.peopleTimestamp = now
 		}
 
-		await ctx.replyWithMarkdown(afterBattleMessageText(true, attackerWins, target.name!, attackerLoot))
+		await ctx.reply(
+			afterBattleMessageText(true, attackerWins, target.name!, attackerLoot),
+			{parse_mode: 'Markdown'},
+		)
 
 		const isBetrayal = attacker.name?.last && attacker.name.last === target.name?.last
 		if (isBetrayal) {
@@ -175,14 +179,19 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 				lastChangeLast: now,
 			}
 
-			await ctx.replyWithMarkdown(
+			await ctx.reply(
 				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {titlePrefix: outEmoji.betrayal}),
+				{parse_mode: 'Markdown'},
 			)
 		}
 
 		if (!target.blocked) {
 			try {
-				await ctx.telegram.sendMessage(targetId, afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot), {parse_mode: 'Markdown'})
+				await ctx.api.sendMessage(
+					targetId,
+					afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot),
+					{parse_mode: 'Markdown'},
+				)
 			} catch (error: unknown) {
 				console.error('send defender battlereport failed', targetId, error instanceof Error ? error.message : error)
 				target.blocked = true
@@ -194,8 +203,8 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 })
 
 menu.interact(async ctx => `${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`, 'search', {
-	do(ctx) {
-		const chosen = userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
+	async do(ctx) {
+		const chosen = await userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget))
 		ctx.session.attackTarget = chosen.user
 		return '.'
 	},

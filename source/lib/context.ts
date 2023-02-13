@@ -1,8 +1,9 @@
-import {createBackMainMenuButtons} from 'telegraf-inline-menu'
+import {createBackMainMenuButtons} from 'grammy-inline-menu'
 import type {Constructions, Resources} from 'bastion-siege-logic'
-import type {Context as TelegrafContext} from 'telegraf'
-import type {I18nContext} from '@grammyjs/i18n'
+import type {I18nContextFlavor} from '@grammyjs/i18n'
 import type {MiddlewareProperty} from 'telegraf-wikibase'
+
+import type {Context as BaseContext, SessionFlavor} from 'grammy'
 
 import type {PeopleInConstructions} from '../types.js'
 
@@ -32,10 +33,7 @@ export type Session = {
 	selectedSpyEmoji: string;
 }
 
-export type Context = TelegrafContext & {
-	readonly i18n: I18nContext;
-	readonly match: RegExpExecArray | undefined;
-	readonly session: Session;
+export type Context = BaseContext & SessionFlavor<Session> & I18nContextFlavor & {
 	readonly wd: MiddlewareProperty;
 }
 

@@ -1,4 +1,4 @@
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {type ConstructionName, CONSTRUCTIONS, EMOJI} from 'bastion-siege-logic'
 import * as randomItem from 'random-item'
 import arrayFilterUnique from 'array-filter-unique'
@@ -57,10 +57,7 @@ export const menu = new MenuTemplate(menuBody)
 
 menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`, 'espionage', {
 	async do(ctx) {
-		const possibleSessions = userSessions.getRaw()
-			.filter(o => o.data.name)
-
-		const session = randomItem(possibleSessions).data
+		const {data: session} = await userSessions.getRandomUser(o => Boolean(o.data.name))
 		const name = session.name!
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy)
@@ -77,7 +74,7 @@ menu.interact(async ctx => `${(await ctx.wd.reader('action.espionage')).label()}
 		message += ' '
 		message += pickedConstructionLevel.toFixed(0)
 
-		await ctx.answerCbQuery(message)
+		await ctx.answerCallbackQuery(message)
 		return false
 	},
 })

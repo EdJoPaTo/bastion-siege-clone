@@ -1,49 +1,64 @@
-import * as randomItem from 'random-item'
-import * as LocalSession from 'telegraf-session-local'
+import {readdir} from 'node:fs/promises'
 
-import type {Context, Session} from './context.js'
+import {FileAdapter} from '@grammyjs/storage-file'
+import {session} from 'grammy'
+import * as randomItem from 'random-item'
+
+import type {Session} from './context.js'
 
 type SessionRawEntry = {
 	readonly user: number;
 	readonly data: Session;
 }
 
-const localSession = new LocalSession<Session>({
-	// Database name/path, where sessions will be located (default: 'sessions.json')
-	database: 'persist/sessions.json',
-	// Format of storage/database (default: JSON.stringify / JSON.parse)
-	format: {
-		serialize: object => JSON.stringify(object, null, '\t') + '\n',
-		deserialize: string => JSON.parse(string),
-	},
-	getSessionKey: ctx => `${ctx.from!.id}`,
+const storage = new FileAdapter<Session>({dirName: 'sessions'})
+
+const sessionMiddleware = session({
+	initial: (): Session => ({} as any),
+	storage: new FileAdapter<Session>({dirName: 'sessions'}),
+	getSessionKey: ctx => String(ctx.from!.id),
 })
 
-export function getRaw(): readonly SessionRawEntry[] {
-	return (localSession.DB as any)
-		.get('sessions').value()
-		.map((o: {id: string; data: Session}) => {
-			const user = Number(o.id.split(':')[0])
-			return {user, data: o.data}
-		})
+async function allSessionIds(): Promise<readonly number[]> {
+	async function inner(path: string) {
+		const results: number[] = []
+		const hits = await readdir(path, {encoding: 'utf8', withFileTypes: true})
+
+		const dirResults = await Promise.all(
+			hits.filter(o => o.isDirectory()).map(async d => inner(path + '/' + d.name)),
+		)
+		results.push(...dirResults.flat())
+
+		const fileResults = hits.filter(o => o.isFile)
+			.map(o => /^(\d+)\.json$/.exec(o.name)?.[1])
+			.filter(Boolean)
+			.map(Number)
+		results.push(...fileResults)
+
+		return results
+	}
+
+	return inner('sessions')
 }
 
-export function getUser(userId: number): Session | undefined {
-	return (localSession.DB as any)
-		.get('sessions')
-		.getById(`${userId}`)
-		.get('data')
-		.value()
+export async function getRaw(): Promise<readonly SessionRawEntry[]> {
+	const allIds = await allSessionIds()
+	return Promise.all(allIds.map(async user => {
+		const data = await getUser(user)
+		return {user, data: data!}
+	}))
 }
 
-export function getRandomUser(
+export async function getUser(userId: number): Promise<Session | undefined> {
+	return storage.read(String(userId))
+}
+
+export async function getRandomUser(
 	filter: (o: SessionRawEntry) => boolean = () => true,
-): SessionRawEntry {
-	const rawArray = getRaw()
-		.filter(o => filter(o))
+): Promise<SessionRawEntry> {
+	const all = await getRaw()
+	const rawArray = all.filter(o => filter(o))
 	return randomItem(rawArray)
 }
 
-export function middleware(): (ctx: Context, next: () => Promise<void>) => void {
-	return localSession.middleware() as any
-}
+export const middleware = sessionMiddleware

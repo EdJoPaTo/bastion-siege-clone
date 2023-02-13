@@ -2,4 +2,4 @@ dist
 node_modules
 
 # botfiles
-persist
+sessions

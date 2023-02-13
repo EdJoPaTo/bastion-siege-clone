@@ -1,4 +1,4 @@
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 
 import {backButtons, type Context} from '../../lib/context.js'
 import {formatNamePlain} from '../../lib/interface/name.js'

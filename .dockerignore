@@ -10,4 +10,4 @@ node_modules
 test
 
 # botfiles
-persist
+sessions

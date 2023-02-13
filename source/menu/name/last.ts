@@ -1,5 +1,5 @@
 import {FAMILY} from 'wikidata-person-names'
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import arrayFilterUnique from 'array-filter-unique'
 import * as randomItem from 'random-item'
 
@@ -136,9 +136,9 @@ menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
 	},
 })
 
-function getExistingFamilies(ctx: Context): string[] {
+async function getExistingFamilies(ctx: Context): Promise<string[]> {
 	const currentLastName = ctx.session.name?.last
-	const all = getRaw()
+	const all = await getRaw()
 	const lastNames = all
 		.map(o => o.data.name?.last)
 		.filter(o => o !== currentLastName)

@@ -1,4 +1,4 @@
-import {type Body, MenuTemplate} from 'telegraf-inline-menu'
+import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {UNISEX} from 'wikidata-person-names'
 import * as randomItem from 'random-item'
 

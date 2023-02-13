@@ -1,11 +1,11 @@
 import {existsSync, readFileSync} from 'node:fs'
 import * as process from 'node:process'
 
+import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
-import {MenuMiddleware} from 'telegraf-inline-menu'
-import {Telegraf} from 'telegraf'
-import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
 import {I18n} from '@grammyjs/i18n'
+import {MenuMiddleware} from 'grammy-inline-menu'
+import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
 
 import * as ensureSessionContent from './lib/session-state-math.js'
 import * as userSessions from './lib/user-sessions.js'
@@ -25,13 +25,13 @@ if (!token) {
 	)
 }
 
-const bot = new Telegraf<Context>(token)
+const bot = new Bot<Context>(token)
 
 if (process.env['NODE_ENV'] !== 'production') {
 	bot.use(generateUpdateMiddleware())
 }
 
-bot.use(userSessions.middleware())
+bot.use(userSessions.middleware)
 bot.use(ensureSessionContent.middleware())
 
 const i18n = new I18n({
@@ -68,7 +68,7 @@ bot.catch((error: any) => {
 })
 
 async function startup(): Promise<void> {
-	await bot.telegram.setMyCommands([
+	await bot.api.setMyCommands([
 		{command: 'start', description: 'show the menu'},
 	])
 
@@ -80,8 +80,11 @@ async function startup(): Promise<void> {
 		console.error('TelegrafWikibase', 'regular update failed', error)
 	})
 
-	await bot.launch()
-	console.log(new Date(), 'Bot started as', bot.botInfo?.username)
+	await bot.start({
+		onStart(botInfo) {
+			console.log(new Date(), 'Bot starts as', botInfo.username)
+		},
+	})
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

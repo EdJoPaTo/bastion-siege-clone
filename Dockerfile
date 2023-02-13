@@ -19,7 +19,7 @@ ENV NODE_ENV=production
 RUN apk upgrade --no-cache
 
 WORKDIR /app
-VOLUME /app/persist
+VOLUME /app/sessions
 
 COPY --from=packages /build/node_modules ./node_modules
 COPY locales locales
