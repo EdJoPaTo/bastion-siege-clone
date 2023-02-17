@@ -13,23 +13,23 @@
 		"start": "tsc --sourceMap && node --enable-source-maps dist/index.js",
 		"test": "tsc --sourceMap && xo"
 	},
-	"type": "commonjs",
+	"type": "module",
 	"engines": {
 		"node": ">=18"
 	},
 	"dependencies": {
 		"@grammyjs/i18n": "^0.5.0",
 		"@grammyjs/storage-file": "^2.1.0",
-		"array-filter-unique": "^2.1.0",
+		"array-filter-unique": "^3.0.0",
 		"bastion-siege-logic": "^2.0.0",
 		"grammy": "^1.14.1",
 		"grammy-inline-menu": "^8.0.0",
 		"locale-emoji": "^0.3.0",
-		"random-item": "^3.0.0",
+		"random-item": "^4.0.0",
 		"telegraf-middleware-console-time": "^2.0.0",
-		"telegraf-wikibase": "^0.11.0",
+		"telegraf-wikibase": "^0.12.0",
 		"wikidata-entity-reader": "^3.0.0",
-		"wikidata-person-names": "^1.0.0",
+		"wikidata-person-names": "^1.2.1",
 		"wikidata-sdk": "^8.0.0",
 		"wikidata-sdk-got": "^2.0.1"
 	},
@@ -43,12 +43,8 @@
 		"semicolon": false,
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
-			"@typescript-eslint/no-require-imports": "off",
-			"@typescript-eslint/no-unsafe-assignment": "off",
-			"@typescript-eslint/no-unsafe-call": "off",
-			"@typescript-eslint/no-unsafe-return": "off",
+			"n/prefer-global/process": "off",
 			"unicorn/no-await-expression-member": "off",
-			"unicorn/prefer-module": "off",
 			"unicorn/prefer-top-level-await": "off"
 		}
 	}

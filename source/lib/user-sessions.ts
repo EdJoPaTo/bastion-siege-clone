@@ -2,7 +2,7 @@ import {readdir} from 'node:fs/promises'
 
 import {FileAdapter} from '@grammyjs/storage-file'
 import {session} from 'grammy'
-import * as randomItem from 'random-item'
+import randomItem from 'random-item'
 
 import type {Session} from './context.js'
 
@@ -14,6 +14,7 @@ type SessionRawEntry = {
 const storage = new FileAdapter<Session>({dirName: 'sessions'})
 
 const sessionMiddleware = session({
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	initial: (): Session => ({} as any),
 	storage: new FileAdapter<Session>({dirName: 'sessions'}),
 	getSessionKey: ctx => String(ctx.from!.id),

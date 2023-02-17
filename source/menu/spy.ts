@@ -1,7 +1,7 @@
+import {arrayFilterUnique} from 'array-filter-unique'
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {type ConstructionName, CONSTRUCTIONS, EMOJI} from 'bastion-siege-logic'
-import * as randomItem from 'random-item'
-import arrayFilterUnique from 'array-filter-unique'
+import randomItem from 'random-item'
 import type {WikibaseEntityReader} from 'wikidata-entity-reader'
 
 import {backButtons, type Context} from '../lib/context.js'

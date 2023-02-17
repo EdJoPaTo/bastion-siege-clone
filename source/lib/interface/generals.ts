@@ -1,4 +1,4 @@
-import * as randomItem from 'random-item'
+import randomItem from 'random-item'
 import type {WikibaseEntityReader} from 'wikidata-entity-reader'
 
 export const outEmoji = {
@@ -17,11 +17,11 @@ export const outEmoji = {
 	suicide: '😵',
 	win: '🎉',
 	withoutLastName: '🎭',
-}
+} as const
 
 export const FAMILY_EMOJIS: readonly string[] = ['👨‍👩‍👧‍👦', '👨‍👩‍👦‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👦', '👩‍👩‍👦‍👦', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👦', '👨‍👨‍👦‍👦', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👨‍👩‍👧', '👨‍👨‍👦', '👨‍👨‍👧', '👩‍👩‍👦', '👩‍👩‍👧', '👩‍👦', '👩‍👧', '👩‍👧‍👦', '👩‍👦‍👦', '👩‍👧‍👧', '👨‍👦', '👨‍👧', '👨‍👧‍👦', '👨‍👦‍👦', '👨‍👧‍👧']
 
-export function possibleEmoji(condition: boolean): string {
+export function possibleEmoji(condition: boolean) {
 	return condition ? outEmoji.possibleYes : outEmoji.possibleNo
 }
 

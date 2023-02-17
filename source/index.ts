@@ -1,5 +1,4 @@
-import {existsSync, readFileSync} from 'node:fs'
-import * as process from 'node:process'
+import {readFileSync} from 'node:fs'
 
 import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
@@ -16,12 +15,10 @@ import {menu} from './menu/index.js'
 
 (process as any).title = 'bs-clone-tgbot'
 
-const token = (existsSync('/run/secrets/bot-token.txt') && readFileSync('/run/secrets/bot-token.txt', 'utf8').trim())
-	|| (existsSync('bot-token.txt') && readFileSync('bot-token.txt', 'utf8').trim())
-	|| process.env['BOT_TOKEN']
+const token = process.env['BOT_TOKEN']
 if (!token) {
 	throw new Error(
-		'You have to provide the bot-token from @BotFather via file (bot-token.txt) or environment variable (BOT_TOKEN)',
+		'You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)',
 	)
 }
 

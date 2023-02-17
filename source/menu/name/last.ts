@@ -1,7 +1,7 @@
+import {arrayFilterUnique} from 'array-filter-unique'
 import {FAMILY} from 'wikidata-person-names'
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
-import arrayFilterUnique from 'array-filter-unique'
-import * as randomItem from 'random-item'
+import randomItem from 'random-item'
 
 import {formatNamePlain} from '../../lib/interface/name.js'
 import {getRaw} from '../../lib/user-sessions.js'

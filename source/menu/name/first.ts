@@ -1,6 +1,6 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {UNISEX} from 'wikidata-person-names'
-import * as randomItem from 'random-item'
+import randomItem from 'random-item'
 
 import {DAY, MINUTE} from '../../lib/unix-time.js'
 import {formatNamePlain} from '../../lib/interface/name.js'

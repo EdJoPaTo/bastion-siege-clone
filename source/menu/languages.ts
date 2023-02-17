@@ -1,25 +1,20 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
+// @ts-expect-error missing types
+import localeEmoji from 'locale-emoji'
 
 import {backButtons, type Context} from '../lib/context.js'
 
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const localeEmoji = require('locale-emoji')
-
 export const menu = new MenuTemplate<Context>(languageMenuBody)
 
-function flagString(languageCode: string, useFallbackFlag = false): string {
-	const flag = localeEmoji(languageCode)
-	if (!flag && useFallbackFlag) {
-		return outEmoji.language
-	}
-
-	return flag
+function flagString(languageCode: string): string | undefined {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	return localeEmoji(languageCode) as string | undefined
 }
 
 async function languageMenuBody(ctx: Context): Promise<Body> {
-	const flag = flagString(ctx.wd.locale(), true)
+	const flag = flagString(ctx.wd.locale()) ?? outEmoji.language
 	const text = wikidataInfoHeader(await ctx.wd.reader('menu.language'), {titlePrefix: flag})
 	return {text, parse_mode: 'Markdown'}
 }
@@ -28,7 +23,7 @@ menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	columns: 3,
 	buttonText(_, key) {
 		const flag = flagString(key)
-		return `${flag} ${key}`
+		return flag ? `${flag} ${key}` : key
 	},
 	isSet: (ctx, key) => key === ctx.wd.locale(),
 	set(ctx, key) {
