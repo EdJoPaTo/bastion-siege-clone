@@ -1,5 +1,10 @@
-import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
+// eslint-disable-next-line n/file-extension-in-import
+import {wdk} from 'wikibase-sdk/wikidata.org'
 import randomItem from 'random-item'
+import {simplifySparqlResults, type SparqlResults} from 'wikibase-sdk'
+
+const headers = new Headers()
+headers.set('user-agent', 'github.com/EdJoPaTo/bastion-siege-clone')
 
 const queries = {
 	spies: `SELECT DISTINCT ?item WHERE {
@@ -28,8 +33,10 @@ export async function build(): Promise<void> {
 
 async function loadQNumbersOfKey(key: Query): Promise<void> {
 	try {
-		const results = await sparqlQuerySimplifiedMinified(queries[key])
-		const qNumbers = results as string[]
+		const url = wdk.sparqlQuery(queries[key])
+		const response = await fetch(url, {headers})
+		const json = await response.json() as SparqlResults
+		const qNumbers = simplifySparqlResults(json, {minimize: true}) as string[]
 		entities[key] = qNumbers
 	} catch (error: unknown) {
 		console.error('wikidata-set query failed', key, error)
