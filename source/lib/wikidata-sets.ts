@@ -1,14 +1,14 @@
 import {sparqlQuerySimplifiedMinified} from 'wikidata-sdk-got'
 import randomItem from 'random-item'
 
-export type Query = 'spies'
-
-const queries: Record<Query, string> = {
+const queries = {
 	spies: `SELECT DISTINCT ?item WHERE {
 ?item wdt:P279+ wd:Q729.
 ?item wdt:P487 ?emoji.
 }`,
-}
+} as const
+
+export type Query = keyof typeof queries
 
 const entities: Record<Query, string[]> = {
 	spies: [],
