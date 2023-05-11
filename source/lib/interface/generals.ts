@@ -30,8 +30,8 @@ export function randomFamilyEmoji(): string {
 }
 
 type InfoHeaderOptions = {
-	titlePrefix?: string;
-	titleSuffix?: string;
+	readonly titlePrefix?: string;
+	readonly titleSuffix?: string;
 }
 
 export function wikidataInfoHeader(
