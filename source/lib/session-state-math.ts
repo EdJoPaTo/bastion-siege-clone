@@ -6,7 +6,6 @@ import {
 	calcWallArcherCapacity,
 	estimateResourcesAfter,
 } from 'bastion-siege-logic'
-import type {PeopleInConstructions} from '../types.js'
 import type {Context, Session} from './context.js'
 
 const GAME_SPEEDUP = 30
@@ -46,12 +45,11 @@ function initWhenMissing(session: Session, now: number): void {
 	const {people, peopleTimestamp} = session
 	if (!people || !peopleTimestamp) {
 		session.peopleTimestamp = now
-		const people: PeopleInConstructions = {
+		session.people = {
 			houses: 0,
 			barracks: 0,
 			wall: 0,
 		}
-		session.people = people
 	}
 }
 
