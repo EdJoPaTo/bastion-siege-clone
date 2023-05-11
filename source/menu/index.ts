@@ -1,13 +1,9 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
-
 import {EMOJI} from 'bastion-siege-logic'
-
 import type {Context} from '../lib/context.js'
-
 import {formatNamePlain} from '../lib/interface/name.js'
 import {outEmoji, randomFamilyEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
 import {resources} from '../lib/interface/resource.js'
-
 import {buildingsMenu, workshopMenu} from './constructions.js'
 import {menu as familyMenu} from './family.js'
 import {menu as languageMenu} from './languages.js'

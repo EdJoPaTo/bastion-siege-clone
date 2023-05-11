@@ -6,11 +6,8 @@ import {
 	type Constructions,
 	EMOJI,
 } from 'bastion-siege-logic'
-
 import type {PeopleInConstructions} from '../types.js'
-
 import * as userSessions from '../lib/user-sessions.js'
-
 import {backButtons, type Context, type Name} from '../lib/context.js'
 import {formatNamePlain} from '../lib/interface/name.js'
 import {formatNumberShort} from '../lib/interface/format-number.js'

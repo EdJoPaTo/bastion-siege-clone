@@ -2,9 +2,7 @@ import {createBackMainMenuButtons} from 'grammy-inline-menu'
 import type {Constructions, Resources} from 'bastion-siege-logic'
 import type {I18nContextFlavor} from '@grammyjs/i18n'
 import type {MiddlewareProperty} from 'telegraf-wikibase'
-
 import type {Context as BaseContext, SessionFlavor} from 'grammy'
-
 import type {PeopleInConstructions} from '../types.js'
 
 type UnixSeconds = number

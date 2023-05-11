@@ -6,9 +6,7 @@ import {
 	calcWallArcherCapacity,
 	estimateResourcesAfter,
 } from 'bastion-siege-logic'
-
 import type {PeopleInConstructions} from '../types.js'
-
 import type {Context, Session} from './context.js'
 
 const GAME_SPEEDUP = 30

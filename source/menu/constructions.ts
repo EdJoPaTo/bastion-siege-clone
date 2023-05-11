@@ -9,12 +9,9 @@ import {
 	type Resources,
 	WORKSHOP,
 } from 'bastion-siege-logic'
-
 import {backButtons, type Context} from '../lib/context.js'
-
 import {constructionLine} from '../lib/interface/construction.js'
 import {wikidataInfoHeader} from '../lib/interface/generals.js'
-
 import {menu as entryMenu} from './construction.js'
 
 function canUpgrade(

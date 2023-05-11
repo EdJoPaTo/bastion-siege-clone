@@ -1,9 +1,7 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
-
 import {backButtons, type Context} from '../../lib/context.js'
 import {formatNamePlain} from '../../lib/interface/name.js'
 import {outEmoji} from '../../lib/interface/generals.js'
-
 import {menu as firstMenu} from './first.js'
 import {menu as lastMenu} from './last.js'
 

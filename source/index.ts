@@ -1,16 +1,13 @@
 import {readFileSync} from 'node:fs'
-
 import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {I18n} from '@grammyjs/i18n'
 import {MenuMiddleware} from 'grammy-inline-menu'
 import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
-
 import * as ensureSessionContent from './lib/session-state-math.js'
 import * as userSessions from './lib/user-sessions.js'
 import * as wdSets from './lib/wikidata-sets.js'
 import type {Context} from './lib/context.js'
-
 import {menu} from './menu/index.js'
 
 (process as any).title = 'bs-clone-tgbot'

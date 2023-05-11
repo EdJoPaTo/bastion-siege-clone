@@ -5,9 +5,7 @@ import {
 	calcResourcesAfterConstruction,
 	type ConstructionName,
 } from 'bastion-siege-logic'
-
 import {backButtons, type Context} from '../lib/context.js'
-
 import {constructionPropertyString, infoHeader} from '../lib/interface/construction.js'
 import {constructionResources} from '../lib/interface/resource.js'
 

@@ -14,10 +14,8 @@ import {
 	EMOJI,
 	type ResourceName,
 } from 'bastion-siege-logic'
-
 import type {Context} from '../context.js'
 import type {PeopleInConstructions} from '../../types.js'
-
 import {formatNumberShort} from './format-number.js'
 import {possibleEmoji, wikidataInfoHeader} from './generals.js'
 

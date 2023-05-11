@@ -1,9 +1,7 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu'
 import {type ConstructionName, EMOJI} from 'bastion-siege-logic'
-
 import {backButtons, type Context, type Session} from '../lib/context.js'
 import * as userSessions from '../lib/user-sessions.js'
-
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js'
 
 async function menuBody(ctx: Context): Promise<Body> {
