@@ -79,7 +79,6 @@ async function menuBody(ctx: Context): Promise<Body> {
 
 	text += '\n'
 
-	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 	if (attackTarget && attackTarget.name) {
 		const {name, constructions} = attackTarget
 		text += (await ctx.wd.reader('battle.target')).label()
