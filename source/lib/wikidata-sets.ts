@@ -38,7 +38,7 @@ async function loadQNumbersOfKey(key: Query): Promise<void> {
 		const json = await response.json() as SparqlResults
 		const qNumbers = simplifySparqlResults(json, {minimize: true}) as string[]
 		entities[key] = qNumbers
-	} catch (error: unknown) {
+	} catch (error) {
 		console.error('wikidata-set query failed', key, error)
 	}
 }
