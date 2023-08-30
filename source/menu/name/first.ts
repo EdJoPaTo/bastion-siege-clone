@@ -25,11 +25,11 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += outEmoji.name
 	text += ' '
 	text += '*'
-	text += ctx.i18n.t('name.question.first')
+	text += ctx.t('name-question-first')
 	text += '*'
 
 	text += '\n\n'
-	text += ctx.i18n.t('name.info.first').trim()
+	text += ctx.t('name-info-first').trim()
 
 	if (ctx.session.name) {
 		text += '\n\n'
@@ -52,7 +52,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 		text += await ctx.wd.reader('unit.minute').then(r => r.label())
 	} else if (ctx.session.createFirst) {
 		text += '\n\n'
-		text += ctx.i18n.t('name.new.first')
+		text += ctx.t('name-new-first')
 		text += ': '
 		text += ctx.session.createFirst
 	}
@@ -70,7 +70,7 @@ menu.interact(outEmoji.nameFallback, 'random', {
 	},
 })
 
-menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
+menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
 	hide: ctx => !ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
 	do(ctx) {
 		const now = Date.now() / 1000
@@ -85,7 +85,7 @@ menu.interact(ctx => `😍 ${ctx.i18n.t('name.take')}`, 'take', {
 	},
 })
 
-menu.interact(ctx => `😒 ${ctx.i18n.t('name.reject')}`, 'reject', {
+menu.interact(ctx => `😒 ${ctx.t('name-reject')}`, 'reject', {
 	joinLastRow: true,
 	hide: ctx => !ctx.session.name,
 	do(ctx) {

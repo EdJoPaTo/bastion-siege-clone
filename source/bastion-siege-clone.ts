@@ -1,15 +1,15 @@
-import {readFileSync} from 'node:fs'
 import {env} from 'node:process'
+import {readFileSync} from 'node:fs'
 import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
-import {I18n} from '@grammyjs/i18n'
 import {MenuMiddleware} from 'grammy-inline-menu'
 import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase'
+import {i18n} from './translation.js'
+import {menu} from './menu/index.js'
 import * as ensureSessionContent from './lib/session-state-math.js'
 import * as userSessions from './lib/user-sessions.js'
 import * as wdSets from './lib/wikidata-sets.js'
 import type {Context} from './lib/context.js'
-import {menu} from './menu/index.js'
 
 const token = env['BOT_TOKEN']
 if (!token) {
@@ -26,13 +26,6 @@ if (env['NODE_ENV'] !== 'production') {
 
 bot.use(userSessions.middleware)
 bot.use(ensureSessionContent.middleware())
-
-const i18n = new I18n({
-	directory: 'locales',
-	defaultLanguage: 'en',
-	defaultLanguageOnMissing: true,
-	useSession: true,
-})
 
 bot.use(i18n.middleware())
 

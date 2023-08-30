@@ -1,8 +1,8 @@
 import {createBackMainMenuButtons} from 'grammy-inline-menu'
 import type {Constructions, Resources} from 'bastion-siege-logic'
-import type {I18nContextFlavor} from '@grammyjs/i18n'
-import type {MiddlewareProperty} from 'telegraf-wikibase'
 import type {Context as BaseContext, SessionFlavor} from 'grammy'
+import type {I18nFlavor} from '@grammyjs/i18n'
+import type {MiddlewareProperty} from 'telegraf-wikibase'
 import type {PeopleInConstructions} from '../types.js'
 
 type UnixSeconds = number
@@ -31,11 +31,11 @@ export type Session = {
 	selectedSpyEmoji: string;
 }
 
-export type Context = BaseContext & SessionFlavor<Session> & I18nContextFlavor & {
+export type Context = BaseContext & SessionFlavor<Session> & I18nFlavor & {
 	readonly wd: MiddlewareProperty;
 }
 
 export const backButtons = createBackMainMenuButtons<Context>(
-	ctx => `🔙 ${ctx.i18n.t('menu.back')}`,
+	ctx => `🔙 ${ctx.t('menu-back')}`,
 	async ctx => `🔝 ${(await ctx.wd.reader('menu.menu')).label()}`,
 )

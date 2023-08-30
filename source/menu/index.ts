@@ -26,7 +26,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += await resources(ctx, ctx.session.resources)
 
 	text += '\n\n'
-	text += ctx.i18n.t('disclaimer')
+	text += ctx.t('disclaimer')
 
 	return {text, parse_mode: 'Markdown'}
 }

@@ -25,7 +25,7 @@ menu.select('lang', async ctx => ctx.wd.availableLocales(), {
 	},
 	isSet: (ctx, key) => key === ctx.wd.locale(),
 	set(ctx, key) {
-		ctx.i18n.locale(key)
+		ctx.i18n.setLocale(key)
 		ctx.wd.locale(key)
 		return true
 	},

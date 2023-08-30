@@ -11,11 +11,11 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += outEmoji.name
 	text += ' '
 	text += '*'
-	text += ctx.i18n.t('name.question.full')
+	text += ctx.t('name-question-full')
 	text += '*'
 
 	text += '\n\n'
-	text += ctx.i18n.t('name.info.full').trim()
+	text += ctx.t('name-info-full').trim()
 
 	if (ctx.session.name) {
 		text += '\n\n'
