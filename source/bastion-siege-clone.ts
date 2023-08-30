@@ -1,4 +1,5 @@
 import {readFileSync} from 'node:fs'
+import {env} from 'node:process'
 import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
 import {I18n} from '@grammyjs/i18n'
@@ -10,9 +11,7 @@ import * as wdSets from './lib/wikidata-sets.js'
 import type {Context} from './lib/context.js'
 import {menu} from './menu/index.js'
 
-(process as any).title = 'bs-clone-tgbot'
-
-const token = process.env['BOT_TOKEN']
+const token = env['BOT_TOKEN']
 if (!token) {
 	throw new Error(
 		'You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)',
@@ -21,7 +20,7 @@ if (!token) {
 
 const bot = new Bot<Context>(token)
 
-if (process.env['NODE_ENV'] !== 'production') {
+if (env['NODE_ENV'] !== 'production') {
 	bot.use(generateUpdateMiddleware())
 }
 
@@ -39,7 +38,7 @@ bot.use(i18n.middleware())
 
 const twb = new TelegrafWikibase({
 	contextKey: 'wd',
-	logQueriedEntityIds: process.env['NODE_ENV'] !== 'production',
+	logQueriedEntityIds: env['NODE_ENV'] !== 'production',
 	userAgent: 'EdJoPaTo/bastion-siege-clone',
 })
 

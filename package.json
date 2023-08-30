@@ -10,7 +10,7 @@
 		"url": "https://EdJoPaTo.de"
 	},
 	"scripts": {
-		"start": "tsc --sourceMap && node --enable-source-maps dist/index.js",
+		"start": "tsc --sourceMap && node --enable-source-maps dist/bastion-siege-clone.js",
 		"test": "tsc --sourceMap && xo"
 	},
 	"type": "module",
@@ -41,7 +41,6 @@
 		"semicolon": false,
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
-			"n/prefer-global/process": "off",
 			"unicorn/no-await-expression-member": "off",
 			"unicorn/prefer-top-level-await": "off"
 		}
