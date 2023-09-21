@@ -41,8 +41,7 @@
 		"semicolon": false,
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
-			"unicorn/no-await-expression-member": "off",
-			"unicorn/prefer-top-level-await": "off"
+			"unicorn/no-await-expression-member": "off"
 		}
 	}
 }

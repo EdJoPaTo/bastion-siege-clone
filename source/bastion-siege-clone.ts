@@ -53,25 +53,20 @@ const menuMiddleware = new MenuMiddleware('/', menu)
 bot.command('start', async ctx => menuMiddleware.replyToContext(ctx))
 bot.use(menuMiddleware.middleware())
 
-async function startup(): Promise<void> {
-	await baseBot.api.setMyCommands([
-		{command: 'start', description: 'show the menu'},
-	])
+await baseBot.api.setMyCommands([
+	{command: 'start', description: 'show the menu'},
+])
 
-	console.time('preload wdSets')
-	await wdSets.build()
-	console.timeEnd('preload wdSets')
+console.time('preload wdSets')
+await wdSets.build()
+console.timeEnd('preload wdSets')
 
-	await twb.startRegularResourceKeyUpdate(error => {
-		console.error('TelegrafWikibase', 'regular update failed', error)
-	})
+await twb.startRegularResourceKeyUpdate(error => {
+	console.error('TelegrafWikibase', 'regular update failed', error)
+})
 
-	await baseBot.start({
-		onStart(botInfo) {
-			console.log(new Date(), 'Bot starts as', botInfo.username)
-		},
-	})
-}
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-startup()
+await baseBot.start({
+	onStart(botInfo) {
+		console.log(new Date(), 'Bot starts as', botInfo.username)
+	},
+})
