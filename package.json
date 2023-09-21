@@ -38,7 +38,6 @@
 		"xo": "^0.56.0"
 	},
 	"xo": {
-		"semicolon": false,
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
 			"unicorn/no-await-expression-member": "off"

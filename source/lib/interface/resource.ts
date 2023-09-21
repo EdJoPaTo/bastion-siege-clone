@@ -5,24 +5,24 @@ import {
 	type ResourceName,
 	RESOURCES,
 	type Resources,
-} from 'bastion-siege-logic'
-import type {Context} from '../context.js'
-import {formatNumberShort} from './format-number.js'
-import {possibleEmoji} from './generals.js'
+} from 'bastion-siege-logic';
+import type {Context} from '../context.js';
+import {formatNumberShort} from './format-number.js';
+import {possibleEmoji} from './generals.js';
 
 export async function resourceLine(
 	ctx: Context,
 	resource: ResourceName,
 	amount: number,
 ): Promise<string> {
-	const reader = await ctx.wd.reader(`resource.${resource}`)
+	const reader = await ctx.wd.reader(`resource.${resource}`);
 	const parts: string[] = [
 		EMOJI[resource],
 		`*${reader.label()}*`,
 		formatNumberShort(amount, true),
-	]
+	];
 
-	return parts.join(' ')
+	return parts.join(' ');
 }
 
 export async function constructionResourceLine(
@@ -31,7 +31,7 @@ export async function constructionResourceLine(
 	amount: number,
 	possible: boolean,
 ): Promise<string> {
-	return `${possibleEmoji(possible)} ${await resourceLine(ctx, resource, amount)}`
+	return `${possibleEmoji(possible)} ${await resourceLine(ctx, resource, amount)}`;
 }
 
 export async function resources(
@@ -40,9 +40,9 @@ export async function resources(
 ): Promise<string> {
 	const lines = await Promise.all(
 		RESOURCES.map(async o => resourceLine(ctx, o, resources[o])),
-	)
+	);
 
-	return lines.join('\n')
+	return lines.join('\n');
 }
 
 export async function constructionResources(
@@ -53,7 +53,7 @@ export async function constructionResources(
 	const lines = await Promise.all(CONSTRUCTION_RESOURCES
 		.filter(o => required[o])
 		.map(async o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o])),
-	)
+	);
 
-	return lines.join('\n')
+	return lines.join('\n');
 }

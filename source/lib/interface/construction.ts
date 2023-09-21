@@ -13,11 +13,11 @@ import {
 	type Constructions,
 	EMOJI,
 	type ResourceName,
-} from 'bastion-siege-logic'
-import type {Context} from '../context.js'
-import type {PeopleInConstructions} from '../../types.js'
-import {formatNumberShort} from './format-number.js'
-import {possibleEmoji, wikidataInfoHeader} from './generals.js'
+} from 'bastion-siege-logic';
+import type {Context} from '../context.js';
+import type {PeopleInConstructions} from '../../types.js';
+import {formatNumberShort} from './format-number.js';
+import {possibleEmoji, wikidataInfoHeader} from './generals.js';
 
 export async function constructionLine(
 	ctx: Context,
@@ -25,15 +25,15 @@ export async function constructionLine(
 	level: number,
 	canUpgrade: boolean,
 ): Promise<string> {
-	const reader = await ctx.wd.reader(`construction.${construction}`)
+	const reader = await ctx.wd.reader(`construction.${construction}`);
 	const parts: string[] = [
 		possibleEmoji(canUpgrade),
 		EMOJI[construction],
 		String(level),
 		`*${reader.label()}*`,
-	]
+	];
 
-	return parts.join(' ')
+	return parts.join(' ');
 }
 
 export async function infoHeader(
@@ -41,15 +41,15 @@ export async function infoHeader(
 	construction: ConstructionName,
 	currentLevel: number,
 ): Promise<string> {
-	const wdKey = `construction.${construction}`
+	const wdKey = `construction.${construction}`;
 	return wikidataInfoHeader(await ctx.wd.reader(wdKey), {
 		titlePrefix: EMOJI[construction],
 		titleSuffix: String(currentLevel),
-	})
+	});
 }
 
 function simpleLineString(...args: ReadonlyArray<string | number>): string {
-	return args.join(' ')
+	return args.join(' ');
 }
 
 async function incomeString(
@@ -57,13 +57,13 @@ async function incomeString(
 	income: number | string,
 	unit: string,
 ): Promise<string> {
-	const readerLabel = await ctx.wd.reader('other.income')
-	const readerDay = await ctx.wd.reader('bs.day')
+	const readerLabel = await ctx.wd.reader('other.income');
+	const readerDay = await ctx.wd.reader('bs.day');
 	return simpleLineString(
 		readerLabel.label(),
 		income,
 		`${unit} / ${readerDay.label()}`,
-	)
+	);
 }
 
 async function storageCapacityString(
@@ -71,12 +71,12 @@ async function storageCapacityString(
 	capacity: number,
 	unit: ResourceName,
 ): Promise<string> {
-	const readerCapacity = await ctx.wd.reader('bs.storageCapacity')
+	const readerCapacity = await ctx.wd.reader('bs.storageCapacity');
 	return simpleLineString(
 		readerCapacity.label(),
 		formatNumberShort(capacity, true),
 		EMOJI[unit],
-	)
+	);
 }
 
 export function peopleString(
@@ -90,7 +90,7 @@ export function peopleString(
 		formatNumberShort(available, true) + unit,
 		'/',
 		formatNumberShort(capacity, true) + unit,
-	)
+	);
 }
 
 export async function constructionPropertyString(
@@ -116,13 +116,13 @@ export async function constructionPropertyString(
 				calcGoldIncome(constructions.townhall, constructions.houses),
 				EMOJI.gold,
 			),
-		]
+		];
 
-		return lines.join('\n')
+		return lines.join('\n');
 	}
 
 	if (construction === 'storage') {
-		const units: ResourceName[] = ['wood', 'stone', 'food']
+		const units: ResourceName[] = ['wood', 'stone', 'food'];
 		const lines = await Promise.all(units
 			.map(async o =>
 				storageCapacityString(
@@ -130,9 +130,9 @@ export async function constructionPropertyString(
 					calcStorageCapacity(constructions.storage),
 					o,
 				),
-			))
+			));
 
-		return lines.join('\n')
+		return lines.join('\n');
 	}
 
 	if (construction === 'houses') {
@@ -153,9 +153,9 @@ export async function constructionPropertyString(
 				calcProductionFood(constructions.farm, constructions.houses),
 				EMOJI.food,
 			),
-		]
+		];
 
-		return lines.join('\n')
+		return lines.join('\n');
 	}
 
 	if (construction === 'farm') {
@@ -163,15 +163,15 @@ export async function constructionPropertyString(
 			ctx,
 			calcProductionFood(constructions.farm, constructions.houses),
 			EMOJI.food,
-		)
+		);
 	}
 
 	if (construction === 'sawmill') {
-		return incomeString(ctx, calcProduction(constructions.sawmill), EMOJI.wood)
+		return incomeString(ctx, calcProduction(constructions.sawmill), EMOJI.wood);
 	}
 
 	if (construction === 'mine') {
-		return incomeString(ctx, calcProduction(constructions.mine), EMOJI.stone)
+		return incomeString(ctx, calcProduction(constructions.mine), EMOJI.stone);
 	}
 
 	if (construction === 'barracks') {
@@ -180,7 +180,7 @@ export async function constructionPropertyString(
 			people.barracks,
 			calcBarracksCapacity(constructions.barracks),
 			EMOJI.army,
-		)
+		);
 	}
 
 	if (construction === 'wall') {
@@ -189,8 +189,8 @@ export async function constructionPropertyString(
 			people.wall,
 			calcWallArcherCapacity(constructions.wall),
 			EMOJI.archer,
-		)
+		);
 	}
 
-	return undefined
+	return undefined;
 }

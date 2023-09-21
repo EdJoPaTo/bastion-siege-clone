@@ -1,5 +1,5 @@
-import randomItem from 'random-item'
-import type {WikibaseEntityReader} from 'telegraf-wikibase'
+import randomItem from 'random-item';
+import type {WikibaseEntityReader} from 'telegraf-wikibase';
 
 export const outEmoji = {
 	activeUser: '💙',
@@ -17,49 +17,49 @@ export const outEmoji = {
 	suicide: '😵',
 	win: '🎉',
 	withoutLastName: '🎭',
-} as const
+} as const;
 
-export const FAMILY_EMOJIS: readonly string[] = ['👨‍👩‍👧‍👦', '👨‍👩‍👦‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👦', '👩‍👩‍👦‍👦', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👦', '👨‍👨‍👦‍👦', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👨‍👩‍👧', '👨‍👨‍👦', '👨‍👨‍👧', '👩‍👩‍👦', '👩‍👩‍👧', '👩‍👦', '👩‍👧', '👩‍👧‍👦', '👩‍👦‍👦', '👩‍👧‍👧', '👨‍👦', '👨‍👧', '👨‍👧‍👦', '👨‍👦‍👦', '👨‍👧‍👧']
+export const FAMILY_EMOJIS: readonly string[] = ['👨‍👩‍👧‍👦', '👨‍👩‍👦‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👧‍👦', '👩‍👩‍👦‍👦', '👩‍👩‍👧‍👧', '👨‍👨‍👧‍👦', '👨‍👨‍👦‍👦', '👨‍👨‍👧‍👧', '👨‍👩‍👦', '👨‍👩‍👧', '👨‍👨‍👦', '👨‍👨‍👧', '👩‍👩‍👦', '👩‍👩‍👧', '👩‍👦', '👩‍👧', '👩‍👧‍👦', '👩‍👦‍👦', '👩‍👧‍👧', '👨‍👦', '👨‍👧', '👨‍👧‍👦', '👨‍👦‍👦', '👨‍👧‍👧'];
 
 export function possibleEmoji(condition: boolean) {
-	return condition ? outEmoji.possibleYes : outEmoji.possibleNo
+	return condition ? outEmoji.possibleYes : outEmoji.possibleNo;
 }
 
 export function randomFamilyEmoji(): string {
-	return randomItem(FAMILY_EMOJIS)
+	return randomItem(FAMILY_EMOJIS);
 }
 
 type InfoHeaderOptions = {
 	readonly titlePrefix?: string;
 	readonly titleSuffix?: string;
-}
+};
 
 export function wikidataInfoHeader(
 	wdr: WikibaseEntityReader,
 	options: InfoHeaderOptions = {},
 ): string {
-	const {titlePrefix, titleSuffix} = options
-	const label = wdr.label()
-	const description = wdr.description()
+	const {titlePrefix, titleSuffix} = options;
+	const label = wdr.label();
+	const description = wdr.description();
 
-	let text = ''
+	let text = '';
 
 	if (titlePrefix) {
-		text += titlePrefix
-		text += ' '
+		text += titlePrefix;
+		text += ' ';
 	}
 
-	text += `*${label}*`
+	text += `*${label}*`;
 
 	if (titleSuffix) {
-		text += ' '
-		text += titleSuffix
+		text += ' ';
+		text += titleSuffix;
 	}
 
 	if (description) {
-		text += '\n'
-		text += `${description}`
+		text += '\n';
+		text += `${description}`;
 	}
 
-	return text
+	return text;
 }
