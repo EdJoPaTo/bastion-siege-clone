@@ -18,11 +18,15 @@ if (!token) {
 	)
 }
 
-const bot = new Bot<Context>(token)
+const baseBot = new Bot<Context>(token)
 
 if (env['NODE_ENV'] !== 'production') {
-	bot.use(generateUpdateMiddleware())
+	baseBot.use(generateUpdateMiddleware())
 }
+
+const bot = baseBot.errorBoundary(async ({error}) => {
+	console.error('grammy ERROR occured', error)
+})
 
 bot.use(userSessions.middleware)
 bot.use(ensureSessionContent.middleware())
@@ -49,12 +53,8 @@ const menuMiddleware = new MenuMiddleware('/', menu)
 bot.command('start', async ctx => menuMiddleware.replyToContext(ctx))
 bot.use(menuMiddleware.middleware())
 
-bot.catch((error: any) => {
-	console.error('telegraf error occured', error)
-})
-
 async function startup(): Promise<void> {
-	await bot.api.setMyCommands([
+	await baseBot.api.setMyCommands([
 		{command: 'start', description: 'show the menu'},
 	])
 
@@ -66,7 +66,7 @@ async function startup(): Promise<void> {
 		console.error('TelegrafWikibase', 'regular update failed', error)
 	})
 
-	await bot.start({
+	await baseBot.start({
 		onStart(botInfo) {
 			console.log(new Date(), 'Bot starts as', botInfo.username)
 		},
