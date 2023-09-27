@@ -8,7 +8,7 @@ import {
 } from 'bastion-siege-logic';
 import type {Context, Session} from './context.js';
 
-const GAME_SPEEDUP = 30;
+const GAME_SPEEDUP = 5;
 
 function foodPenalty(session: Session): number {
 	return session.resources.food > 0 ? 1 : 0.2;
