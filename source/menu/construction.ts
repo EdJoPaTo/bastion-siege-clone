@@ -1,12 +1,15 @@
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import {
 	calcBuildingCost,
 	calcMinutesNeeded,
 	calcResourcesAfterConstruction,
 	type ConstructionName,
 } from 'bastion-siege-logic';
+import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context} from '../lib/context.js';
-import {constructionPropertyString, infoHeader} from '../lib/interface/construction.js';
+import {
+	constructionPropertyString,
+	infoHeader,
+} from '../lib/interface/construction.js';
 import {constructionResources} from '../lib/interface/resource.js';
 
 export const menu = new MenuTemplate<Context>(constructionBody);
@@ -31,12 +34,19 @@ async function constructionBody(ctx: Context): Promise<Body> {
 	const textParts: string[] = [];
 	textParts.push(await infoHeader(ctx, construction, level));
 
-	const properties = await constructionPropertyString(ctx, constructions, people, construction);
+	const properties = await constructionPropertyString(
+		ctx,
+		constructions,
+		people,
+		construction,
+	);
 	if (properties) {
 		textParts.push(properties);
 	}
 
-	textParts.push(await constructionResources(ctx, requiredResources, currentResources));
+	textParts.push(
+		await constructionResources(ctx, requiredResources, currentResources),
+	);
 	const text = textParts.join('\n\n');
 
 	return {text, parse_mode: 'Markdown'};
@@ -49,7 +59,11 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 		const requiredResources = calcBuildingCost(construction, level);
 		const currentResources = ctx.session.resources;
 
-		const minutes = calcMinutesNeeded(requiredResources, constructions, currentResources);
+		const minutes = calcMinutesNeeded(
+			requiredResources,
+			constructions,
+			currentResources,
+		);
 		return minutes > 0;
 	},
 	do(ctx) {
@@ -57,7 +71,10 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 		const requiredResources = calcBuildingCost(construction, level);
 		const currentResources = ctx.session.resources;
 
-		ctx.session.resources = calcResourcesAfterConstruction(currentResources, requiredResources);
+		ctx.session.resources = calcResourcesAfterConstruction(
+			currentResources,
+			requiredResources,
+		);
 		const constructions = {...ctx.session.constructions};
 		constructions[construction] = level + 1;
 		ctx.session.constructions = constructions;

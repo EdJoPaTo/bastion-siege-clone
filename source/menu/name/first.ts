@@ -1,10 +1,10 @@
 import {type Body, MenuTemplate} from 'grammy-inline-menu';
-import {UNISEX} from 'wikidata-person-names';
 import randomItem from 'random-item';
-import {DAY, MINUTE} from '../../lib/unix-time.js';
-import {formatNamePlain} from '../../lib/interface/name.js';
-import {outEmoji} from '../../lib/interface/generals.js';
+import {UNISEX} from 'wikidata-person-names';
 import type {Context, Name} from '../../lib/context.js';
+import {outEmoji} from '../../lib/interface/generals.js';
+import {formatNamePlain} from '../../lib/interface/name.js';
+import {DAY, MINUTE} from '../../lib/unix-time.js';
 
 const CHANGE_EACH_SECONDS = DAY * 7;
 
@@ -71,7 +71,8 @@ menu.interact(outEmoji.nameFallback, 'random', {
 });
 
 menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
-	hide: ctx => !ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
+	hide: ctx =>
+		!ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
 	do(ctx) {
 		const now = Date.now() / 1000;
 		ctx.session.name = {

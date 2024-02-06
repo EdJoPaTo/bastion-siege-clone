@@ -7,7 +7,9 @@ export const menu = new MenuTemplate<Context>(languageMenuBody);
 
 async function languageMenuBody(ctx: Context): Promise<Body> {
 	const flag = localeEmoji(ctx.wd.locale()) ?? outEmoji.language;
-	const text = wikidataInfoHeader(await ctx.wd.reader('menu.language'), {titlePrefix: flag});
+	const text = wikidataInfoHeader(await ctx.wd.reader('menu.language'), {
+		titlePrefix: flag,
+	});
 	return {text, parse_mode: 'Markdown'};
 }
 

@@ -24,7 +24,9 @@ async function allSessionIds(): Promise<readonly number[]> {
 		const hits = await readdir(path, {encoding: 'utf8', withFileTypes: true});
 
 		const dirResults = await Promise.all(
-			hits.filter(o => o.isDirectory()).map(async d => inner(path + '/' + d.name)),
+			hits
+				.filter(o => o.isDirectory())
+				.map(async d => inner(path + '/' + d.name)),
 		);
 		results.push(...dirResults.flat());
 

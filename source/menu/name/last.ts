@@ -1,12 +1,12 @@
 import {arrayFilterUnique} from 'array-filter-unique';
-import {FAMILY} from 'wikidata-person-names';
 import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
-import {formatNamePlain} from '../../lib/interface/name.js';
-import {getRaw} from '../../lib/user-sessions.js';
-import {HOUR, MINUTE} from '../../lib/unix-time.js';
-import {outEmoji} from '../../lib/interface/generals.js';
+import {FAMILY} from 'wikidata-person-names';
 import type {Context, Name} from '../../lib/context.js';
+import {outEmoji} from '../../lib/interface/generals.js';
+import {formatNamePlain} from '../../lib/interface/name.js';
+import {HOUR, MINUTE} from '../../lib/unix-time.js';
+import {getRaw} from '../../lib/user-sessions.js';
 
 const CHANGE_EACH_SECONDS = HOUR * 22;
 
@@ -79,7 +79,8 @@ async function menuBody(ctx: Context): Promise<Body> {
 export const menu = new MenuTemplate<Context>(menuBody);
 
 menu.interact(outEmoji.nameFallback, 'random', {
-	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
+	hide: ctx =>
+		!canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	do(ctx) {
 		ctx.session.createLast = randomItem(FAMILY);
 		return '.';
@@ -89,7 +90,8 @@ menu.interact(outEmoji.nameFallback, 'random', {
 menu.choose('existing', getExistingFamilies, {
 	columns: 2,
 	maxRows: 3,
-	hide: ctx => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
+	hide: ctx =>
+		!canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	getCurrentPage: ctx => ctx.session.page,
 	setPage(ctx, page) {
 		ctx.session.page = page;
@@ -109,7 +111,9 @@ menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('n
 });
 
 menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
-	hide: ctx => ctx.session.createLast === undefined || !canChangeLastName(ctx.session.name),
+	hide: ctx =>
+		ctx.session.createLast === undefined
+		|| !canChangeLastName(ctx.session.name),
 	do(ctx) {
 		const now = Date.now() / 1000;
 		const {createLast} = ctx.session;

@@ -1,11 +1,20 @@
+import {
+	calcStorageCapacity,
+	EMOJI,
+	type ResourceName,
+	type Resources,
+} from 'bastion-siege-logic';
 import {type Body, MenuTemplate} from 'grammy-inline-menu';
-import {calcStorageCapacity, EMOJI, type ResourceName, type Resources} from 'bastion-siege-logic';
 import {backButtons, type Context} from '../lib/context.js';
 import {formatNumberShort} from '../lib/interface/format-number.js';
-import {resources} from '../lib/interface/resource.js';
 import {wikidataInfoHeader} from '../lib/interface/generals.js';
+import {resources} from '../lib/interface/resource.js';
 
-function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
+function buy(
+	currentResources: Resources,
+	resource: ResourceName,
+	amount: number,
+): Resources {
 	const result = {...currentResources};
 	result.gold -= amount * 2;
 	result[resource] += amount;
@@ -13,8 +22,9 @@ function buy(currentResources: Resources, resource: ResourceName, amount: number
 }
 
 async function tradeMenuBody(ctx: Context): Promise<Body> {
-	let text = '';
-	text += wikidataInfoHeader(await ctx.wd.reader('action.buy'), {titlePrefix: EMOJI.trade});
+	let text = wikidataInfoHeader(await ctx.wd.reader('action.buy'), {
+		titlePrefix: EMOJI.trade,
+	});
 	text += '\n\n';
 	text += await resources(ctx, ctx.session.resources);
 	return {text, parse_mode: 'Markdown'};
@@ -32,13 +42,27 @@ async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 	const {constructions} = ctx.session;
 	const storageCapacity = calcStorageCapacity(constructions.storage);
 
-	let text = '';
-	text += wikidataInfoHeader(await ctx.wd.reader(`resource.${resource}`), {titlePrefix: EMOJI[resource]});
+	let text = wikidataInfoHeader(await ctx.wd.reader(`resource.${resource}`), {
+		titlePrefix: EMOJI[resource],
+	});
 
 	text += '\n\n';
-	text += `${EMOJI.gold} ${(await ctx.wd.reader('resource.gold')).label()} ${formatNumberShort(currentResources.gold, true)}${EMOJI.gold}\n`;
-	text += `${EMOJI[resource]} ${(await ctx.wd.reader(`resource.${resource}`)).label()} ${formatNumberShort(currentResources[resource], true)}${EMOJI[resource]}\n`;
-	text += `${(await ctx.wd.reader('bs.storageCapacity')).label()} ${formatNumberShort(storageCapacity, true)}${EMOJI[resource]}\n`;
+
+	const goldReader = await ctx.wd.reader('resource.gold');
+	const currentGoldShort = formatNumberShort(currentResources.gold, true);
+	text += `${EMOJI.gold} ${goldReader.label()} ${currentGoldShort}${EMOJI.gold}\n`;
+
+	const resourceReader = await ctx.wd.reader(`resource.${resource}`);
+	const currentResourceShort = formatNumberShort(
+		currentResources[resource],
+		true,
+	);
+	text += `${EMOJI[resource]} ${resourceReader.label()} ${currentResourceShort}${EMOJI[resource]}\n`;
+
+	const storageCapacityReader = await ctx.wd.reader('bs.storageCapacity');
+	const capacityShort = formatNumberShort(storageCapacity, true);
+	text += `${storageCapacityReader.label()} ${capacityShort}${EMOJI[resource]}\n`;
+
 	text += '\n';
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`;
 	return {text, parse_mode: 'Markdown'};
@@ -47,7 +71,11 @@ async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 const resourceMenu = new MenuTemplate(tradeResourceMenuBody);
 
 menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
-	buttonText: async (ctx, key) => `${EMOJI[key as ResourceName]} ${(await ctx.wd.reader(`resource.${key}`)).label()}`,
+	async buttonText(ctx, key) {
+		const emoji = EMOJI[key as ResourceName];
+		const reader = await ctx.wd.reader(`resource.${key}`);
+		return `${emoji} ${reader.label()}`;
+	},
 });
 
 menu.manualRow(backButtons);

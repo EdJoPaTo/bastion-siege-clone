@@ -1,4 +1,3 @@
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import {
 	calcBarracksCapacity,
 	calcGoldIncome,
@@ -6,19 +5,23 @@ import {
 	type Constructions,
 	EMOJI,
 } from 'bastion-siege-logic';
-import type {PeopleInConstructions} from '../types.js';
-import * as userSessions from '../lib/user-sessions.js';
+import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context, type Name} from '../lib/context.js';
-import {formatNamePlain} from '../lib/interface/name.js';
+import {peopleString} from '../lib/interface/construction.js';
 import {formatNumberShort} from '../lib/interface/format-number.js';
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
-import {peopleString} from '../lib/interface/construction.js';
+import {formatNamePlain} from '../lib/interface/name.js';
+import * as userSessions from '../lib/user-sessions.js';
+import type {PeopleInConstructions} from '../types.js';
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60;
 }
 
-function getAttackerWinChance(constructions: Constructions, people: PeopleInConstructions): number {
+function getAttackerWinChance(
+	constructions: Constructions,
+	people: PeopleInConstructions,
+): number {
 	const {trebuchet} = constructions;
 	const {barracks} = people;
 
@@ -35,7 +38,12 @@ function getDefenderWinChance(constructions: Constructions): number {
 	return chance;
 }
 
-function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot: number): string {
+function afterBattleMessageText(
+	attack: boolean,
+	win: boolean,
+	name: Name,
+	loot: number,
+): string {
 	const lines: string[] = [];
 
 	let headline = '';
@@ -59,8 +67,9 @@ async function menuBody(ctx: Context): Promise<Body> {
 	const attackTargetId = ctx.session.attackTarget;
 	const attackTarget = attackTargetId && await userSessions.getUser(attackTargetId);
 
-	let text = '';
-	text += wikidataInfoHeader(await ctx.wd.reader('bs.war'), {titlePrefix: EMOJI.war});
+	let text = wikidataInfoHeader(await ctx.wd.reader('bs.war'), {
+		titlePrefix: EMOJI.war,
+	});
 	text += '\n\n';
 	text += peopleString(
 		(await ctx.wd.reader('bs.army')).label(),
@@ -85,7 +94,8 @@ async function menuBody(ctx: Context): Promise<Body> {
 		text += '\n';
 		text += formatNamePlain(name);
 		text += '\n';
-		text += `~${formatNumberShort(getLoot(constructions), true)}${EMOJI.gold}\n`;
+		const gold = formatNumberShort(getLoot(constructions), true);
+		text += `~${gold}${EMOJI.gold}\n`;
 		text += '\n\n';
 	}
 
@@ -104,7 +114,10 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 		const targetId = ctx.session.attackTarget!;
 		const target = (await userSessions.getUser(targetId))!;
 
-		const attackerWinChance = getAttackerWinChance(attacker.constructions, attacker.people);
+		const attackerWinChance = getAttackerWinChance(
+			attacker.constructions,
+			attacker.people,
+		);
 		const targetWinChance = getDefenderWinChance(target.constructions);
 
 		const possibleLootFromAttacker = getLoot(attacker.constructions);
@@ -134,7 +147,9 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			}
 
 			await ctx.reply(
-				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {titlePrefix: outEmoji.suicide}),
+				wikidataInfoHeader(await ctx.wd.reader('battle.suicide'), {
+					titlePrefix: outEmoji.suicide,
+				}),
 				{parse_mode: 'Markdown'},
 			);
 			return '.';
@@ -176,7 +191,9 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			};
 
 			await ctx.reply(
-				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {titlePrefix: outEmoji.betrayal}),
+				wikidataInfoHeader(await ctx.wd.reader('battle.betrayal'), {
+					titlePrefix: outEmoji.betrayal,
+				}),
 				{parse_mode: 'Markdown'},
 			);
 		}
@@ -185,11 +202,20 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			try {
 				await ctx.api.sendMessage(
 					targetId,
-					afterBattleMessageText(false, !attackerWins, attacker.name!, targetLoot),
+					afterBattleMessageText(
+						false,
+						!attackerWins,
+						attacker.name!,
+						targetLoot,
+					),
 					{parse_mode: 'Markdown'},
 				);
 			} catch (error) {
-				console.error('send defender battlereport failed', targetId, error instanceof Error ? error.message : error);
+				console.error(
+					'send defender battlereport failed',
+					targetId,
+					error instanceof Error ? error.message : error,
+				);
 				target.blocked = true;
 			}
 		}

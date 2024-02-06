@@ -31,7 +31,9 @@ export async function constructionResourceLine(
 	amount: number,
 	possible: boolean,
 ): Promise<string> {
-	return `${possibleEmoji(possible)} ${await resourceLine(ctx, resource, amount)}`;
+	const emoji = possibleEmoji(possible);
+	const line = await resourceLine(ctx, resource, amount);
+	return `${emoji} ${line}`;
 }
 
 export async function resources(
@@ -50,9 +52,17 @@ export async function constructionResources(
 	required: ConstructionResources,
 	available: Resources,
 ): Promise<string> {
-	const lines = await Promise.all(CONSTRUCTION_RESOURCES
-		.filter(o => required[o])
-		.map(async o => constructionResourceLine(ctx, o, required[o], available[o] >= required[o])),
+	const lines = await Promise.all(
+		CONSTRUCTION_RESOURCES
+			.filter(o => required[o])
+			.map(async resource =>
+				constructionResourceLine(
+					ctx,
+					resource,
+					required[resource],
+					available[resource] >= required[resource],
+				),
+			),
 	);
 
 	return lines.join('\n');

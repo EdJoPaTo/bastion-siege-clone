@@ -1,15 +1,15 @@
-import {env} from 'node:process';
 import {readFileSync} from 'node:fs';
+import {env} from 'node:process';
 import {Bot} from 'grammy';
-import {generateUpdateMiddleware} from 'telegraf-middleware-console-time';
 import {MenuMiddleware} from 'grammy-inline-menu';
+import {generateUpdateMiddleware} from 'telegraf-middleware-console-time';
 import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase';
-import {i18n} from './translation.js';
-import {menu} from './menu/index.js';
+import type {Context} from './lib/context.js';
 import * as ensureSessionContent from './lib/session-state-math.js';
 import * as userSessions from './lib/user-sessions.js';
 import * as wdSets from './lib/wikidata-sets.js';
-import type {Context} from './lib/context.js';
+import {menu} from './menu/index.js';
+import {i18n} from './translation.js';
 
 const token = env['BOT_TOKEN'];
 if (!token) {

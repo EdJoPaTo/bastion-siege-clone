@@ -14,8 +14,8 @@ import {
 	EMOJI,
 	type ResourceName,
 } from 'bastion-siege-logic';
-import type {Context} from '../context.js';
 import type {PeopleInConstructions} from '../../types.js';
+import type {Context} from '../context.js';
 import {formatNumberShort} from './format-number.js';
 import {possibleEmoji, wikidataInfoHeader} from './generals.js';
 
@@ -124,11 +124,11 @@ export async function constructionPropertyString(
 	if (construction === 'storage') {
 		const units: ResourceName[] = ['wood', 'stone', 'food'];
 		const lines = await Promise.all(units
-			.map(async o =>
+			.map(async unit =>
 				storageCapacityString(
 					ctx,
 					calcStorageCapacity(constructions.storage),
-					o,
+					unit,
 				),
 			));
 

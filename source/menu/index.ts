@@ -1,8 +1,12 @@
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import {EMOJI} from 'bastion-siege-logic';
+import {type Body, MenuTemplate} from 'grammy-inline-menu';
 import type {Context} from '../lib/context.js';
+import {
+	outEmoji,
+	randomFamilyEmoji,
+	wikidataInfoHeader,
+} from '../lib/interface/generals.js';
 import {formatNamePlain} from '../lib/interface/name.js';
-import {outEmoji, randomFamilyEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
 import {resources} from '../lib/interface/resource.js';
 import {buildingsMenu, workshopMenu} from './constructions.js';
 import {menu as familyMenu} from './family.js';
@@ -14,8 +18,7 @@ import {menu as tradeMenu} from './trade.js';
 import {menu as warMenu} from './war.js';
 
 async function menuBody(ctx: Context): Promise<Body> {
-	let text = '';
-	text += wikidataInfoHeader(await ctx.wd.reader('menu.menu'));
+	let text = wikidataInfoHeader(await ctx.wd.reader('menu.menu'));
 	text += '\n\n';
 
 	if (ctx.session.name) {
@@ -37,7 +40,10 @@ function buttonText(
 	emoji: string,
 	resourceKey: string,
 ): (ctx: Context) => Promise<string> {
-	return async ctx => `${emoji} ${(await ctx.wd.reader(resourceKey)).label()}`;
+	return async ctx => {
+		const reader = await ctx.wd.reader(resourceKey);
+		return `${emoji} ${reader.label()}`;
+	};
 }
 
 menu.submenu(buttonText(EMOJI.buildings, 'bs.buildings'), 'b', buildingsMenu);

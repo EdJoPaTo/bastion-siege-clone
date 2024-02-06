@@ -1,7 +1,7 @@
-import {createBackMainMenuButtons} from 'grammy-inline-menu';
+import type {I18nFlavor} from '@grammyjs/i18n';
 import type {Constructions, Resources} from 'bastion-siege-logic';
 import type {Context as BaseContext, SessionFlavor} from 'grammy';
-import type {I18nFlavor} from '@grammyjs/i18n';
+import {createBackMainMenuButtons} from 'grammy-inline-menu';
 import type {MiddlewareProperty} from 'telegraf-wikibase';
 import type {PeopleInConstructions} from '../types.js';
 

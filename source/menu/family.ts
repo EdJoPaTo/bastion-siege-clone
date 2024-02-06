@@ -24,7 +24,9 @@ async function menuBody(ctx: Context): Promise<Body> {
 		const familyMembers = await getFamilyMembers(ctx.session.name.last);
 		const lines = familyMembers
 			.sort((a, b) => b.constructions.barracks - a.constructions.barracks)
-			.map(o => `${o.constructions.barracks}${EMOJI.barracks}  ${o.name!.first}`);
+			.map(o =>
+				`${o.constructions.barracks}${EMOJI.barracks}  ${o.name!.first}`,
+			);
 		text += '\n\n';
 		text += lines.join('\n');
 	}

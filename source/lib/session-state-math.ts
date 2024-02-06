@@ -6,6 +6,7 @@ import {
 	calcWallArcherCapacity,
 	estimateResourcesAfter,
 } from 'bastion-siege-logic';
+import type {MiddlewareFn} from 'grammy';
 import type {Context, Session} from './context.js';
 
 const GAME_SPEEDUP = 5;
@@ -57,15 +58,20 @@ function calcCurrentPeople(session: Session, now: number): void {
 	const {constructions, people, peopleTimestamp} = session;
 
 	const totalSeconds = now - peopleTimestamp;
-	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60);
+	const totalMinutes = Math.floor(
+		GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60,
+	);
 
-	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses) * totalMinutes;
+	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses)
+		* totalMinutes;
 	if (totalPoepleIncome < 1) {
 		return;
 	}
 
-	const freePlacesBarracks = calcBarracksCapacity(constructions.barracks) - session.people.barracks;
-	const freePlacesWall = calcWallArcherCapacity(constructions.wall) - session.people.wall;
+	const freePlacesBarracks = calcBarracksCapacity(constructions.barracks)
+		- session.people.barracks;
+	const freePlacesWall = calcWallArcherCapacity(constructions.wall)
+		- session.people.wall;
 
 	let peopleAvailable = totalPoepleIncome + people.houses;
 
@@ -89,13 +95,23 @@ function calcCurrentResources(session: Session, now: number): void {
 	const {constructions, resources, resourcesTimestamp} = session;
 
 	const totalSeconds = now - resourcesTimestamp;
-	const totalMinutes = Math.floor(GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60);
+	const totalMinutes = Math.floor(
+		GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60,
+	);
 
 	if (totalMinutes > 0) {
-		session.resources = estimateResourcesAfter(resources, constructions, totalMinutes);
+		session.resources = estimateResourcesAfter(
+			resources,
+			constructions,
+			totalMinutes,
+		);
 
 		// Max negative gold should be recoverable in 12h realtime hours
-		const goldIncome24h = calcGoldIncome(constructions.townhall, constructions.houses) * 12 * 60 * GAME_SPEEDUP * foodPenalty(session);
+		const goldIncome24h = calcGoldIncome(
+			constructions.townhall,
+			constructions.houses,
+		)
+			* 12 * 60 * GAME_SPEEDUP * foodPenalty(session);
 
 		session.resources = {
 			...session.resources,
@@ -106,7 +122,7 @@ function calcCurrentResources(session: Session, now: number): void {
 	}
 }
 
-export function middleware(): (ctx: Context, next: () => Promise<void>) => Promise<void> {
+export function middleware(): MiddlewareFn<Context> {
 	return async (ctx, next) => {
 		const now = Date.now() / 1000;
 
