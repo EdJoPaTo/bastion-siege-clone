@@ -12,7 +12,7 @@ const queries = {
 }`,
 } as const;
 
-export type Query = keyof typeof queries;
+type Query = keyof typeof queries;
 
 const entities: Record<Query, string[]> = {
 	spies: [],
@@ -44,7 +44,7 @@ async function loadQNumbersOfKey(key: Query): Promise<void> {
 	}
 }
 
-export function get(key: Query): readonly string[] {
+function get(key: Query): readonly string[] {
 	return entities[key] || [];
 }
 

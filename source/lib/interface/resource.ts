@@ -10,7 +10,7 @@ import type {Context} from '../context.js';
 import {formatNumberShort} from './format-number.js';
 import {possibleEmoji} from './generals.js';
 
-export async function resourceLine(
+async function resourceLine(
 	ctx: Context,
 	resource: ResourceName,
 	amount: number,
@@ -25,7 +25,7 @@ export async function resourceLine(
 	return parts.join(' ');
 }
 
-export async function constructionResourceLine(
+async function constructionResourceLine(
 	ctx: Context,
 	resource: ResourceName,
 	amount: number,
