@@ -4,7 +4,7 @@ import {
 	type ResourceName,
 	type Resources,
 } from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context} from '../lib/context.js';
 import {formatNumberShort} from '../lib/interface/format-number.js';
 import {wikidataInfoHeader} from '../lib/interface/generals.js';
@@ -21,22 +21,20 @@ function buy(
 	return result;
 }
 
-async function tradeMenuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = wikidataInfoHeader(await ctx.wd.reader('action.buy'), {
 		titlePrefix: EMOJI.trade,
 	});
 	text += '\n\n';
 	text += await resources(ctx, ctx.session.resources);
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate(tradeMenuBody);
+});
 
 function resourceFromCtx(ctx: Context): ResourceName {
 	return ctx.match![1] as ResourceName;
 }
 
-async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
+const resourceMenu = new MenuTemplate<Context>(async ctx => {
 	const resource = resourceFromCtx(ctx);
 	const currentResources = ctx.session.resources;
 	const {constructions} = ctx.session;
@@ -66,9 +64,7 @@ async function tradeResourceMenuBody(ctx: Context): Promise<Body> {
 	text += '\n';
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`;
 	return {text, parse_mode: 'Markdown'};
-}
-
-const resourceMenu = new MenuTemplate(tradeResourceMenuBody);
+});
 
 menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
 	async buttonText(ctx, key) {

@@ -1,5 +1,5 @@
 import {EMOJI} from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context, type Session} from '../lib/context.js';
 import {randomFamilyEmoji} from '../lib/interface/generals.js';
 import {getRaw} from '../lib/user-sessions.js';
@@ -11,7 +11,7 @@ async function getFamilyMembers(lastName: string): Promise<Session[]> {
 		.filter(o => o.name?.last === lastName);
 }
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = '';
 
 	text += randomFamilyEmoji();
@@ -32,8 +32,6 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate<Context>(menuBody);
+});
 
 menu.manualRow(backButtons);

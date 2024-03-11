@@ -1,10 +1,10 @@
 import {type ConstructionName, EMOJI} from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context, type Session} from '../lib/context.js';
 import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
 import * as userSessions from '../lib/user-sessions.js';
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	const allSessions = await userSessions.getRaw();
 	const allSessionData = allSessions.map(o => o.data);
 
@@ -24,7 +24,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += statLines.join('\n');
 
 	return {text, parse_mode: 'Markdown'};
-}
+});
 
 async function maxConstructionLevelLine(
 	ctx: Context,
@@ -35,8 +35,6 @@ async function maxConstructionLevelLine(
 	const level = Math.max(...sessions.map(o => o.constructions[construction]));
 	return `${EMOJI[construction]} ≤${level} ${reader.label()}`;
 }
-
-export const menu = new MenuTemplate(menuBody);
 
 menu.url(
 	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,

@@ -5,7 +5,7 @@ import {
 	type Constructions,
 	EMOJI,
 } from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context, type Name} from '../lib/context.js';
 import {peopleString} from '../lib/interface/construction.js';
 import {formatNumberShort} from '../lib/interface/format-number.js';
@@ -62,7 +62,7 @@ function afterBattleMessageText(
 	return lines.join('\n');
 }
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	const {constructions, people} = ctx.session;
 	const attackTargetId = ctx.session.attackTarget;
 	const attackTarget = attackTargetId && await userSessions.getUser(attackTargetId);
@@ -100,9 +100,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate(menuBody);
+});
 
 menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')).label()}`, 'attack', {
 	hide: ctx => !ctx.session.attackTarget,

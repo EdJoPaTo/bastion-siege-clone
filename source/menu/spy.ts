@@ -4,7 +4,7 @@ import {
 	CONSTRUCTIONS,
 	EMOJI,
 } from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
 import {backButtons, type Context} from '../lib/context.js';
 import {wikidataInfoHeader} from '../lib/interface/generals.js';
@@ -33,7 +33,7 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 	return possibleConstructions;
 }
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = wikidataInfoHeader(await ctx.wd.reader('menu.spy'), {
 		titlePrefix: EMOJI.search,
 	});
@@ -49,9 +49,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate(menuBody);
+});
 
 menu.interact(
 	async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`,

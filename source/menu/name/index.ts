@@ -1,11 +1,11 @@
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context} from '../../lib/context.js';
 import {outEmoji} from '../../lib/interface/generals.js';
 import {formatNamePlain} from '../../lib/interface/name.js';
 import {menu as firstMenu} from './first.js';
 import {menu as lastMenu} from './last.js';
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = '';
 
 	text += outEmoji.name;
@@ -25,9 +25,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate<Context>(menuBody);
+});
 
 menu.submenu(ctx => ctx.session.name?.first ?? outEmoji.nameFallback, 'first', firstMenu);
 

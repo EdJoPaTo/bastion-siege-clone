@@ -1,5 +1,5 @@
 import {arrayFilterUnique} from 'array-filter-unique';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
 import {FAMILY} from 'wikidata-person-names';
 import type {Context, Name} from '../../lib/context.js';
@@ -29,7 +29,7 @@ function canChangeLastName(name: Name | undefined): name is Name {
 	return true;
 }
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = '';
 
 	text += outEmoji.name;
@@ -74,9 +74,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	}
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate<Context>(menuBody);
+});
 
 menu.interact(outEmoji.nameFallback, 'random', {
 	hide: ctx =>

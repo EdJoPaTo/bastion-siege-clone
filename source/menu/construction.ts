@@ -4,15 +4,13 @@ import {
 	calcResourcesAfterConstruction,
 	type ConstructionName,
 } from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import {backButtons, type Context} from '../lib/context.js';
 import {
 	constructionPropertyString,
 	infoHeader,
 } from '../lib/interface/construction.js';
 import {constructionResources} from '../lib/interface/resource.js';
-
-export const menu = new MenuTemplate<Context>(constructionBody);
 
 function constructionFromCtx(
 	ctx: Context,
@@ -24,7 +22,7 @@ function constructionFromCtx(
 	return {construction, level};
 }
 
-async function constructionBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	const {constructions, people} = ctx.session;
 	const {construction, level} = constructionFromCtx(ctx);
 
@@ -50,7 +48,7 @@ async function constructionBody(ctx: Context): Promise<Body> {
 	const text = textParts.join('\n\n');
 
 	return {text, parse_mode: 'Markdown'};
-}
+});
 
 menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).label()}`, 'upgrade', {
 	hide(ctx) {

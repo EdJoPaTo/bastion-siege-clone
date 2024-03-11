@@ -1,5 +1,5 @@
 import {EMOJI} from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
+import {MenuTemplate} from 'grammy-inline-menu';
 import type {Context} from '../lib/context.js';
 import {
 	outEmoji,
@@ -17,7 +17,7 @@ import {menu as statsMenu} from './stats.js';
 import {menu as tradeMenu} from './trade.js';
 import {menu as warMenu} from './war.js';
 
-async function menuBody(ctx: Context): Promise<Body> {
+export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = wikidataInfoHeader(await ctx.wd.reader('menu.menu'));
 	text += '\n\n';
 
@@ -32,9 +32,7 @@ async function menuBody(ctx: Context): Promise<Body> {
 	text += ctx.t('disclaimer');
 
 	return {text, parse_mode: 'Markdown'};
-}
-
-export const menu = new MenuTemplate(menuBody);
+});
 
 function buttonText(
 	emoji: string,
