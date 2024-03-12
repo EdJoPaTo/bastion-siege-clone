@@ -11,8 +11,9 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.select('lang', async ctx => ctx.wd.availableLocales(), {
+menu.select('lang', {
 	columns: 3,
+	choices: async ctx => ctx.wd.availableLocales(),
 	buttonText(_, key) {
 		const flag = localeEmoji(key);
 		return flag ? `${flag} ${key}` : key;

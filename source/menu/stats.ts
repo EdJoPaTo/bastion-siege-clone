@@ -36,9 +36,10 @@ async function maxConstructionLevelLine(
 	return `${EMOJI[construction]} ≤${level} ${reader.label()}`;
 }
 
-menu.url(
-	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
-	async ctx => (await ctx.wd.reader('menu.statistics')).url(),
-);
+menu.url({
+	text: async ctx =>
+		`ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
+	url: async ctx => (await ctx.wd.reader('menu.statistics')).url(),
+});
 
 menu.manualRow(backButtons);

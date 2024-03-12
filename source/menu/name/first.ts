@@ -60,7 +60,8 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.interact(outEmoji.nameFallback, 'random', {
+menu.interact('random', {
+	text: outEmoji.nameFallback,
 	hide: ctx => !canChangeFirstName(ctx.session.name),
 	do(ctx) {
 		ctx.session.createFirst = randomItem(UNISEX);
@@ -68,7 +69,8 @@ menu.interact(outEmoji.nameFallback, 'random', {
 	},
 });
 
-menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
+menu.interact('take', {
+	text: ctx => `😍 ${ctx.t('name-take')}`,
 	hide: ctx =>
 		!ctx.session.createFirst || !canChangeFirstName(ctx.session.name),
 	do(ctx) {
@@ -84,8 +86,9 @@ menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
 	},
 });
 
-menu.interact(ctx => `😒 ${ctx.t('name-reject')}`, 'reject', {
+menu.interact('reject', {
 	joinLastRow: true,
+	text: ctx => `😒 ${ctx.t('name-reject')}`,
 	hide: ctx => !ctx.session.name,
 	do(ctx) {
 		delete ctx.session.createLast;

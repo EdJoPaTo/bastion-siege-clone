@@ -27,10 +27,13 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.submenu(ctx => ctx.session.name?.first ?? outEmoji.nameFallback, 'first', firstMenu);
+menu.submenu('first', firstMenu, {
+	text: ctx => ctx.session.name?.first ?? outEmoji.nameFallback,
+});
 
-menu.submenu(ctx => ctx.session.name?.last ?? outEmoji.nameFallback, 'last', lastMenu, {
+menu.submenu('last', lastMenu, {
 	joinLastRow: true,
+	text: ctx => ctx.session.name?.last ?? outEmoji.nameFallback,
 	hide: ctx => !ctx.session.name,
 });
 

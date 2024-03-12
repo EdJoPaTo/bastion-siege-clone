@@ -70,8 +70,9 @@ export const buildingsMenu = new MenuTemplate<Context>(async ctx =>
 	constructionMenuBody(ctx, 'buildings', BUILDINGS),
 );
 
-buildingsMenu.chooseIntoSubmenu('', BUILDINGS, entryMenu, {
+buildingsMenu.chooseIntoSubmenu('', entryMenu, {
 	columns: 2,
+	choices: BUILDINGS,
 	buttonText: constructionButtonTextFunc,
 });
 
@@ -81,8 +82,9 @@ export const workshopMenu = new MenuTemplate<Context>(async ctx =>
 	constructionMenuBody(ctx, 'workshop', WORKSHOP),
 );
 
-workshopMenu.chooseIntoSubmenu('', WORKSHOP, entryMenu, {
+workshopMenu.chooseIntoSubmenu('', entryMenu, {
 	columns: 2,
+	choices: WORKSHOP,
 	buttonText: constructionButtonTextFunc,
 });
 

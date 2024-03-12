@@ -50,7 +50,8 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).label()}`, 'upgrade', {
+menu.interact('upgrade', {
+	text: async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).label()}`,
 	hide(ctx) {
 		const {constructions} = ctx.session;
 		const {construction, level} = constructionFromCtx(ctx);
@@ -81,14 +82,15 @@ menu.interact(async ctx => `⬆️ ${(await ctx.wd.reader('action.upgrade')).lab
 	},
 });
 
-menu.url(
-	async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
-	async ctx => {
+menu.url({
+	text: async ctx =>
+		`ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
+	async url(ctx) {
 		const {construction} = constructionFromCtx(ctx);
 		const wdKey = `construction.${construction}`;
 		const reader = await ctx.wd.reader(wdKey);
 		return reader.url();
 	},
-);
+});
 
 menu.manualRow(backButtons);

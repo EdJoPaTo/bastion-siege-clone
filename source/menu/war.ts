@@ -65,7 +65,8 @@ function afterBattleMessageText(
 export const menu = new MenuTemplate<Context>(async ctx => {
 	const {constructions, people} = ctx.session;
 	const attackTargetId = ctx.session.attackTarget;
-	const attackTarget = attackTargetId && await userSessions.getUser(attackTargetId);
+	const attackTarget = attackTargetId
+		&& await userSessions.getUser(attackTargetId);
 
 	let text = wikidataInfoHeader(await ctx.wd.reader('bs.war'), {
 		titlePrefix: EMOJI.war,
@@ -102,7 +103,9 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')).label()}`, 'attack', {
+menu.interact('attack', {
+	text: async ctx =>
+		`${EMOJI.war} ${(await ctx.wd.reader('action.attack')).label()}`,
 	hide: ctx => !ctx.session.attackTarget,
 	async do(ctx) {
 		const now = Date.now() / 1000;
@@ -180,7 +183,8 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 			{parse_mode: 'Markdown'},
 		);
 
-		const isBetrayal = attacker.name?.last && attacker.name.last === target.name?.last;
+		const isBetrayal = attacker.name?.last
+			&& attacker.name.last === target.name?.last;
 		if (isBetrayal) {
 			attacker.name = {
 				...attacker.name!,
@@ -222,9 +226,13 @@ menu.interact(async ctx => `${EMOJI.war} ${(await ctx.wd.reader('action.attack')
 	},
 });
 
-menu.interact(async ctx => `${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`, 'search', {
+menu.interact('search', {
+	text: async ctx =>
+		`${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`,
 	async do(ctx) {
-		const chosen = await userSessions.getRandomUser(o => Boolean(o.data.name && o.user !== ctx.session.attackTarget));
+		const chosen = await userSessions.getRandomUser(o =>
+			Boolean(o.data.name && o.user !== ctx.session.attackTarget),
+		);
 		ctx.session.attackTarget = chosen.user;
 		return '.';
 	},

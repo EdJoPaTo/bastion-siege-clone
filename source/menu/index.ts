@@ -44,34 +44,49 @@ function buttonText(
 	};
 }
 
-menu.submenu(buttonText(EMOJI.buildings, 'bs.buildings'), 'b', buildingsMenu);
-menu.submenu(buttonText(EMOJI.workshop, 'bs.workshop'), 'w', workshopMenu, {
+menu.submenu('b', buildingsMenu, {
+	text: buttonText(EMOJI.buildings, 'bs.buildings'),
+});
+menu.submenu('w', workshopMenu, {
 	joinLastRow: true,
+	text: buttonText(EMOJI.workshop, 'bs.workshop'),
 });
 
-menu.submenu(buttonText(outEmoji.name, 'menu.name'), 'name', nameMenu);
+menu.submenu('name', nameMenu, {
+	text: buttonText(outEmoji.name, 'menu.name'),
+});
 
-menu.submenu(buttonText(randomFamilyEmoji(), 'menu.family'), 'family', familyMenu, {
+menu.submenu('family', familyMenu, {
 	joinLastRow: true,
+	text: buttonText(randomFamilyEmoji(), 'menu.family'),
 	hide: ctx => !ctx.session.name?.last,
 });
 
-menu.submenu(buttonText(EMOJI.war, 'bs.war'), 'war', warMenu, {
+menu.submenu('war', warMenu, {
+	text: buttonText(EMOJI.war, 'bs.war'),
 	hide: ctx => !ctx.session.name || ctx.session.constructions.barracks === 0,
 });
 
-menu.submenu(buttonText(EMOJI.trade, 'bs.trade'), 'trade', tradeMenu, {
+menu.submenu('trade', tradeMenu, {
 	joinLastRow: true,
+	text: buttonText(EMOJI.trade, 'bs.trade'),
 });
 
-menu.submenu(buttonText(EMOJI.search, 'menu.spy'), 'spy', spyMenu, {
+menu.submenu('spy', spyMenu, {
+	text: buttonText(EMOJI.search, 'menu.spy'),
 	hide: ctx => !ctx.session.name,
 });
 
-menu.submenu(buttonText(outEmoji.language, 'menu.language'), 'lang', languageMenu);
-
-menu.submenu(buttonText(outEmoji.statistics, 'menu.statistics'), 'stats', statsMenu, {
-	joinLastRow: true,
+menu.submenu('lang', languageMenu, {
+	text: buttonText(outEmoji.language, 'menu.language'),
 });
 
-menu.url(buttonText(outEmoji.chat, 'menu.chat'), 'https://t.me/Bs1thApril');
+menu.submenu('stats', statsMenu, {
+	joinLastRow: true,
+	text: buttonText(outEmoji.statistics, 'menu.statistics'),
+});
+
+menu.url({
+	text: buttonText(outEmoji.chat, 'menu.chat'),
+	url: 'https://t.me/Bs1thApril',
+});

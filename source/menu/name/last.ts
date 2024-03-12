@@ -76,7 +76,8 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.interact(outEmoji.nameFallback, 'random', {
+menu.interact('random', {
+	text: outEmoji.nameFallback,
 	hide: ctx =>
 		!canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	do(ctx) {
@@ -85,9 +86,20 @@ menu.interact(outEmoji.nameFallback, 'random', {
 	},
 });
 
-menu.choose('existing', getExistingFamilies, {
+menu.choose('existing', {
 	columns: 2,
 	maxRows: 3,
+	async choices(ctx) {
+		const currentLastName = ctx.session.name?.last;
+		const all = await getRaw();
+		const lastNames = all
+			.map(o => o.data.name?.last)
+			.filter(o => o !== currentLastName)
+			.filter((o): o is string => typeof o === 'string')
+			.filter(arrayFilterUnique())
+			.sort((a, b) => a.localeCompare(b, ctx.wd.locale()));
+		return lastNames;
+	},
 	hide: ctx =>
 		!canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
 	getCurrentPage: ctx => ctx.session.page,
@@ -100,7 +112,11 @@ menu.choose('existing', getExistingFamilies, {
 	},
 });
 
-menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('name.loseLastName').then(r => r.label())}`, 'looseLastName', {
+menu.interact('looseLastName', {
+	async text(ctx) {
+		const reader = await ctx.wd.reader('name.loseLastName');
+		return `${outEmoji.withoutLastName} ${reader.label()}`;
+	},
 	hide: ctx => !canChangeLastName(ctx.session.name) || !ctx.session.name.last,
 	do(ctx) {
 		ctx.session.createLast = false;
@@ -108,7 +124,8 @@ menu.interact(async ctx => `${outEmoji.withoutLastName} ${await ctx.wd.reader('n
 	},
 });
 
-menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
+menu.interact('take', {
+	text: ctx => `😍 ${ctx.t('name-take')}`,
 	hide: ctx =>
 		ctx.session.createLast === undefined
 		|| !canChangeLastName(ctx.session.name),
@@ -129,22 +146,11 @@ menu.interact(ctx => `😍 ${ctx.t('name-take')}`, 'take', {
 	},
 });
 
-menu.interact(ctx => `😒 ${ctx.t('name-reject')}`, 'reject', {
+menu.interact('reject', {
 	joinLastRow: true,
+	text: ctx => `😒 ${ctx.t('name-reject')}`,
 	do(ctx) {
 		delete ctx.session.createLast;
 		return '..';
 	},
 });
-
-async function getExistingFamilies(ctx: Context): Promise<string[]> {
-	const currentLastName = ctx.session.name?.last;
-	const all = await getRaw();
-	const lastNames = all
-		.map(o => o.data.name?.last)
-		.filter(o => o !== currentLastName)
-		.filter((o): o is string => typeof o === 'string')
-		.filter(arrayFilterUnique())
-		.sort((a, b) => a.localeCompare(b, ctx.wd.locale()));
-	return lastNames;
-}

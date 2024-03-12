@@ -51,68 +51,65 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.interact(
-	async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`,
-	'espionage',
-	{
-		async do(ctx) {
-			const {data: session} = await userSessions.getRandomUser(session =>
-				Boolean(session.data.name),
-			);
-			const name = session.name!;
+menu.interact('espionage', {
+	text: async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`,
+	async do(ctx) {
+		const {data: session} = await userSessions.getRandomUser(session =>
+			Boolean(session.data.name),
+		);
+		const name = session.name!;
 
-			const spyableConstructions = getSpyableConstructions(
-				ctx.session.selectedSpy,
-			);
-			const pickedConstructionKey = randomItem(spyableConstructions);
-			const pickedConstructionLevel
-				= session.constructions[pickedConstructionKey];
+		const spyableConstructions = getSpyableConstructions(
+			ctx.session.selectedSpy,
+		);
+		const pickedConstructionKey = randomItem(spyableConstructions);
+		const pickedConstructionLevel
+			= session.constructions[pickedConstructionKey];
 
-			let message = '';
-			message += ctx.session.selectedSpyEmoji;
-			message += ' ';
-			message += formatNamePlain(name);
-			message += ' ';
-			message += EMOJI[pickedConstructionKey];
-			message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`))
-				.label();
-			message += ' ';
-			message += pickedConstructionLevel.toFixed(0);
+		let message = '';
+		message += ctx.session.selectedSpyEmoji;
+		message += ' ';
+		message += formatNamePlain(name);
+		message += ' ';
+		message += EMOJI[pickedConstructionKey];
+		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`))
+			.label();
+		message += ' ';
+		message += pickedConstructionLevel.toFixed(0);
 
-			await ctx.answerCallbackQuery(message);
-			return false;
-		},
+		await ctx.answerCallbackQuery(message);
+		return false;
 	},
-);
+});
 
-menu.interact(
-	async ctx => `${(await ctx.wd.reader('action.change')).label()}`,
-	'change',
-	{
-		joinLastRow: true,
-		do(ctx) {
-			// @ts-expect-error delete non optional. It gets set automatically by middleware
-			delete ctx.session.selectedSpy;
-			// @ts-expect-error delete non optional. It gets set automatically by middleware
-			delete ctx.session.selectedSpyEmoji;
-			return '.';
-		},
+menu.interact('change', {
+	joinLastRow: true,
+	text: async ctx => `${(await ctx.wd.reader('action.change')).label()}`,
+	do(ctx) {
+		// @ts-expect-error delete non optional. It gets set automatically by middleware
+		delete ctx.session.selectedSpy;
+		// @ts-expect-error delete non optional. It gets set automatically by middleware
+		delete ctx.session.selectedSpyEmoji;
+		return '.';
 	},
-);
+});
 
-menu.url(
-	async ctx => {
+menu.url({
+	async text(ctx) {
 		const spyReader = await ctx.wd.reader('menu.spy');
 		const wdItemReader = await ctx.wd.reader('menu.wikidataItem');
 		return `ℹ️ ${wdItemReader.label()} ${spyReader.label()}`;
 	},
-	async ctx => (await ctx.wd.reader('menu.spy')).url(),
-);
+	url: async ctx => (await ctx.wd.reader('menu.spy')).url(),
+});
 
-menu.url(async ctx => {
-	const spyReader = await getSpy(ctx);
-	const wdItemReader = await ctx.wd.reader('menu.wikidataItem');
-	return `ℹ️ ${wdItemReader.label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`;
-}, async ctx => (await getSpy(ctx)).url());
+menu.url({
+	async text(ctx) {
+		const spyReader = await getSpy(ctx);
+		const wdItemReader = await ctx.wd.reader('menu.wikidataItem');
+		return `ℹ️ ${wdItemReader.label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`;
+	},
+	url: async ctx => (await getSpy(ctx)).url(),
+});
 
 menu.manualRow(backButtons);

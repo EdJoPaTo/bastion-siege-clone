@@ -66,7 +66,8 @@ const resourceMenu = new MenuTemplate<Context>(async ctx => {
 	return {text, parse_mode: 'Markdown'};
 });
 
-menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
+menu.chooseIntoSubmenu('', resourceMenu, {
+	choices: ['wood', 'stone', 'food'],
 	async buttonText(ctx, key) {
 		const emoji = EMOJI[key as ResourceName];
 		const reader = await ctx.wd.reader(`resource.${key}`);
@@ -76,30 +77,29 @@ menu.chooseIntoSubmenu('', ['wood', 'stone', 'food'], resourceMenu, {
 
 menu.manualRow(backButtons);
 
-function buyOptions(ctx: Context): string[] {
-	const resource = resourceFromCtx(ctx);
-	const currentResources = ctx.session.resources;
-	const {constructions} = ctx.session;
-	const storageCapacity = calcStorageCapacity(constructions.storage);
-
-	const upperLimitResource = storageCapacity - currentResources[resource];
-	const upperLimitGold = currentResources.gold / 2;
-	const upperLimitExact = Math.min(upperLimitResource, upperLimitGold);
-
-	const exp = Math.floor(Math.log10(upperLimitExact));
-	const magnitude = 10 ** exp;
-
-	const options = [1 / 40, 1 / 20, 1 / 10, 1 / 4, 1 / 2, 1, 2.5, 5];
-
-	return options
-		.map(o => o * magnitude)
-		.filter(o => !(o < 100 || o > upperLimitExact))
-		.slice(-6)
-		.map(String);
-}
-
-resourceMenu.choose('buy', buyOptions, {
+resourceMenu.choose('buy', {
 	columns: 3,
+	choices(ctx) {
+		const resource = resourceFromCtx(ctx);
+		const currentResources = ctx.session.resources;
+		const {constructions} = ctx.session;
+		const storageCapacity = calcStorageCapacity(constructions.storage);
+
+		const upperLimitResource = storageCapacity - currentResources[resource];
+		const upperLimitGold = currentResources.gold / 2;
+		const upperLimitExact = Math.min(upperLimitResource, upperLimitGold);
+
+		const exp = Math.floor(Math.log10(upperLimitExact));
+		const magnitude = 10 ** exp;
+
+		const options = [1 / 40, 1 / 20, 1 / 10, 1 / 4, 1 / 2, 1, 2.5, 5];
+
+		return options
+			.map(o => o * magnitude)
+			.filter(o => !(o < 100 || o > upperLimitExact))
+			.slice(-6)
+			.map(String);
+	},
 	buttonText(ctx, key) {
 		const resource = resourceFromCtx(ctx);
 		const numberText = formatNumberShort(Number(key), true);
@@ -113,11 +113,15 @@ resourceMenu.choose('buy', buyOptions, {
 	},
 });
 
-resourceMenu.url(async ctx => `ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`, async ctx => {
-	const resource = resourceFromCtx(ctx);
-	const wdKey = `resource.${resource}`;
-	const reader = await ctx.wd.reader(wdKey);
-	return reader.url();
+resourceMenu.url({
+	text: async ctx =>
+		`ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
+	async url(ctx) {
+		const resource = resourceFromCtx(ctx);
+		const wdKey = `resource.${resource}`;
+		const reader = await ctx.wd.reader(wdKey);
+		return reader.url();
+	},
 });
 
 resourceMenu.manualRow(backButtons);
