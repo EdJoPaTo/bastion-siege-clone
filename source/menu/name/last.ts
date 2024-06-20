@@ -95,7 +95,7 @@ menu.choose('existing', {
 		const lastNames = all
 			.map(o => o.data.name?.last)
 			.filter(o => o !== currentLastName)
-			.filter((o): o is string => typeof o === 'string')
+			.filter(o => typeof o === 'string')
 			.filter(arrayFilterUnique())
 			.sort((a, b) => a.localeCompare(b, ctx.wd.locale()));
 		return lastNames;
