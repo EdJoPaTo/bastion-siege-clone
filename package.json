@@ -28,7 +28,7 @@
 		"random-item": "^4.0.0",
 		"telegraf-middleware-console-time": "^2.0.0",
 		"telegraf-wikibase": "^0.13.0",
-		"wikibase-sdk": "^9.2.2",
+		"wikibase-sdk": "^10.0.2",
 		"wikidata-person-names": "^1.2.1"
 	},
 	"devDependencies": {
