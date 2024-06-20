@@ -18,3 +18,5 @@ updates:
     ignore:
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "wikibase-sdk"
+        update-types: ["version-update:semver-major"]
