@@ -22,7 +22,7 @@
 		"@grammyjs/storage-file": "^2.1.0",
 		"array-filter-unique": "^3.0.0",
 		"bastion-siege-logic": "^2.0.0",
-		"grammy": "^1.36.1",
+		"grammy": "^1.36.3",
 		"grammy-inline-menu": "^9.2.0",
 		"locale-emoji": "^0.3.0",
 		"random-item": "^4.0.0",
@@ -33,7 +33,7 @@
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^7.0.0",
-		"@types/node": "^22.15.3",
+		"@types/node": "^22.15.29",
 		"typescript": "^5.8.3",
 		"xo": "^0.60.0"
 	},
