@@ -6,9 +6,7 @@ import {getRaw} from '../lib/user-sessions.js';
 
 async function getFamilyMembers(lastName: string): Promise<Session[]> {
 	const all = await getRaw();
-	return all
-		.map(o => o.data)
-		.filter(o => o.name?.last === lastName);
+	return all.map(o => o.data).filter(o => o.name?.last === lastName);
 }
 
 export const menu = new MenuTemplate<Context>(async ctx => {
@@ -25,8 +23,7 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 		const lines = familyMembers
 			.sort((a, b) => b.constructions.barracks - a.constructions.barracks)
 			.map(o =>
-				`${o.constructions.barracks}${EMOJI.barracks}  ${o.name!.first}`,
-			);
+				`${o.constructions.barracks}${EMOJI.barracks}  ${o.name!.first}`);
 		text += '\n\n';
 		text += lines.join('\n');
 	}

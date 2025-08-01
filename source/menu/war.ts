@@ -33,7 +33,7 @@ function getAttackerWinChance(
 function getDefenderWinChance(constructions: Constructions): number {
 	const {barracks, wall} = constructions;
 
-	let chance = barracks * 40 / 100;
+	let chance = (barracks * 40) / 100;
 	chance += wall / 2;
 	return chance;
 }
@@ -66,7 +66,7 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 	const {constructions, people} = ctx.session;
 	const attackTargetId = ctx.session.attackTarget;
 	const attackTarget = attackTargetId
-		&& await userSessions.getUser(attackTargetId);
+		&& (await userSessions.getUser(attackTargetId));
 
 	let text = wikidataInfoHeader(await ctx.wd.reader('bs.war'), {
 		titlePrefix: EMOJI.war,
@@ -231,8 +231,7 @@ menu.interact('search', {
 		`${EMOJI.search} ${(await ctx.wd.reader('action.search')).label()}`,
 	async do(ctx) {
 		const chosen = await userSessions.getRandomUser(o =>
-			Boolean(o.data.name && o.user !== ctx.session.attackTarget),
-		);
+			Boolean(o.data.name && o.user !== ctx.session.attackTarget));
 		ctx.session.attackTarget = chosen.user;
 		return '.';
 	},

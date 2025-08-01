@@ -43,7 +43,7 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 
 	if (ctx.session.name) {
 		text += '\n\n';
-		text += await ctx.wd.reader('menu.name').then(r => r.label());
+		text += (await ctx.wd.reader('menu.name')).label();
 		text += ': ';
 		text += formatNamePlain(ctx.session.name);
 	}
@@ -55,11 +55,11 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 		const remainingMinutes = remainingSeconds / MINUTE;
 
 		text += '\n\n';
-		text += await ctx.wd.reader('name.change').then(r => r.label());
+		text += (await ctx.wd.reader('name.change')).label();
 		text += ': ';
 		text += remainingMinutes.toFixed(0);
 		text += ' ';
-		text += await ctx.wd.reader('unit.minute').then(r => r.label());
+		text += (await ctx.wd.reader('unit.minute')).label();
 	} else if (ctx.session.createLast !== undefined) {
 		text += '\n\n';
 		text += ctx.t('name-new-last');
@@ -69,7 +69,7 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 		} else {
 			text += outEmoji.withoutLastName;
 			text += ' ';
-			text += await ctx.wd.reader('name.loseLastName').then(r => r.label());
+			text += (await ctx.wd.reader('name.loseLastName')).label();
 		}
 	}
 
@@ -132,7 +132,7 @@ menu.interact('take', {
 	do(ctx) {
 		const now = Date.now() / 1000;
 		const {createLast} = ctx.session;
-		// eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
+		// eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary, @typescript-eslint/prefer-nullish-coalescing
 		const nextLast = createLast ? createLast : undefined;
 
 		ctx.session.name = {

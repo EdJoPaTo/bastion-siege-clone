@@ -40,9 +40,7 @@ export async function resources(
 	ctx: Context,
 	resources: Resources,
 ): Promise<string> {
-	const lines = await Promise.all(
-		RESOURCES.map(async o => resourceLine(ctx, o, resources[o])),
-	);
+	const lines = await Promise.all(RESOURCES.map(async o => resourceLine(ctx, o, resources[o])));
 
 	return lines.join('\n');
 }
@@ -52,18 +50,13 @@ export async function constructionResources(
 	required: ConstructionResources,
 	available: Resources,
 ): Promise<string> {
-	const lines = await Promise.all(
-		CONSTRUCTION_RESOURCES
-			.filter(o => required[o])
-			.map(async resource =>
-				constructionResourceLine(
-					ctx,
-					resource,
-					required[resource],
-					available[resource] >= required[resource],
-				),
-			),
-	);
+	const lines = await Promise.all(CONSTRUCTION_RESOURCES.filter(o => required[o]).map(async resource =>
+		constructionResourceLine(
+			ctx,
+			resource,
+			required[resource],
+			available[resource] >= required[resource],
+		)));
 
 	return lines.join('\n');
 }

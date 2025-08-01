@@ -48,18 +48,23 @@ const resourceMenu = new MenuTemplate<Context>(async ctx => {
 
 	const goldReader = await ctx.wd.reader('resource.gold');
 	const currentGoldShort = formatNumberShort(currentResources.gold, true);
-	text += `${EMOJI.gold} ${goldReader.label()} ${currentGoldShort}${EMOJI.gold}\n`;
+	text
+		+= `${EMOJI.gold} ${goldReader.label()} ${currentGoldShort}${EMOJI.gold}\n`;
 
 	const resourceReader = await ctx.wd.reader(`resource.${resource}`);
 	const currentResourceShort = formatNumberShort(
 		currentResources[resource],
 		true,
 	);
-	text += `${EMOJI[resource]} ${resourceReader.label()} ${currentResourceShort}${EMOJI[resource]}\n`;
+	text += `${
+		EMOJI[resource]
+	} ${resourceReader.label()} ${currentResourceShort}${EMOJI[resource]}\n`;
 
 	const storageCapacityReader = await ctx.wd.reader('bs.storageCapacity');
 	const capacityShort = formatNumberShort(storageCapacity, true);
-	text += `${storageCapacityReader.label()} ${capacityShort}${EMOJI[resource]}\n`;
+	text += `${storageCapacityReader.label()} ${capacityShort}${
+		EMOJI[resource]
+	}\n`;
 
 	text += '\n';
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`;

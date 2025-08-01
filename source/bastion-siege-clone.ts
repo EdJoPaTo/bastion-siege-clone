@@ -13,9 +13,7 @@ import {i18n} from './translation.js';
 
 const token = env['BOT_TOKEN'];
 if (!token) {
-	throw new Error(
-		'You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)',
-	);
+	throw new Error('You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)');
 }
 
 const baseBot = new Bot<Context>(token);

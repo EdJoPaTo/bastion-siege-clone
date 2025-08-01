@@ -58,9 +58,7 @@ function calcCurrentPeople(session: Session, now: number): void {
 	const {constructions, people, peopleTimestamp} = session;
 
 	const totalSeconds = now - peopleTimestamp;
-	const totalMinutes = Math.floor(
-		GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60,
-	);
+	const totalMinutes = Math.floor((GAME_SPEEDUP * foodPenalty(session) * totalSeconds) / 60);
 
 	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses)
 		* totalMinutes;
@@ -78,10 +76,16 @@ function calcCurrentPeople(session: Session, now: number): void {
 	const addToWall = Math.min(freePlacesWall, Math.max(0, peopleAvailable));
 	peopleAvailable -= addToWall;
 
-	const addToBarracks = Math.min(freePlacesBarracks, Math.max(0, peopleAvailable));
+	const addToBarracks = Math.min(
+		freePlacesBarracks,
+		Math.max(0, peopleAvailable),
+	);
 	peopleAvailable -= addToBarracks;
 
-	const housesPeople = Math.max(0, Math.min(peopleAvailable, calcHousesCapacity(constructions.houses)));
+	const housesPeople = Math.max(
+		0,
+		Math.min(peopleAvailable, calcHousesCapacity(constructions.houses)),
+	);
 
 	session.peopleTimestamp = now;
 	session.people = {
@@ -95,9 +99,7 @@ function calcCurrentResources(session: Session, now: number): void {
 	const {constructions, resources, resourcesTimestamp} = session;
 
 	const totalSeconds = now - resourcesTimestamp;
-	const totalMinutes = Math.floor(
-		GAME_SPEEDUP * foodPenalty(session) * totalSeconds / 60,
-	);
+	const totalMinutes = Math.floor((GAME_SPEEDUP * foodPenalty(session) * totalSeconds) / 60);
 
 	if (totalMinutes > 0) {
 		session.resources = estimateResourcesAfter(
@@ -107,11 +109,12 @@ function calcCurrentResources(session: Session, now: number): void {
 		);
 
 		// Max negative gold should be recoverable in 12h realtime hours
-		const goldIncome24h = calcGoldIncome(
-			constructions.townhall,
-			constructions.houses,
-		)
-			* 12 * 60 * GAME_SPEEDUP * foodPenalty(session);
+		const goldIncome24h
+			= calcGoldIncome(constructions.townhall, constructions.houses)
+				* 12
+				* 60
+				* GAME_SPEEDUP
+				* foodPenalty(session);
 
 		session.resources = {
 			...session.resources,

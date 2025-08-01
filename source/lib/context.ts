@@ -31,9 +31,13 @@ export type Session = {
 	selectedSpyEmoji: string;
 };
 
-export type Context = BaseContext & SessionFlavor<Session> & I18nFlavor & {
-	readonly wd: MiddlewareProperty;
-};
+export type Context =
+	& BaseContext
+	& SessionFlavor<Session>
+	& I18nFlavor
+	& {
+		readonly wd: MiddlewareProperty;
+	};
 
 export const backButtons = createBackMainMenuButtons<Context>(
 	ctx => `🔙 ${ctx.t('menu-back')}`,

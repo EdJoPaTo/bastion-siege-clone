@@ -20,10 +20,7 @@ const entities: Record<Query, string[]> = {
 
 export async function build(): Promise<void> {
 	console.time('wikidata-sets');
-	await Promise.all(
-		Object.keys(queries)
-			.map(async key => loadQNumbersOfKey(key as Query)),
-	);
+	await Promise.all(Object.keys(queries).map(async key => loadQNumbersOfKey(key as Query)));
 
 	const qNumbers = Object.values(entities).flat();
 	console.timeLog('wikidata-sets', 'preloadQNumbers', qNumbers.length);
@@ -34,7 +31,7 @@ async function loadQNumbersOfKey(key: Query): Promise<void> {
 	try {
 		const url = wdk.sparqlQuery(queries[key]);
 		const response = await fetch(url, {headers});
-		const json = await response.json() as SparqlResults;
+		const json = (await response.json()) as SparqlResults;
 		const qNumbers = simplifySparqlResults(json, {
 			minimize: true,
 		}) as string[];

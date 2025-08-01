@@ -43,15 +43,13 @@ async function constructionMenuBody(
 
 	text += '\n\n';
 
-	const constructionLines = await Promise.all(entries
-		.map(async construction =>
-			constructionLine(
-				ctx,
-				construction,
-				constructions[construction],
-				canUpgrade(constructions, construction, currentResources),
-			),
-		));
+	const constructionLines = await Promise.all(entries.map(async construction =>
+		constructionLine(
+			ctx,
+			construction,
+			constructions[construction],
+			canUpgrade(constructions, construction, currentResources),
+		)));
 	text += constructionLines.join('\n');
 
 	return {text, parse_mode: 'Markdown'};
@@ -67,8 +65,7 @@ async function constructionButtonTextFunc(
 }
 
 export const buildingsMenu = new MenuTemplate<Context>(async ctx =>
-	constructionMenuBody(ctx, 'buildings', BUILDINGS),
-);
+	constructionMenuBody(ctx, 'buildings', BUILDINGS));
 
 buildingsMenu.chooseIntoSubmenu('', entryMenu, {
 	columns: 2,
@@ -79,8 +76,7 @@ buildingsMenu.chooseIntoSubmenu('', entryMenu, {
 buildingsMenu.manualRow(backButtons);
 
 export const workshopMenu = new MenuTemplate<Context>(async ctx =>
-	constructionMenuBody(ctx, 'workshop', WORKSHOP),
-);
+	constructionMenuBody(ctx, 'workshop', WORKSHOP));
 
 workshopMenu.chooseIntoSubmenu('', entryMenu, {
 	columns: 2,

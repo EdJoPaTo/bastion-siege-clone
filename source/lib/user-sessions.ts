@@ -13,7 +13,7 @@ const storage = new FileAdapter<Session>({dirName: 'sessions'});
 
 const sessionMiddleware = session({
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-	initial: (): Session => ({} as any),
+	initial: (): Session => ({}) as any,
 	storage: new FileAdapter<Session>({dirName: 'sessions'}),
 	getSessionKey: ctx => String(ctx.from!.id),
 });
@@ -23,14 +23,13 @@ async function allSessionIds(): Promise<readonly number[]> {
 		const results: number[] = [];
 		const hits = await readdir(path, {encoding: 'utf8', withFileTypes: true});
 
-		const dirResults = await Promise.all(
-			hits
-				.filter(o => o.isDirectory())
-				.map(async d => inner(path + '/' + d.name)),
-		);
+		const dirResults = await Promise.all(hits
+			.filter(o => o.isDirectory())
+			.map(async d => inner(path + '/' + d.name)));
 		results.push(...dirResults.flat());
 
-		const fileResults = hits.filter(o => o.isFile)
+		const fileResults = hits
+			.filter(o => o.isFile)
 			.map(o => /^(\d+)\.json$/.exec(o.name)?.[1])
 			.filter(Boolean)
 			.map(Number);
@@ -54,9 +53,7 @@ export async function getUser(userId: number): Promise<Session | undefined> {
 	return storage.read(String(userId));
 }
 
-export async function getRandomUser(
-	filter: (o: SessionRawEntry) => boolean = () => true,
-): Promise<SessionRawEntry> {
+export async function getRandomUser(filter: (o: SessionRawEntry) => boolean = () => true): Promise<SessionRawEntry> {
 	const all = await getRaw();
 	const rawArray = all.filter(o => filter(o));
 	return randomItem(rawArray);

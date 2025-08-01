@@ -55,13 +55,10 @@ menu.interact('espionage', {
 	text: async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`,
 	async do(ctx) {
 		const {data: session} = await userSessions.getRandomUser(session =>
-			Boolean(session.data.name),
-		);
+			Boolean(session.data.name));
 		const name = session.name!;
 
-		const spyableConstructions = getSpyableConstructions(
-			ctx.session.selectedSpy,
-		);
+		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy);
 		const pickedConstructionKey = randomItem(spyableConstructions);
 		const pickedConstructionLevel
 			= session.constructions[pickedConstructionKey];
@@ -72,8 +69,9 @@ menu.interact('espionage', {
 		message += formatNamePlain(name);
 		message += ' ';
 		message += EMOJI[pickedConstructionKey];
-		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`))
-			.label();
+		message += (
+			await ctx.wd.reader(`construction.${pickedConstructionKey}`)
+		).label();
 		message += ' ';
 		message += pickedConstructionLevel.toFixed(0);
 

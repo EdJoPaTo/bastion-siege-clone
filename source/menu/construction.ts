@@ -12,9 +12,10 @@ import {
 } from '../lib/interface/construction.js';
 import {constructionResources} from '../lib/interface/resource.js';
 
-function constructionFromCtx(
-	ctx: Context,
-): {construction: ConstructionName; level: number} {
+function constructionFromCtx(ctx: Context): {
+	construction: ConstructionName;
+	level: number;
+} {
 	const construction = ctx.match![1] as ConstructionName;
 	const {constructions} = ctx.session;
 	const level = constructions[construction];
@@ -42,9 +43,7 @@ export const menu = new MenuTemplate<Context>(async ctx => {
 		textParts.push(properties);
 	}
 
-	textParts.push(
-		await constructionResources(ctx, requiredResources, currentResources),
-	);
+	textParts.push(await constructionResources(ctx, requiredResources, currentResources));
 	const text = textParts.join('\n\n');
 
 	return {text, parse_mode: 'Markdown'};
