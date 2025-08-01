@@ -1,21 +1,21 @@
 import {EMOJI} from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
-import type {Context} from '../lib/context.js';
+import type {Context} from '../lib/context.ts';
 import {
 	outEmoji,
 	randomFamilyEmoji,
 	wikidataInfoHeader,
-} from '../lib/interface/generals.js';
-import {formatNamePlain} from '../lib/interface/name.js';
-import {resources} from '../lib/interface/resource.js';
-import {buildingsMenu, workshopMenu} from './constructions.js';
-import {menu as familyMenu} from './family.js';
-import {menu as languageMenu} from './languages.js';
-import {menu as nameMenu} from './name/index.js';
-import {menu as spyMenu} from './spy.js';
-import {menu as statsMenu} from './stats.js';
-import {menu as tradeMenu} from './trade.js';
-import {menu as warMenu} from './war.js';
+} from '../lib/interface/generals.ts';
+import {formatNamePlain} from '../lib/interface/name.ts';
+import {resources} from '../lib/interface/resource.ts';
+import {buildingsMenu, workshopMenu} from './constructions.ts';
+import {menu as familyMenu} from './family.ts';
+import {menu as languageMenu} from './languages.ts';
+import {menu as nameMenu} from './name/index.ts';
+import {menu as spyMenu} from './spy.ts';
+import {menu as statsMenu} from './stats.ts';
+import {menu as tradeMenu} from './trade.ts';
+import {menu as warMenu} from './war.ts';
 
 export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = wikidataInfoHeader(await ctx.wd.reader('menu.menu'));

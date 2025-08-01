@@ -7,7 +7,7 @@ import {
 	estimateResourcesAfter,
 } from 'bastion-siege-logic';
 import type {MiddlewareFn} from 'grammy';
-import type {Context, Session} from './context.js';
+import type {Context, Session} from './context.ts';
 
 const GAME_SPEEDUP = 5;
 

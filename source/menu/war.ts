@@ -6,13 +6,13 @@ import {
 	EMOJI,
 } from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context, type Name} from '../lib/context.js';
-import {peopleString} from '../lib/interface/construction.js';
-import {formatNumberShort} from '../lib/interface/format-number.js';
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
-import {formatNamePlain} from '../lib/interface/name.js';
-import * as userSessions from '../lib/user-sessions.js';
-import type {PeopleInConstructions} from '../types.js';
+import {backButtons, type Context, type Name} from '../lib/context.ts';
+import {peopleString} from '../lib/interface/construction.ts';
+import {formatNumberShort} from '../lib/interface/format-number.ts';
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.ts';
+import {formatNamePlain} from '../lib/interface/name.ts';
+import * as userSessions from '../lib/user-sessions.ts';
+import type {PeopleInConstructions} from '../types.ts';
 
 function getLoot(constructions: Constructions): number {
 	return calcGoldIncome(constructions.townhall, constructions.houses) * 60;

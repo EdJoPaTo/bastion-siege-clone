@@ -5,10 +5,10 @@ import {
 	type Resources,
 } from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../lib/context.js';
-import {formatNumberShort} from '../lib/interface/format-number.js';
-import {wikidataInfoHeader} from '../lib/interface/generals.js';
-import {resources} from '../lib/interface/resource.js';
+import {backButtons, type Context} from '../lib/context.ts';
+import {formatNumberShort} from '../lib/interface/format-number.ts';
+import {wikidataInfoHeader} from '../lib/interface/generals.ts';
+import {resources} from '../lib/interface/resource.ts';
 
 function buy(
 	currentResources: Resources,

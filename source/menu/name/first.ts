@@ -1,10 +1,10 @@
 import {MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
 import {UNISEX} from 'wikidata-person-names';
-import type {Context, Name} from '../../lib/context.js';
-import {outEmoji} from '../../lib/interface/generals.js';
-import {formatNamePlain} from '../../lib/interface/name.js';
-import {DAY, MINUTE} from '../../lib/unix-time.js';
+import type {Context, Name} from '../../lib/context.ts';
+import {outEmoji} from '../../lib/interface/generals.ts';
+import {formatNamePlain} from '../../lib/interface/name.ts';
+import {DAY, MINUTE} from '../../lib/unix-time.ts';
 
 const CHANGE_EACH_SECONDS = DAY * 7;
 

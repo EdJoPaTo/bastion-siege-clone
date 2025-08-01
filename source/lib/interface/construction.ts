@@ -14,10 +14,10 @@ import {
 	EMOJI,
 	type ResourceName,
 } from 'bastion-siege-logic';
-import type {PeopleInConstructions} from '../../types.js';
-import type {Context} from '../context.js';
-import {formatNumberShort} from './format-number.js';
-import {possibleEmoji, wikidataInfoHeader} from './generals.js';
+import type {PeopleInConstructions} from '../../types.ts';
+import type {Context} from '../context.ts';
+import {formatNumberShort} from './format-number.ts';
+import {possibleEmoji, wikidataInfoHeader} from './generals.ts';
 
 export async function constructionLine(
 	ctx: Context,

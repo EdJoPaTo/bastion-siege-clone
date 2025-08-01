@@ -1,9 +1,9 @@
 import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../../lib/context.js';
-import {outEmoji} from '../../lib/interface/generals.js';
-import {formatNamePlain} from '../../lib/interface/name.js';
-import {menu as firstMenu} from './first.js';
-import {menu as lastMenu} from './last.js';
+import {backButtons, type Context} from '../../lib/context.ts';
+import {outEmoji} from '../../lib/interface/generals.ts';
+import {formatNamePlain} from '../../lib/interface/name.ts';
+import {menu as firstMenu} from './first.ts';
+import {menu as lastMenu} from './last.ts';
 
 export const menu = new MenuTemplate<Context>(async ctx => {
 	let text = '';

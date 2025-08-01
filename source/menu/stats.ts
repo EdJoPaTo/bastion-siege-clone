@@ -1,8 +1,8 @@
 import {type ConstructionName, EMOJI} from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context, type Session} from '../lib/context.js';
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
-import * as userSessions from '../lib/user-sessions.js';
+import {backButtons, type Context, type Session} from '../lib/context.ts';
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.ts';
+import * as userSessions from '../lib/user-sessions.ts';
 
 export const menu = new MenuTemplate<Context>(async ctx => {
 	const allSessions = await userSessions.getRaw();

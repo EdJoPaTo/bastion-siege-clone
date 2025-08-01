@@ -1,7 +1,7 @@
 import {MenuTemplate} from 'grammy-inline-menu';
 import localeEmoji from 'locale-emoji';
-import {backButtons, type Context} from '../lib/context.js';
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.js';
+import {backButtons, type Context} from '../lib/context.ts';
+import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.ts';
 
 export const menu = new MenuTemplate<Context>(async ctx => {
 	const flag = localeEmoji(ctx.wd.locale()) ?? outEmoji.language;

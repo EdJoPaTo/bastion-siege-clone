@@ -2,7 +2,7 @@ import {readdir} from 'node:fs/promises';
 import {FileAdapter} from '@grammyjs/storage-file';
 import {session} from 'grammy';
 import randomItem from 'random-item';
-import type {Session} from './context.js';
+import type {Session} from './context.ts';
 
 type SessionRawEntry = {
 	readonly user: number;

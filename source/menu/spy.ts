@@ -6,11 +6,11 @@ import {
 } from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
-import {backButtons, type Context} from '../lib/context.js';
-import {wikidataInfoHeader} from '../lib/interface/generals.js';
-import {formatNamePlain} from '../lib/interface/name.js';
-import * as userSessions from '../lib/user-sessions.js';
-import * as wdSets from '../lib/wikidata-sets.js';
+import {backButtons, type Context} from '../lib/context.ts';
+import {wikidataInfoHeader} from '../lib/interface/generals.ts';
+import {formatNamePlain} from '../lib/interface/name.ts';
+import * as userSessions from '../lib/user-sessions.ts';
+import * as wdSets from '../lib/wikidata-sets.ts';
 
 async function getSpy(ctx: Context) {
 	ctx.session.selectedSpy ||= wdSets.getRandom('spies');

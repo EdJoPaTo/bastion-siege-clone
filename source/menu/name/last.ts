@@ -2,11 +2,11 @@ import {arrayFilterUnique} from 'array-filter-unique';
 import {MenuTemplate} from 'grammy-inline-menu';
 import randomItem from 'random-item';
 import {FAMILY} from 'wikidata-person-names';
-import type {Context, Name} from '../../lib/context.js';
-import {outEmoji} from '../../lib/interface/generals.js';
-import {formatNamePlain} from '../../lib/interface/name.js';
-import {HOUR, MINUTE} from '../../lib/unix-time.js';
-import {getRaw} from '../../lib/user-sessions.js';
+import type {Context, Name} from '../../lib/context.ts';
+import {outEmoji} from '../../lib/interface/generals.ts';
+import {formatNamePlain} from '../../lib/interface/name.ts';
+import {HOUR, MINUTE} from '../../lib/unix-time.ts';
+import {getRaw} from '../../lib/user-sessions.ts';
 
 const CHANGE_EACH_SECONDS = HOUR * 22;
 

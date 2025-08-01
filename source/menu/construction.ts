@@ -5,12 +5,12 @@ import {
 	type ConstructionName,
 } from 'bastion-siege-logic';
 import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../lib/context.js';
+import {backButtons, type Context} from '../lib/context.ts';
 import {
 	constructionPropertyString,
 	infoHeader,
-} from '../lib/interface/construction.js';
-import {constructionResources} from '../lib/interface/resource.js';
+} from '../lib/interface/construction.ts';
+import {constructionResources} from '../lib/interface/resource.ts';
 
 function constructionFromCtx(ctx: Context): {
 	construction: ConstructionName;

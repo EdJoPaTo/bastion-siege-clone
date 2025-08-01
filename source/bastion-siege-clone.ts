@@ -4,12 +4,12 @@ import {Bot} from 'grammy';
 import {MenuMiddleware} from 'grammy-inline-menu';
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time';
 import {resourceKeysFromYaml, TelegrafWikibase} from 'telegraf-wikibase';
-import type {Context} from './lib/context.js';
-import * as ensureSessionContent from './lib/session-state-math.js';
-import * as userSessions from './lib/user-sessions.js';
-import * as wdSets from './lib/wikidata-sets.js';
-import {menu} from './menu/index.js';
-import {i18n} from './translation.js';
+import type {Context} from './lib/context.ts';
+import * as ensureSessionContent from './lib/session-state-math.ts';
+import * as userSessions from './lib/user-sessions.ts';
+import * as wdSets from './lib/wikidata-sets.ts';
+import {menu} from './menu/index.ts';
+import {i18n} from './translation.ts';
 
 const token = env['BOT_TOKEN'];
 if (!token) {

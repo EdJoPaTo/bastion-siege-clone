@@ -9,10 +9,10 @@ import {
 	WORKSHOP,
 } from 'bastion-siege-logic';
 import {type Body, MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../lib/context.js';
-import {constructionLine} from '../lib/interface/construction.js';
-import {wikidataInfoHeader} from '../lib/interface/generals.js';
-import {menu as entryMenu} from './construction.js';
+import {backButtons, type Context} from '../lib/context.ts';
+import {constructionLine} from '../lib/interface/construction.ts';
+import {wikidataInfoHeader} from '../lib/interface/generals.ts';
+import {menu as entryMenu} from './construction.ts';
 
 function canUpgrade(
 	constructions: Constructions,

@@ -6,9 +6,9 @@ import {
 	RESOURCES,
 	type Resources,
 } from 'bastion-siege-logic';
-import type {Context} from '../context.js';
-import {formatNumberShort} from './format-number.js';
-import {possibleEmoji} from './generals.js';
+import type {Context} from '../context.ts';
+import {formatNumberShort} from './format-number.ts';
+import {possibleEmoji} from './generals.ts';
 
 async function resourceLine(
 	ctx: Context,

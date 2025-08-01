@@ -3,7 +3,7 @@ import type {Constructions, Resources} from 'bastion-siege-logic';
 import type {Context as BaseContext, SessionFlavor} from 'grammy';
 import {createBackMainMenuButtons} from 'grammy-inline-menu';
 import type {MiddlewareProperty} from 'telegraf-wikibase';
-import type {PeopleInConstructions} from '../types.js';
+import type {PeopleInConstructions} from '../types.ts';
 
 type UnixSeconds = number;
 
