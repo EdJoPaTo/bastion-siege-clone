@@ -32,7 +32,6 @@
 		"wikidata-person-names": "^1.2.1"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^7.0.0",
 		"@types/node": "^22.15.34",
 		"typescript": "^5.9.2",
 		"xo": "^1.2.1"
