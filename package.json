@@ -34,7 +34,7 @@
 	"devDependencies": {
 		"@types/node": "^22.15.34",
 		"typescript": "^5.9.2",
-		"xo": "^1.2.1"
+		"xo": "^1.2.2"
 	},
 	"xo": {
 		"rules": {
