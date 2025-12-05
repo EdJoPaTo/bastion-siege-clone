@@ -2,12 +2,13 @@
 *.md
 **/*.test.*
 **/test.*
-botfather-settings
-coverage
 dist
 Dockerfile
 node_modules
 test
+tsconfig.json
+
+botfather-settings
 
 # botfiles
 sessions
