@@ -1,5 +1,9 @@
 import randomItem from "random-item";
-import { simplifySparqlResults, type SparqlResults } from "wikibase-sdk";
+import {
+	minimizeSimplifiedSparqlResults,
+	simplifySparqlResults,
+	type SparqlResults,
+} from "wikibase-sdk";
 import { wdk } from "wikibase-sdk/wikidata.org";
 
 const headers = new Headers();
@@ -32,9 +36,9 @@ async function loadQNumbersOfKey(key: Query): Promise<void> {
 		const url = wdk.sparqlQuery(queries[key]);
 		const response = await fetch(url, { headers });
 		const json = (await response.json()) as SparqlResults;
-		const qNumbers = simplifySparqlResults(json, {
-			minimize: true,
-		}) as string[];
+		const qNumbers = minimizeSimplifiedSparqlResults(simplifySparqlResults(json)).filter(
+			(value) => typeof value === "string",
+		);
 		entities[key] = qNumbers;
 	} catch (error) {
 		console.error("wikidata-set query failed", key, error);
