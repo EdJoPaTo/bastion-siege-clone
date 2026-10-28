@@ -109,7 +109,7 @@ export async function constructionPropertyString(
 	if (construction === "storage") {
 		const units: ResourceName[] = ["wood", "stone", "food"];
 		const lines = await Promise.all(
-			units.map(async (unit) =>
+			units.map((unit) =>
 				storageCapacityString(ctx, calcStorageCapacity(constructions.storage), unit),
 			),
 		);

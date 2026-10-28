@@ -15,9 +15,7 @@ function constructionFromCtx(ctx: Context): {
 	level: number;
 } {
 	const construction = ctx.match![1] as ConstructionName;
-	const { constructions } = ctx.session;
-	const level = constructions[construction];
-
+	const level = ctx.session.constructions[construction];
 	return { construction, level };
 }
 
@@ -28,8 +26,7 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 	const requiredResources = calcBuildingCost(construction, level);
 	const currentResources = ctx.session.resources;
 
-	const textParts: string[] = [];
-	textParts.push(await infoHeader(ctx, construction, level));
+	const textParts: string[] = [await infoHeader(ctx, construction, level)];
 
 	const properties = await constructionPropertyString(ctx, constructions, people, construction);
 	if (properties) {
@@ -59,9 +56,7 @@ menu.interact("upgrade", {
 		const currentResources = ctx.session.resources;
 
 		ctx.session.resources = calcResourcesAfterConstruction(currentResources, requiredResources);
-		const constructions = { ...ctx.session.constructions };
-		constructions[construction] = level + 1;
-		ctx.session.constructions = constructions;
+		ctx.session.constructions = { ...ctx.session.constructions, [construction]: level + 1 };
 
 		return ".";
 	},

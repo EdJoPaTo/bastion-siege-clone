@@ -41,7 +41,7 @@ async function constructionMenuBody(
 	text += "\n\n";
 
 	const constructionLines = await Promise.all(
-		entries.map(async (construction) =>
+		entries.map((construction) =>
 			constructionLine(
 				ctx,
 				construction,
@@ -61,7 +61,7 @@ async function constructionButtonTextFunc(ctx: Context, key: string): Promise<st
 	return `${emoji} ${reader.label()}`;
 }
 
-export const buildingsMenu = new MenuTemplate<Context>(async (ctx) =>
+export const buildingsMenu = new MenuTemplate<Context>((ctx) =>
 	constructionMenuBody(ctx, "buildings", BUILDINGS),
 );
 
@@ -73,7 +73,7 @@ buildingsMenu.chooseIntoSubmenu("", entryMenu, {
 
 buildingsMenu.manualRow(backButtons);
 
-export const workshopMenu = new MenuTemplate<Context>(async (ctx) =>
+export const workshopMenu = new MenuTemplate<Context>((ctx) =>
 	constructionMenuBody(ctx, "workshop", WORKSHOP),
 );
 

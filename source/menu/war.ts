@@ -56,7 +56,6 @@ function afterBattleMessageText(attack: boolean, win: boolean, name: Name, loot:
 }
 
 export const menu = new MenuTemplate<Context>(async (ctx) => {
-	const { constructions, people } = ctx.session;
 	const attackTargetId = ctx.session.attackTarget;
 	const attackTarget = attackTargetId && (await userSessions.getUser(attackTargetId));
 
@@ -66,15 +65,15 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 	text += "\n\n";
 	text += peopleString(
 		(await ctx.wd.reader("bs.army")).label(),
-		people.barracks,
-		calcBarracksCapacity(constructions.barracks),
+		ctx.session.people.barracks,
+		calcBarracksCapacity(ctx.session.constructions.barracks),
 		EMOJI.army,
 	);
 	text += "\n";
 	text += peopleString(
 		(await ctx.wd.reader("bs.people")).label(),
-		people.houses,
-		calcHousesCapacity(constructions.houses),
+		ctx.session.people.houses,
+		calcHousesCapacity(ctx.session.constructions.houses),
 		EMOJI.people,
 	);
 	text += "\n";
@@ -82,12 +81,11 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 	text += "\n";
 
 	if (attackTarget && attackTarget.name) {
-		const { name, constructions } = attackTarget;
 		text += (await ctx.wd.reader("battle.target")).label();
 		text += "\n";
-		text += formatNamePlain(name);
+		text += formatNamePlain(attackTarget.name);
 		text += "\n";
-		const gold = formatNumberShort(getLoot(constructions), true);
+		const gold = formatNumberShort(getLoot(attackTarget.constructions), true);
 		text += `~${gold}${EMOJI.gold}\n`;
 		text += "\n\n";
 	}

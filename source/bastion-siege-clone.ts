@@ -26,7 +26,7 @@ if (env["NODE_ENV"] !== "production") {
 	baseBot.use(generateUpdateMiddleware());
 }
 
-const bot = baseBot.errorBoundary(async ({ error }) => {
+const bot = baseBot.errorBoundary(({ error }) => {
 	console.error("grammy ERROR occured", error);
 });
 
@@ -46,13 +46,13 @@ twb.addResourceKeys(resourceKeysFromYaml(wikidataResourceKeyYaml));
 
 bot.use(twb.middleware());
 
-bot.use(async (ctx, next) => {
+bot.use((ctx, next) => {
 	delete ctx.session.blocked;
 	return next();
 });
 
 const menuMiddleware = new MenuMiddleware("/", menu);
-bot.command("start", async (ctx) => menuMiddleware.replyToContext(ctx));
+bot.command("start", (ctx) => menuMiddleware.replyToContext(ctx));
 bot.use(menuMiddleware.middleware());
 
 await baseBot.api.setMyCommands([{ command: "start", description: "show the menu" }]);

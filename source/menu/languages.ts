@@ -14,7 +14,7 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 
 menu.select("lang", {
 	columns: 3,
-	choices: async (ctx) => ctx.wd.availableLocales(),
+	choices: (ctx) => ctx.wd.availableLocales(),
 	buttonText(_, key) {
 		const flag = localeEmoji(key);
 		return flag ? `${flag} ${key}` : key;

@@ -84,7 +84,7 @@ export function wikidataInfoHeader(
 
 	if (description) {
 		text += "\n";
-		text += `${description}`;
+		text += description;
 	}
 
 	return text;

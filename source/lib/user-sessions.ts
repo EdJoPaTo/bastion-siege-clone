@@ -11,36 +11,25 @@ type SessionRawEntry = {
 	readonly data: Session;
 };
 
-const storage = new FileAdapter<Session>({ dirName: "sessions" });
+const DIRECTORY = "sessions";
+
+const storage = new FileAdapter<Session>({ dirName: DIRECTORY });
 
 const sessionMiddleware = session({
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	initial: (): Session => ({}) as any,
-	storage: new FileAdapter<Session>({ dirName: "sessions" }),
+	storage,
 	getSessionKey: (ctx) => String(ctx.from!.id),
 });
 
 async function allSessionIds(): Promise<readonly number[]> {
-	async function inner(path: string) {
-		const results: number[] = [];
-		const hits = await readdir(path, { encoding: "utf8", withFileTypes: true });
-
-		const dirResults = await Promise.all(
-			hits.filter((o) => o.isDirectory()).map(async (d) => inner(path + "/" + d.name)),
-		);
-		results.push(...dirResults.flat());
-
-		const fileResults = hits
-			.filter((o) => o.isFile)
-			.map((o) => /^(\d+)\.json$/.exec(o.name)?.[1])
-			.filter(Boolean)
-			.map(Number);
-		results.push(...fileResults);
-
-		return results;
-	}
-
-	return inner("sessions");
+	const hits = await readdir(DIRECTORY, { encoding: "utf8", recursive: true, withFileTypes: true });
+	const ids = hits
+		.filter((o) => o.isFile())
+		.map((o) => /^(\d+)\.json$/u.exec(o.name)?.[1])
+		.filter(Boolean)
+		.map(Number);
+	return ids;
 }
 
 export async function getRaw(): Promise<readonly SessionRawEntry[]> {
@@ -53,7 +42,7 @@ export async function getRaw(): Promise<readonly SessionRawEntry[]> {
 	);
 }
 
-export async function getUser(userId: number): Promise<Session | undefined> {
+export function getUser(userId: number): Promise<Session | undefined> {
 	return storage.read(String(userId));
 }
 

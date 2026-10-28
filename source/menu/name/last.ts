@@ -97,7 +97,7 @@ menu.choose("existing", {
 			.filter((o) => o !== currentLastName)
 			.filter((o) => typeof o === "string")
 			.filter(arrayFilterUnique())
-			.sort((a, b) => a.localeCompare(b, ctx.wd.locale()));
+			.toSorted((a, b) => a.localeCompare(b, ctx.wd.locale()));
 		return lastNames;
 	},
 	hide: (ctx) => !canChangeLastName(ctx.session.name) || Boolean(ctx.session.name.last),
@@ -129,7 +129,6 @@ menu.interact("take", {
 	do(ctx) {
 		const now = Date.now() / 1000;
 		const { createLast } = ctx.session;
-		// eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary, @typescript-eslint/prefer-nullish-coalescing
 		const nextLast = createLast ? createLast : undefined;
 
 		ctx.session.name = {

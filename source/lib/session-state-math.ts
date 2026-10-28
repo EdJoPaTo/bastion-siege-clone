@@ -117,7 +117,7 @@ function calcCurrentResources(session: Session, now: number): void {
 }
 
 export function middleware(): MiddlewareFn<Context> {
-	return async (ctx, next) => {
+	return (ctx, next) => {
 		const now = Date.now() / 1000;
 
 		initWhenMissing(ctx.session, now);

@@ -21,6 +21,7 @@ async function getSpy(ctx: Context) {
 }
 
 function getSpyableConstructions(qNumber: string): ConstructionName[] {
+	// oxlint-disable-next-line typescript/no-misused-spread
 	const possibleConstructions = [...qNumber]
 		.slice(1)
 		.map(Number)
@@ -49,8 +50,9 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 });
 
 menu.interact("espionage", {
-	text: async (ctx) => `${(await ctx.wd.reader("action.espionage")).label()}`,
+	text: async (ctx) => (await ctx.wd.reader("action.espionage")).label(),
 	async do(ctx) {
+		// oxlint-disable-next-line no-shadow
 		const { data: session } = await userSessions.getRandomUser((session) =>
 			Boolean(session.data.name),
 		);
@@ -77,7 +79,7 @@ menu.interact("espionage", {
 
 menu.interact("change", {
 	joinLastRow: true,
-	text: async (ctx) => `${(await ctx.wd.reader("action.change")).label()}`,
+	text: async (ctx) => (await ctx.wd.reader("action.change")).label(),
 	do(ctx) {
 		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpy;

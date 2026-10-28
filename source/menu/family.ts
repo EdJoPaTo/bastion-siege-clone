@@ -22,7 +22,7 @@ export const menu = new MenuTemplate<Context>(async (ctx) => {
 	if (ctx.session.name?.last) {
 		const familyMembers = await getFamilyMembers(ctx.session.name.last);
 		const lines = familyMembers
-			.sort((a, b) => b.constructions.barracks - a.constructions.barracks)
+			.toSorted((a, b) => b.constructions.barracks - a.constructions.barracks)
 			.map((o) => `${o.constructions.barracks}${EMOJI.barracks}  ${o.name!.first}`);
 		text += "\n\n";
 		text += lines.join("\n");

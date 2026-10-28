@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "node --enable-source-maps source/bastion-siege-clone.ts",
-		"test": "tsc && oxfmt --check"
+		"test": "tsc && oxlint && oxfmt --check"
 	},
 	"dependencies": {
 		"@grammyjs/i18n": "^1.1.2",
@@ -24,7 +24,9 @@
 	"devDependencies": {
 		"@types/node": "^24.10.1",
 		"oxfmt": "^0.75.0",
-		"typescript": "^6.0.2"
+		"oxlint": "^1.90.0",
+		"oxlint-tsgolint": "^7.0.2005",
+		"typescript": "^7.0.2"
 	},
 	"devEngines": {
 		"packageManager": {

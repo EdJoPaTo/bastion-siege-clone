@@ -20,7 +20,7 @@ const entities: Record<Query, string[]> = {
 
 export async function build(): Promise<void> {
 	console.time("wikidata-sets");
-	await Promise.all(Object.keys(queries).map(async (key) => loadQNumbersOfKey(key as Query)));
+	await Promise.all(Object.keys(queries).map((key) => loadQNumbersOfKey(key as Query)));
 
 	const qNumbers = Object.values(entities).flat();
 	console.timeLog("wikidata-sets", "preloadQNumbers", qNumbers.length);

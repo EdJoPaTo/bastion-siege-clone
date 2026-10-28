@@ -29,9 +29,10 @@ async function constructionResourceLine(
 	return `${emoji} ${line}`;
 }
 
-export async function resources(ctx: Context, resources: Resources): Promise<string> {
-	const lines = await Promise.all(RESOURCES.map(async (o) => resourceLine(ctx, o, resources[o])));
-
+export async function resources(ctx: Context, amounts: Resources): Promise<string> {
+	const lines = await Promise.all(
+		RESOURCES.map((resource) => resourceLine(ctx, resource, amounts[resource])),
+	);
 	return lines.join("\n");
 }
 
@@ -41,7 +42,7 @@ export async function constructionResources(
 	available: Resources,
 ): Promise<string> {
 	const lines = await Promise.all(
-		CONSTRUCTION_RESOURCES.filter((o) => required[o]).map(async (resource) =>
+		CONSTRUCTION_RESOURCES.filter((o) => required[o]).map((resource) =>
 			constructionResourceLine(
 				ctx,
 				resource,
