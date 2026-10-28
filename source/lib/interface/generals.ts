@@ -1,50 +1,50 @@
-import randomItem from 'random-item';
-import type {WikibaseEntityReader} from 'telegraf-wikibase';
+import randomItem from "random-item";
+import type { WikibaseEntityReader } from "telegraf-wikibase";
 
 export const outEmoji = {
-	activeUser: '💙',
-	betrayal: '😈',
-	chat: '💭',
-	fire: '🔥',
-	health: '❤️',
-	language: '🏳️‍🌈',
-	lose: '😭',
-	name: '👋',
-	nameFallback: '🔮',
-	possibleNo: '⛔️',
-	possibleYes: '✅',
-	statistics: '📊',
-	suicide: '😵',
-	win: '🎉',
-	withoutLastName: '🎭',
+	activeUser: "💙",
+	betrayal: "😈",
+	chat: "💭",
+	fire: "🔥",
+	health: "❤️",
+	language: "🏳️‍🌈",
+	lose: "😭",
+	name: "👋",
+	nameFallback: "🔮",
+	possibleNo: "⛔️",
+	possibleYes: "✅",
+	statistics: "📊",
+	suicide: "😵",
+	win: "🎉",
+	withoutLastName: "🎭",
 } as const;
 
 const FAMILY_EMOJIS: readonly string[] = [
-	'👨‍👩‍👧‍👦',
-	'👨‍👩‍👦‍👦',
-	'👨‍👩‍👧‍👧',
-	'👩‍👩‍👧‍👦',
-	'👩‍👩‍👦‍👦',
-	'👩‍👩‍👧‍👧',
-	'👨‍👨‍👧‍👦',
-	'👨‍👨‍👦‍👦',
-	'👨‍👨‍👧‍👧',
-	'👨‍👩‍👦',
-	'👨‍👩‍👧',
-	'👨‍👨‍👦',
-	'👨‍👨‍👧',
-	'👩‍👩‍👦',
-	'👩‍👩‍👧',
-	'👩‍👦',
-	'👩‍👧',
-	'👩‍👧‍👦',
-	'👩‍👦‍👦',
-	'👩‍👧‍👧',
-	'👨‍👦',
-	'👨‍👧',
-	'👨‍👧‍👦',
-	'👨‍👦‍👦',
-	'👨‍👧‍👧',
+	"👨‍👩‍👧‍👦",
+	"👨‍👩‍👦‍👦",
+	"👨‍👩‍👧‍👧",
+	"👩‍👩‍👧‍👦",
+	"👩‍👩‍👦‍👦",
+	"👩‍👩‍👧‍👧",
+	"👨‍👨‍👧‍👦",
+	"👨‍👨‍👦‍👦",
+	"👨‍👨‍👧‍👧",
+	"👨‍👩‍👦",
+	"👨‍👩‍👧",
+	"👨‍👨‍👦",
+	"👨‍👨‍👧",
+	"👩‍👩‍👦",
+	"👩‍👩‍👧",
+	"👩‍👦",
+	"👩‍👧",
+	"👩‍👧‍👦",
+	"👩‍👦‍👦",
+	"👩‍👧‍👧",
+	"👨‍👦",
+	"👨‍👧",
+	"👨‍👧‍👦",
+	"👨‍👦‍👦",
+	"👨‍👧‍👧",
 ];
 
 export function possibleEmoji(condition: boolean) {
@@ -64,26 +64,26 @@ export function wikidataInfoHeader(
 	wdr: WikibaseEntityReader,
 	options: InfoHeaderOptions = {},
 ): string {
-	const {titlePrefix, titleSuffix} = options;
+	const { titlePrefix, titleSuffix } = options;
 	const label = wdr.label();
 	const description = wdr.description();
 
-	let text = '';
+	let text = "";
 
 	if (titlePrefix) {
 		text += titlePrefix;
-		text += ' ';
+		text += " ";
 	}
 
 	text += `*${label}*`;
 
 	if (titleSuffix) {
-		text += ' ';
+		text += " ";
 		text += titleSuffix;
 	}
 
 	if (description) {
-		text += '\n';
+		text += "\n";
 		text += `${description}`;
 	}
 

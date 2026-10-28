@@ -1,29 +1,30 @@
-import {type ConstructionName, EMOJI} from 'bastion-siege-logic';
-import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context, type Session} from '../lib/context.ts';
-import {outEmoji, wikidataInfoHeader} from '../lib/interface/generals.ts';
-import * as userSessions from '../lib/user-sessions.ts';
+import { type ConstructionName, EMOJI } from "bastion-siege-logic";
+import { MenuTemplate } from "grammy-inline-menu";
 
-export const menu = new MenuTemplate<Context>(async ctx => {
+import { backButtons, type Context, type Session } from "../lib/context.ts";
+import { outEmoji, wikidataInfoHeader } from "../lib/interface/generals.ts";
+import * as userSessions from "../lib/user-sessions.ts";
+
+export const menu = new MenuTemplate<Context>(async (ctx) => {
 	const allSessions = await userSessions.getRaw();
-	const allSessionData = allSessions.map(o => o.data);
+	const allSessionData = allSessions.map((o) => o.data);
 
-	let text = wikidataInfoHeader(await ctx.wd.reader('menu.statistics'), {
+	let text = wikidataInfoHeader(await ctx.wd.reader("menu.statistics"), {
 		titlePrefix: outEmoji.statistics,
 	});
-	text += '\n\n';
+	text += "\n\n";
 
-	const active = allSessionData.filter(o => !o.blocked && o.name).length;
+	const active = allSessionData.filter((o) => !o.blocked && o.name).length;
 	const statLines: string[] = [
 		`${allSessions.length} ${EMOJI.people} (${active} ${outEmoji.activeUser})`,
 
-		await maxConstructionLevelLine(ctx, allSessionData, 'townhall'),
-		await maxConstructionLevelLine(ctx, allSessionData, 'barracks'),
+		await maxConstructionLevelLine(ctx, allSessionData, "townhall"),
+		await maxConstructionLevelLine(ctx, allSessionData, "barracks"),
 	];
 
-	text += statLines.join('\n');
+	text += statLines.join("\n");
 
-	return {text, parse_mode: 'Markdown'};
+	return { text, parse_mode: "Markdown" };
 });
 
 async function maxConstructionLevelLine(
@@ -32,14 +33,13 @@ async function maxConstructionLevelLine(
 	construction: ConstructionName,
 ): Promise<string> {
 	const reader = await ctx.wd.reader(`construction.${construction}`);
-	const level = Math.max(...sessions.map(o => o.constructions[construction]));
+	const level = Math.max(...sessions.map((o) => o.constructions[construction]));
 	return `${EMOJI[construction]} ≤${level} ${reader.label()}`;
 }
 
 menu.url({
-	text: async ctx =>
-		`ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
-	url: async ctx => (await ctx.wd.reader('menu.statistics')).url(),
+	text: async (ctx) => `ℹ️ ${(await ctx.wd.reader("menu.wikidataItem")).label()}`,
+	url: async (ctx) => (await ctx.wd.reader("menu.statistics")).url(),
 });
 
 menu.manualRow(backButtons);

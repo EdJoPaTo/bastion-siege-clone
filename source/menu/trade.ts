@@ -1,78 +1,64 @@
-import {
-	calcStorageCapacity,
-	EMOJI,
-	type ResourceName,
-	type Resources,
-} from 'bastion-siege-logic';
-import {MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../lib/context.ts';
-import {formatNumberShort} from '../lib/interface/format-number.ts';
-import {wikidataInfoHeader} from '../lib/interface/generals.ts';
-import {resources} from '../lib/interface/resource.ts';
+import { calcStorageCapacity, EMOJI, type ResourceName, type Resources } from "bastion-siege-logic";
+import { MenuTemplate } from "grammy-inline-menu";
 
-function buy(
-	currentResources: Resources,
-	resource: ResourceName,
-	amount: number,
-): Resources {
-	const result = {...currentResources};
+import { backButtons, type Context } from "../lib/context.ts";
+import { formatNumberShort } from "../lib/interface/format-number.ts";
+import { wikidataInfoHeader } from "../lib/interface/generals.ts";
+import { resources } from "../lib/interface/resource.ts";
+
+function buy(currentResources: Resources, resource: ResourceName, amount: number): Resources {
+	const result = { ...currentResources };
 	result.gold -= amount * 2;
 	result[resource] += amount;
 	return result;
 }
 
-export const menu = new MenuTemplate<Context>(async ctx => {
-	let text = wikidataInfoHeader(await ctx.wd.reader('action.buy'), {
+export const menu = new MenuTemplate<Context>(async (ctx) => {
+	let text = wikidataInfoHeader(await ctx.wd.reader("action.buy"), {
 		titlePrefix: EMOJI.trade,
 	});
-	text += '\n\n';
+	text += "\n\n";
 	text += await resources(ctx, ctx.session.resources);
-	return {text, parse_mode: 'Markdown'};
+	return { text, parse_mode: "Markdown" };
 });
 
 function resourceFromCtx(ctx: Context): ResourceName {
 	return ctx.match![1] as ResourceName;
 }
 
-const resourceMenu = new MenuTemplate<Context>(async ctx => {
+const resourceMenu = new MenuTemplate<Context>(async (ctx) => {
 	const resource = resourceFromCtx(ctx);
 	const currentResources = ctx.session.resources;
-	const {constructions} = ctx.session;
+	const { constructions } = ctx.session;
 	const storageCapacity = calcStorageCapacity(constructions.storage);
 
 	let text = wikidataInfoHeader(await ctx.wd.reader(`resource.${resource}`), {
 		titlePrefix: EMOJI[resource],
 	});
 
-	text += '\n\n';
+	text += "\n\n";
 
-	const goldReader = await ctx.wd.reader('resource.gold');
+	const goldReader = await ctx.wd.reader("resource.gold");
 	const currentGoldShort = formatNumberShort(currentResources.gold, true);
-	text
-		+= `${EMOJI.gold} ${goldReader.label()} ${currentGoldShort}${EMOJI.gold}\n`;
+	text += `${EMOJI.gold} ${goldReader.label()} ${currentGoldShort}${EMOJI.gold}\n`;
 
 	const resourceReader = await ctx.wd.reader(`resource.${resource}`);
-	const currentResourceShort = formatNumberShort(
-		currentResources[resource],
-		true,
-	);
+	const currentResourceShort = formatNumberShort(currentResources[resource], true);
 	text += `${
 		EMOJI[resource]
 	} ${resourceReader.label()} ${currentResourceShort}${EMOJI[resource]}\n`;
 
-	const storageCapacityReader = await ctx.wd.reader('bs.storageCapacity');
+	const storageCapacityReader = await ctx.wd.reader("bs.storageCapacity");
 	const capacityShort = formatNumberShort(storageCapacity, true);
-	text += `${storageCapacityReader.label()} ${capacityShort}${
-		EMOJI[resource]
-	}\n`;
+	text += `${storageCapacityReader.label()} ${capacityShort}${EMOJI[resource]}\n`;
 
-	text += '\n';
+	text += "\n";
 	text += `200${EMOJI.gold} / 100${EMOJI[resource]}\n`;
-	return {text, parse_mode: 'Markdown'};
+	return { text, parse_mode: "Markdown" };
 });
 
-menu.chooseIntoSubmenu('', resourceMenu, {
-	choices: ['wood', 'stone', 'food'],
+menu.chooseIntoSubmenu("", resourceMenu, {
+	choices: ["wood", "stone", "food"],
 	async buttonText(ctx, key) {
 		const emoji = EMOJI[key as ResourceName];
 		const reader = await ctx.wd.reader(`resource.${key}`);
@@ -82,12 +68,12 @@ menu.chooseIntoSubmenu('', resourceMenu, {
 
 menu.manualRow(backButtons);
 
-resourceMenu.choose('buy', {
+resourceMenu.choose("buy", {
 	columns: 3,
 	choices(ctx) {
 		const resource = resourceFromCtx(ctx);
 		const currentResources = ctx.session.resources;
-		const {constructions} = ctx.session;
+		const { constructions } = ctx.session;
 		const storageCapacity = calcStorageCapacity(constructions.storage);
 
 		const upperLimitResource = storageCapacity - currentResources[resource];
@@ -100,8 +86,8 @@ resourceMenu.choose('buy', {
 		const options = [1 / 40, 1 / 20, 1 / 10, 1 / 4, 1 / 2, 1, 2.5, 5];
 
 		return options
-			.map(o => o * magnitude)
-			.filter(o => !(o < 100 || o > upperLimitExact))
+			.map((o) => o * magnitude)
+			.filter((o) => !(o < 100 || o > upperLimitExact))
 			.slice(-6)
 			.map(String);
 	},
@@ -114,13 +100,12 @@ resourceMenu.choose('buy', {
 		const resource = resourceFromCtx(ctx);
 		const currentResources = ctx.session.resources;
 		ctx.session.resources = buy(currentResources, resource, Number(key));
-		return '.';
+		return ".";
 	},
 });
 
 resourceMenu.url({
-	text: async ctx =>
-		`ℹ️ ${(await ctx.wd.reader('menu.wikidataItem')).label()}`,
+	text: async (ctx) => `ℹ️ ${(await ctx.wd.reader("menu.wikidataItem")).label()}`,
 	async url(ctx) {
 		const resource = resourceFromCtx(ctx);
 		const wdKey = `resource.${resource}`;

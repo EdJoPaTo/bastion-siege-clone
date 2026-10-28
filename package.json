@@ -1,26 +1,11 @@
 {
 	"name": "bastion-siege-clone",
 	"private": true,
-	"version": "3.0.0",
 	"license": "MIT",
-	"repository": "EdJoPaTo/bastion-siege-clone",
-	"author": {
-		"name": "EdJoPaTo",
-		"email": "bastion-siege-clone@edjopato.de",
-		"url": "https://EdJoPaTo.de"
-	},
+	"type": "module",
 	"scripts": {
 		"start": "node --enable-source-maps source/bastion-siege-clone.ts",
-		"test": "tsc && xo"
-	},
-	"type": "module",
-	"engines": {
-		"node": ">=24"
-	},
-	"devEngines": {
-		"packageManager": {
-			"name": "npm"
-		}
+		"test": "tsc && oxfmt --check"
 	},
 	"dependencies": {
 		"@grammyjs/i18n": "^1.1.2",
@@ -38,14 +23,15 @@
 	},
 	"devDependencies": {
 		"@types/node": "^24.10.1",
-		"typescript": "^6.0.2",
-		"xo": "^1.2.1"
+		"oxfmt": "^0.75.0",
+		"typescript": "^6.0.2"
 	},
-	"xo": {
-		"rules": {
-			"@typescript-eslint/naming-convention": "off",
-			"unicorn/no-await-expression-member": "off",
-			"unicorn/prevent-abbreviations": "off"
+	"devEngines": {
+		"packageManager": {
+			"name": "npm"
 		}
+	},
+	"engines": {
+		"node": ">=24"
 	}
 }

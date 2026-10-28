@@ -1,19 +1,16 @@
-import {arrayFilterUnique} from 'array-filter-unique';
-import {
-	type ConstructionName,
-	CONSTRUCTIONS,
-	EMOJI,
-} from 'bastion-siege-logic';
-import {MenuTemplate} from 'grammy-inline-menu';
-import randomItem from 'random-item';
-import {backButtons, type Context} from '../lib/context.ts';
-import {wikidataInfoHeader} from '../lib/interface/generals.ts';
-import {formatNamePlain} from '../lib/interface/name.ts';
-import * as userSessions from '../lib/user-sessions.ts';
-import * as wdSets from '../lib/wikidata-sets.ts';
+import { arrayFilterUnique } from "array-filter-unique";
+import { type ConstructionName, CONSTRUCTIONS, EMOJI } from "bastion-siege-logic";
+import { MenuTemplate } from "grammy-inline-menu";
+import randomItem from "random-item";
+
+import { backButtons, type Context } from "../lib/context.ts";
+import { wikidataInfoHeader } from "../lib/interface/generals.ts";
+import { formatNamePlain } from "../lib/interface/name.ts";
+import * as userSessions from "../lib/user-sessions.ts";
+import * as wdSets from "../lib/wikidata-sets.ts";
 
 async function getSpy(ctx: Context) {
-	ctx.session.selectedSpy ||= wdSets.getRandom('spies');
+	ctx.session.selectedSpy ||= wdSets.getRandom("spies");
 	const reader = await ctx.wd.reader(ctx.session.selectedSpy);
 	if (!ctx.session.selectedSpyEmoji) {
 		const spymojis = reader.unicodeChars();
@@ -28,51 +25,49 @@ function getSpyableConstructions(qNumber: string): ConstructionName[] {
 		.slice(1)
 		.map(Number)
 		.filter(arrayFilterUnique())
-		.map(o => CONSTRUCTIONS[o]!);
+		.map((o) => CONSTRUCTIONS[o]!);
 
 	return possibleConstructions;
 }
 
-export const menu = new MenuTemplate<Context>(async ctx => {
-	let text = wikidataInfoHeader(await ctx.wd.reader('menu.spy'), {
+export const menu = new MenuTemplate<Context>(async (ctx) => {
+	let text = wikidataInfoHeader(await ctx.wd.reader("menu.spy"), {
 		titlePrefix: EMOJI.search,
 	});
 
 	const spyReader = await getSpy(ctx);
 	const description = spyReader.description();
 
-	text += '\n\n';
+	text += "\n\n";
 	text += `${ctx.session.selectedSpyEmoji} ${spyReader.label()}\n`;
 	if (description) {
 		text += description;
-		text += '\n';
+		text += "\n";
 	}
 
-	return {text, parse_mode: 'Markdown'};
+	return { text, parse_mode: "Markdown" };
 });
 
-menu.interact('espionage', {
-	text: async ctx => `${(await ctx.wd.reader('action.espionage')).label()}`,
+menu.interact("espionage", {
+	text: async (ctx) => `${(await ctx.wd.reader("action.espionage")).label()}`,
 	async do(ctx) {
-		const {data: session} = await userSessions.getRandomUser(session =>
-			Boolean(session.data.name));
+		const { data: session } = await userSessions.getRandomUser((session) =>
+			Boolean(session.data.name),
+		);
 		const name = session.name!;
 
 		const spyableConstructions = getSpyableConstructions(ctx.session.selectedSpy);
 		const pickedConstructionKey = randomItem(spyableConstructions);
-		const pickedConstructionLevel
-			= session.constructions[pickedConstructionKey];
+		const pickedConstructionLevel = session.constructions[pickedConstructionKey];
 
-		let message = '';
+		let message = "";
 		message += ctx.session.selectedSpyEmoji;
-		message += ' ';
+		message += " ";
 		message += formatNamePlain(name);
-		message += ' ';
+		message += " ";
 		message += EMOJI[pickedConstructionKey];
-		message += (
-			await ctx.wd.reader(`construction.${pickedConstructionKey}`)
-		).label();
-		message += ' ';
+		message += (await ctx.wd.reader(`construction.${pickedConstructionKey}`)).label();
+		message += " ";
 		message += pickedConstructionLevel.toFixed(0);
 
 		await ctx.answerCallbackQuery(message);
@@ -80,34 +75,34 @@ menu.interact('espionage', {
 	},
 });
 
-menu.interact('change', {
+menu.interact("change", {
 	joinLastRow: true,
-	text: async ctx => `${(await ctx.wd.reader('action.change')).label()}`,
+	text: async (ctx) => `${(await ctx.wd.reader("action.change")).label()}`,
 	do(ctx) {
 		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpy;
 		// @ts-expect-error delete non optional. It gets set automatically by middleware
 		delete ctx.session.selectedSpyEmoji;
-		return '.';
+		return ".";
 	},
 });
 
 menu.url({
 	async text(ctx) {
-		const spyReader = await ctx.wd.reader('menu.spy');
-		const wdItemReader = await ctx.wd.reader('menu.wikidataItem');
+		const spyReader = await ctx.wd.reader("menu.spy");
+		const wdItemReader = await ctx.wd.reader("menu.wikidataItem");
 		return `ℹ️ ${wdItemReader.label()} ${spyReader.label()}`;
 	},
-	url: async ctx => (await ctx.wd.reader('menu.spy')).url(),
+	url: async (ctx) => (await ctx.wd.reader("menu.spy")).url(),
 });
 
 menu.url({
 	async text(ctx) {
 		const spyReader = await getSpy(ctx);
-		const wdItemReader = await ctx.wd.reader('menu.wikidataItem');
+		const wdItemReader = await ctx.wd.reader("menu.wikidataItem");
 		return `ℹ️ ${wdItemReader.label()} ${ctx.session.selectedSpyEmoji} ${spyReader.label()}`;
 	},
-	url: async ctx => (await getSpy(ctx)).url(),
+	url: async (ctx) => (await getSpy(ctx)).url(),
 });
 
 menu.manualRow(backButtons);

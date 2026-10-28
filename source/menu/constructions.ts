@@ -7,12 +7,13 @@ import {
 	EMOJI,
 	type Resources,
 	WORKSHOP,
-} from 'bastion-siege-logic';
-import {type Body, MenuTemplate} from 'grammy-inline-menu';
-import {backButtons, type Context} from '../lib/context.ts';
-import {constructionLine} from '../lib/interface/construction.ts';
-import {wikidataInfoHeader} from '../lib/interface/generals.ts';
-import {menu as entryMenu} from './construction.ts';
+} from "bastion-siege-logic";
+import { type Body, MenuTemplate } from "grammy-inline-menu";
+
+import { backButtons, type Context } from "../lib/context.ts";
+import { constructionLine } from "../lib/interface/construction.ts";
+import { wikidataInfoHeader } from "../lib/interface/generals.ts";
+import { menu as entryMenu } from "./construction.ts";
 
 function canUpgrade(
 	constructions: Constructions,
@@ -20,54 +21,51 @@ function canUpgrade(
 	currentResources: Resources,
 ): boolean {
 	const cost = calcBuildingCost(construction, constructions[construction]);
-	const minutesNeeded = calcMinutesNeeded(
-		cost,
-		constructions,
-		currentResources,
-	);
+	const minutesNeeded = calcMinutesNeeded(cost, constructions, currentResources);
 	return minutesNeeded === 0;
 }
 
 async function constructionMenuBody(
 	ctx: Context,
-	key: 'buildings' | 'workshop',
+	key: "buildings" | "workshop",
 	entries: readonly ConstructionName[],
 ): Promise<Body> {
 	const wdKey = `bs.${key}`;
 	const currentResources = ctx.session.resources;
-	const {constructions} = ctx.session;
+	const { constructions } = ctx.session;
 
 	let text = wikidataInfoHeader(await ctx.wd.reader(wdKey), {
 		titlePrefix: EMOJI[key],
 	});
 
-	text += '\n\n';
+	text += "\n\n";
 
-	const constructionLines = await Promise.all(entries.map(async construction =>
-		constructionLine(
-			ctx,
-			construction,
-			constructions[construction],
-			canUpgrade(constructions, construction, currentResources),
-		)));
-	text += constructionLines.join('\n');
+	const constructionLines = await Promise.all(
+		entries.map(async (construction) =>
+			constructionLine(
+				ctx,
+				construction,
+				constructions[construction],
+				canUpgrade(constructions, construction, currentResources),
+			),
+		),
+	);
+	text += constructionLines.join("\n");
 
-	return {text, parse_mode: 'Markdown'};
+	return { text, parse_mode: "Markdown" };
 }
 
-async function constructionButtonTextFunc(
-	ctx: Context,
-	key: string,
-): Promise<string> {
+async function constructionButtonTextFunc(ctx: Context, key: string): Promise<string> {
 	const reader = await ctx.wd.reader(`construction.${key}`);
 	const emoji = EMOJI[key as ConstructionName];
 	return `${emoji} ${reader.label()}`;
 }
 
-export const buildingsMenu = new MenuTemplate<Context>(async ctx =>
-	constructionMenuBody(ctx, 'buildings', BUILDINGS));
+export const buildingsMenu = new MenuTemplate<Context>(async (ctx) =>
+	constructionMenuBody(ctx, "buildings", BUILDINGS),
+);
 
-buildingsMenu.chooseIntoSubmenu('', entryMenu, {
+buildingsMenu.chooseIntoSubmenu("", entryMenu, {
 	columns: 2,
 	choices: BUILDINGS,
 	buttonText: constructionButtonTextFunc,
@@ -75,10 +73,11 @@ buildingsMenu.chooseIntoSubmenu('', entryMenu, {
 
 buildingsMenu.manualRow(backButtons);
 
-export const workshopMenu = new MenuTemplate<Context>(async ctx =>
-	constructionMenuBody(ctx, 'workshop', WORKSHOP));
+export const workshopMenu = new MenuTemplate<Context>(async (ctx) =>
+	constructionMenuBody(ctx, "workshop", WORKSHOP),
+);
 
-workshopMenu.chooseIntoSubmenu('', entryMenu, {
+workshopMenu.chooseIntoSubmenu("", entryMenu, {
 	columns: 2,
 	choices: WORKSHOP,
 	buttonText: constructionButtonTextFunc,

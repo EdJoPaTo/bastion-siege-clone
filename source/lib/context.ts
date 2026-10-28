@@ -1,9 +1,10 @@
-import type {I18nFlavor} from '@grammyjs/i18n';
-import type {Constructions, Resources} from 'bastion-siege-logic';
-import type {Context as BaseContext, SessionFlavor} from 'grammy';
-import {createBackMainMenuButtons} from 'grammy-inline-menu';
-import type {MiddlewareProperty} from 'telegraf-wikibase';
-import type {PeopleInConstructions} from '../types.ts';
+import type { I18nFlavor } from "@grammyjs/i18n";
+import type { Constructions, Resources } from "bastion-siege-logic";
+import type { Context as BaseContext, SessionFlavor } from "grammy";
+import { createBackMainMenuButtons } from "grammy-inline-menu";
+import type { MiddlewareProperty } from "telegraf-wikibase";
+
+import type { PeopleInConstructions } from "../types.ts";
 
 type UnixSeconds = number;
 
@@ -31,15 +32,13 @@ export type Session = {
 	selectedSpyEmoji: string;
 };
 
-export type Context =
-	& BaseContext
-	& SessionFlavor<Session>
-	& I18nFlavor
-	& {
+export type Context = BaseContext &
+	SessionFlavor<Session> &
+	I18nFlavor & {
 		readonly wd: MiddlewareProperty;
 	};
 
 export const backButtons = createBackMainMenuButtons<Context>(
-	ctx => `🔙 ${ctx.t('menu-back')}`,
-	async ctx => `🔝 ${(await ctx.wd.reader('menu.menu')).label()}`,
+	(ctx) => `🔙 ${ctx.t("menu-back")}`,
+	async (ctx) => `🔝 ${(await ctx.wd.reader("menu.menu")).label()}`,
 );

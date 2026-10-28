@@ -13,11 +13,12 @@ import {
 	type Constructions,
 	EMOJI,
 	type ResourceName,
-} from 'bastion-siege-logic';
-import type {PeopleInConstructions} from '../../types.ts';
-import type {Context} from '../context.ts';
-import {formatNumberShort} from './format-number.ts';
-import {possibleEmoji, wikidataInfoHeader} from './generals.ts';
+} from "bastion-siege-logic";
+
+import type { PeopleInConstructions } from "../../types.ts";
+import type { Context } from "../context.ts";
+import { formatNumberShort } from "./format-number.ts";
+import { possibleEmoji, wikidataInfoHeader } from "./generals.ts";
 
 export async function constructionLine(
 	ctx: Context,
@@ -33,7 +34,7 @@ export async function constructionLine(
 		`*${reader.label()}*`,
 	];
 
-	return parts.join(' ');
+	return parts.join(" ");
 }
 
 export async function infoHeader(
@@ -49,21 +50,13 @@ export async function infoHeader(
 }
 
 function simpleLineString(...args: ReadonlyArray<string | number>): string {
-	return args.join(' ');
+	return args.join(" ");
 }
 
-async function incomeString(
-	ctx: Context,
-	income: number | string,
-	unit: string,
-): Promise<string> {
-	const readerLabel = await ctx.wd.reader('other.income');
-	const readerDay = await ctx.wd.reader('bs.day');
-	return simpleLineString(
-		readerLabel.label(),
-		income,
-		`${unit} / ${readerDay.label()}`,
-	);
+async function incomeString(ctx: Context, income: number | string, unit: string): Promise<string> {
+	const readerLabel = await ctx.wd.reader("other.income");
+	const readerDay = await ctx.wd.reader("bs.day");
+	return simpleLineString(readerLabel.label(), income, `${unit} / ${readerDay.label()}`);
 }
 
 async function storageCapacityString(
@@ -71,12 +64,8 @@ async function storageCapacityString(
 	capacity: number,
 	unit: ResourceName,
 ): Promise<string> {
-	const readerCapacity = await ctx.wd.reader('bs.storageCapacity');
-	return simpleLineString(
-		readerCapacity.label(),
-		formatNumberShort(capacity, true),
-		EMOJI[unit],
-	);
+	const readerCapacity = await ctx.wd.reader("bs.storageCapacity");
+	return simpleLineString(readerCapacity.label(), formatNumberShort(capacity, true), EMOJI[unit]);
 }
 
 export function peopleString(
@@ -88,7 +77,7 @@ export function peopleString(
 	return simpleLineString(
 		label,
 		formatNumberShort(available, true) + unit,
-		'/',
+		"/",
 		formatNumberShort(capacity, true) + unit,
 	);
 }
@@ -99,17 +88,13 @@ export async function constructionPropertyString(
 	people: PeopleInConstructions,
 	construction: ConstructionName,
 ): Promise<string | undefined> {
-	if (construction === 'townhall') {
+	if (construction === "townhall") {
 		const lines: string[] = [
-			await storageCapacityString(
-				ctx,
-				calcGoldCapacity(constructions.townhall),
-				'gold',
-			),
+			await storageCapacityString(ctx, calcGoldCapacity(constructions.townhall), "gold"),
 			await incomeString(
 				ctx,
 				calcGoldIncomePerPerson(constructions.townhall).toFixed(1),
-				`${EMOJI.gold} / ${(await ctx.wd.reader('bs.inhabitant')).label()}`,
+				`${EMOJI.gold} / ${(await ctx.wd.reader("bs.inhabitant")).label()}`,
 			),
 			await incomeString(
 				ctx,
@@ -118,34 +103,29 @@ export async function constructionPropertyString(
 			),
 		];
 
-		return lines.join('\n');
+		return lines.join("\n");
 	}
 
-	if (construction === 'storage') {
-		const units: ResourceName[] = ['wood', 'stone', 'food'];
-		const lines = await Promise.all(units.map(async unit =>
-			storageCapacityString(
-				ctx,
-				calcStorageCapacity(constructions.storage),
-				unit,
-			)));
+	if (construction === "storage") {
+		const units: ResourceName[] = ["wood", "stone", "food"];
+		const lines = await Promise.all(
+			units.map(async (unit) =>
+				storageCapacityString(ctx, calcStorageCapacity(constructions.storage), unit),
+			),
+		);
 
-		return lines.join('\n');
+		return lines.join("\n");
 	}
 
-	if (construction === 'houses') {
+	if (construction === "houses") {
 		const lines: string[] = [
 			peopleString(
-				(await ctx.wd.reader('bs.people')).label(),
+				(await ctx.wd.reader("bs.people")).label(),
 				people.houses,
 				calcHousesCapacity(constructions.houses),
 				EMOJI.people,
 			),
-			await incomeString(
-				ctx,
-				calcHousesPeopleIncome(constructions.houses),
-				EMOJI.people,
-			),
+			await incomeString(ctx, calcHousesPeopleIncome(constructions.houses), EMOJI.people),
 			await incomeString(
 				ctx,
 				calcProductionFood(constructions.farm, constructions.houses),
@@ -153,10 +133,10 @@ export async function constructionPropertyString(
 			),
 		];
 
-		return lines.join('\n');
+		return lines.join("\n");
 	}
 
-	if (construction === 'farm') {
+	if (construction === "farm") {
 		return incomeString(
 			ctx,
 			calcProductionFood(constructions.farm, constructions.houses),
@@ -164,26 +144,26 @@ export async function constructionPropertyString(
 		);
 	}
 
-	if (construction === 'sawmill') {
+	if (construction === "sawmill") {
 		return incomeString(ctx, calcProduction(constructions.sawmill), EMOJI.wood);
 	}
 
-	if (construction === 'mine') {
+	if (construction === "mine") {
 		return incomeString(ctx, calcProduction(constructions.mine), EMOJI.stone);
 	}
 
-	if (construction === 'barracks') {
+	if (construction === "barracks") {
 		return peopleString(
-			(await ctx.wd.reader('bs.army')).label(),
+			(await ctx.wd.reader("bs.army")).label(),
 			people.barracks,
 			calcBarracksCapacity(constructions.barracks),
 			EMOJI.army,
 		);
 	}
 
-	if (construction === 'wall') {
+	if (construction === "wall") {
 		return peopleString(
-			(await ctx.wd.reader('bs.archer')).label(),
+			(await ctx.wd.reader("bs.archer")).label(),
 			people.wall,
 			calcWallArcherCapacity(constructions.wall),
 			EMOJI.archer,

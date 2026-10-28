@@ -1,8 +1,8 @@
-const allLetters = ['', 'k', 'M', 'B', 'T'];
+const allLetters = ["", "k", "M", "B", "T"];
 
 export function formatNumberShort(value: number, isInteger = false): string {
 	if (!value && value !== 0) {
-		return 'NaN';
+		return "NaN";
 	}
 
 	const isNegative = value < 0;
@@ -23,5 +23,5 @@ export function formatNumberShort(value: number, isInteger = false): string {
 	}
 
 	const valueString = shortValue.toFixed(fractionDigits);
-	return (isNegative ? '-' : '') + valueString + letter;
+	return (isNegative ? "-" : "") + valueString + letter;
 }

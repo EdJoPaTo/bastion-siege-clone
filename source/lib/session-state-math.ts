@@ -5,9 +5,10 @@ import {
 	calcHousesPeopleIncome,
 	calcWallArcherCapacity,
 	estimateResourcesAfter,
-} from 'bastion-siege-logic';
-import type {MiddlewareFn} from 'grammy';
-import type {Context, Session} from './context.ts';
+} from "bastion-siege-logic";
+import type { MiddlewareFn } from "grammy";
+
+import type { Context, Session } from "./context.ts";
 
 const GAME_SPEEDUP = 5;
 
@@ -16,7 +17,7 @@ function foodPenalty(session: Session): number {
 }
 
 function initWhenMissing(session: Session, now: number): void {
-	const {constructions} = session;
+	const { constructions } = session;
 	if (!constructions) {
 		session.constructions = {
 			townhall: 1,
@@ -32,7 +33,7 @@ function initWhenMissing(session: Session, now: number): void {
 		};
 	}
 
-	const {resources, resourcesTimestamp} = session;
+	const { resources, resourcesTimestamp } = session;
 	if (!resources || !resourcesTimestamp) {
 		session.resourcesTimestamp = now;
 		session.resources = {
@@ -43,7 +44,7 @@ function initWhenMissing(session: Session, now: number): void {
 		};
 	}
 
-	const {people, peopleTimestamp} = session;
+	const { people, peopleTimestamp } = session;
 	if (!people || !peopleTimestamp) {
 		session.peopleTimestamp = now;
 		session.people = {
@@ -55,31 +56,25 @@ function initWhenMissing(session: Session, now: number): void {
 }
 
 function calcCurrentPeople(session: Session, now: number): void {
-	const {constructions, people, peopleTimestamp} = session;
+	const { constructions, people, peopleTimestamp } = session;
 
 	const totalSeconds = now - peopleTimestamp;
 	const totalMinutes = Math.floor((GAME_SPEEDUP * foodPenalty(session) * totalSeconds) / 60);
 
-	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses)
-		* totalMinutes;
+	const totalPoepleIncome = calcHousesPeopleIncome(constructions.houses) * totalMinutes;
 	if (totalPoepleIncome < 1) {
 		return;
 	}
 
-	const freePlacesBarracks = calcBarracksCapacity(constructions.barracks)
-		- session.people.barracks;
-	const freePlacesWall = calcWallArcherCapacity(constructions.wall)
-		- session.people.wall;
+	const freePlacesBarracks = calcBarracksCapacity(constructions.barracks) - session.people.barracks;
+	const freePlacesWall = calcWallArcherCapacity(constructions.wall) - session.people.wall;
 
 	let peopleAvailable = totalPoepleIncome + people.houses;
 
 	const addToWall = Math.min(freePlacesWall, Math.max(0, peopleAvailable));
 	peopleAvailable -= addToWall;
 
-	const addToBarracks = Math.min(
-		freePlacesBarracks,
-		Math.max(0, peopleAvailable),
-	);
+	const addToBarracks = Math.min(freePlacesBarracks, Math.max(0, peopleAvailable));
 	peopleAvailable -= addToBarracks;
 
 	const housesPeople = Math.max(
@@ -96,25 +91,21 @@ function calcCurrentPeople(session: Session, now: number): void {
 }
 
 function calcCurrentResources(session: Session, now: number): void {
-	const {constructions, resources, resourcesTimestamp} = session;
+	const { constructions, resources, resourcesTimestamp } = session;
 
 	const totalSeconds = now - resourcesTimestamp;
 	const totalMinutes = Math.floor((GAME_SPEEDUP * foodPenalty(session) * totalSeconds) / 60);
 
 	if (totalMinutes > 0) {
-		session.resources = estimateResourcesAfter(
-			resources,
-			constructions,
-			totalMinutes,
-		);
+		session.resources = estimateResourcesAfter(resources, constructions, totalMinutes);
 
 		// Max negative gold should be recoverable in 12h realtime hours
-		const goldIncome24h
-			= calcGoldIncome(constructions.townhall, constructions.houses)
-				* 12
-				* 60
-				* GAME_SPEEDUP
-				* foodPenalty(session);
+		const goldIncome24h =
+			calcGoldIncome(constructions.townhall, constructions.houses) *
+			12 *
+			60 *
+			GAME_SPEEDUP *
+			foodPenalty(session);
 
 		session.resources = {
 			...session.resources,

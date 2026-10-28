@@ -5,24 +5,17 @@ import {
 	type ResourceName,
 	RESOURCES,
 	type Resources,
-} from 'bastion-siege-logic';
-import type {Context} from '../context.ts';
-import {formatNumberShort} from './format-number.ts';
-import {possibleEmoji} from './generals.ts';
+} from "bastion-siege-logic";
 
-async function resourceLine(
-	ctx: Context,
-	resource: ResourceName,
-	amount: number,
-): Promise<string> {
+import type { Context } from "../context.ts";
+import { formatNumberShort } from "./format-number.ts";
+import { possibleEmoji } from "./generals.ts";
+
+async function resourceLine(ctx: Context, resource: ResourceName, amount: number): Promise<string> {
 	const reader = await ctx.wd.reader(`resource.${resource}`);
-	const parts: string[] = [
-		EMOJI[resource],
-		`*${reader.label()}*`,
-		formatNumberShort(amount, true),
-	];
+	const parts: string[] = [EMOJI[resource], `*${reader.label()}*`, formatNumberShort(amount, true)];
 
-	return parts.join(' ');
+	return parts.join(" ");
 }
 
 async function constructionResourceLine(
@@ -36,13 +29,10 @@ async function constructionResourceLine(
 	return `${emoji} ${line}`;
 }
 
-export async function resources(
-	ctx: Context,
-	resources: Resources,
-): Promise<string> {
-	const lines = await Promise.all(RESOURCES.map(async o => resourceLine(ctx, o, resources[o])));
+export async function resources(ctx: Context, resources: Resources): Promise<string> {
+	const lines = await Promise.all(RESOURCES.map(async (o) => resourceLine(ctx, o, resources[o])));
 
-	return lines.join('\n');
+	return lines.join("\n");
 }
 
 export async function constructionResources(
@@ -50,13 +40,16 @@ export async function constructionResources(
 	required: ConstructionResources,
 	available: Resources,
 ): Promise<string> {
-	const lines = await Promise.all(CONSTRUCTION_RESOURCES.filter(o => required[o]).map(async resource =>
-		constructionResourceLine(
-			ctx,
-			resource,
-			required[resource],
-			available[resource] >= required[resource],
-		)));
+	const lines = await Promise.all(
+		CONSTRUCTION_RESOURCES.filter((o) => required[o]).map(async (resource) =>
+			constructionResourceLine(
+				ctx,
+				resource,
+				required[resource],
+				available[resource] >= required[resource],
+			),
+		),
+	);
 
-	return lines.join('\n');
+	return lines.join("\n");
 }
